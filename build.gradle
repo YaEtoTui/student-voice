@@ -7,6 +7,8 @@ plugins {
 group = 'ru.urfu.sv'
 version = '0.0.1-SNAPSHOT'
 
+compileJava.options.encoding = 'UTF-8'
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)

@@ -1,9 +1,11 @@
-package ru.urfu.sv.studentvoice;
+package ru.urfu.sv.studentvoice.controller;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +23,7 @@ import java.util.Map;
 /**
  * В данной классе тестируем JwtAuthenticationController
  */
+@ExtendWith(MockitoExtension.class)
 public class JwtAuthenticationControllerTest {
 
     /**
@@ -87,7 +90,7 @@ public class JwtAuthenticationControllerTest {
         /* Уже сама проверка. Выше были приготовления */
         final ResponseEntity<Map<String, String>> response = jwtAuthenticationController.login(user);
 
-        /* Ниже проверки: на статус кода и и на значение токена */
+        /* Ниже проверки: на статус кода и на значение токена */
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertEquals(jwtToken, response.getBody().get("token"));
     }

@@ -68,4 +68,4 @@ jobs:
             fi
             
             echo "Starting new container..."
-            docker run -d -p 8000:8080 --env-file .env -v /.env:/.env --name $REPO_NAME --restart unless-stopped $IMAGE_NAME
+            docker run -d -p 8000:8080 --env-file .env --name $REPO_NAME --restart unless-stopped $IMAGE_NAME

@@ -9,15 +9,16 @@ import io.github.cdimascio.dotenv.Dotenv;
 public class StudentVoiceApplication {
 
     public static void main(String[] args) {
-        Dotenv dotenv = Dotenv.load();
-        System.setProperty("web.driver.path", dotenv.get("WEB_DRIVER_PATH"));
-        System.setProperty("web.driver.log", dotenv.get("WEB_DRIVER_LOG"));
-        System.setProperty("web.driver.browser.binary", dotenv.get("WEB_DRIVER_BINARY"));
-        System.setProperty("spring.datasource.url", dotenv.get("SPRING_DATASOURCE_URL"));
-        System.setProperty("spring.datasource.username", dotenv.get("SPRING_DATASOURCE_USERNAME"));
-        System.setProperty("spring.datasource.password", dotenv.get("SPRING_DATASOURCE_PASSWORD"));
-        System.setProperty("urfu.user.username", dotenv.get("URFU_USER_USERNAME"));
-        System.setProperty("urfu.user.password", dotenv.get("URFU_USER_PASSWORD"));
+//        Dotenv dotenv = Dotenv.load();
+//        Dotenv dotenv = Dotenv.configure().directory("./").ignoreIfMalformed().ignoreIfMissing().load();
+        System.setProperty("web.driver.path", System.getenv("WEB_DRIVER_PATH"));
+        System.setProperty("web.driver.log", System.getenv("WEB_DRIVER_LOG"));
+        System.setProperty("web.driver.browser.binary", System.getenv("WEB_DRIVER_BINARY"));
+        System.setProperty("spring.datasource.url", System.getenv("SPRING_DATASOURCE_URL"));
+        System.setProperty("spring.datasource.username", System.getenv("SPRING_DATASOURCE_USERNAME"));
+        System.setProperty("spring.datasource.password", System.getenv("SPRING_DATASOURCE_PASSWORD"));
+        System.setProperty("urfu.user.username", System.getenv("URFU_USER_USERNAME"));
+        System.setProperty("urfu.user.password", System.getenv("URFU_USER_PASSWORD"));
 
         SpringApplication.run(StudentVoiceApplication.class, args);
     }

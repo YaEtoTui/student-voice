@@ -781,7 +781,7 @@ Geckodriver:
   sudo service postgresql restart
   ```
 
-5. Установим maven для сборки проекта.
+5. Установим maven для сборки проекта. (не актуально, уже gradle, и автоматически back подгружается на сервер)
 
   ```bash
   sudo apt update

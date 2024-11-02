@@ -1,17 +1,13 @@
 package ru.urfu.sv.studentvoice.controllers.jwt;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.urfu.sv.studentvoice.controllers.links.Links;
 import ru.urfu.sv.studentvoice.model.domain.dto.auth.UserClient;
 import ru.urfu.sv.studentvoice.services.jwt.JwtUserDetailsService;
+import ru.urfu.sv.studentvoice.utils.exceptions.InvalidLoginException;
 import ru.urfu.sv.studentvoice.utils.jwt.JwtUtil;
 
 import java.util.HashMap;
@@ -49,7 +46,7 @@ public class JwtAuthenticationController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
         } catch (AuthenticationException e) {
-            throw new Exception("Invalid login", e);
+            throw new InvalidLoginException("Invalid login or password", e);
         }
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());

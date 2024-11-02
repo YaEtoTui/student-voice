@@ -14,17 +14,14 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import ru.urfu.sv.studentvoice.config.filter.CustomAuthenticationEntryPoint;
 import ru.urfu.sv.studentvoice.config.filter.JwtAuthenticationFilter;
 import ru.urfu.sv.studentvoice.services.jwt.JwtUserDetailsService;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 @Configuration
@@ -50,9 +47,6 @@ public class SecurityConfig {
                         .permitAll()
                         .anyRequest().authenticated()
                 )
-                .exceptionHandling(exceptionHandling -> exceptionHandling
-                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-                )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
@@ -63,11 +57,11 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder())
-                .and()
-                .build();
+        final AuthenticationManagerBuilder authManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authManagerBuilder.userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder());
+
+        return authManagerBuilder.build();
     }
 
     @Bean
@@ -83,11 +77,6 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", config);
 
         return new CorsFilter(source);
-    }
-
-    @Bean
-    public JdbcUserDetailsManager jdbcUserDetailsManager(DataSource dataSource) {
-        return new JdbcUserDetailsManager(dataSource);
     }
 
     @Bean

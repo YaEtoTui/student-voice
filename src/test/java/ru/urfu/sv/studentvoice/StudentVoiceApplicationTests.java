@@ -9,5 +9,4 @@ class StudentVoiceApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }

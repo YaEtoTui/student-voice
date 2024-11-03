@@ -110,7 +110,7 @@ public class JwtAuthenticationControllerTest {
         user.setPassword(password);
 
         /* Создаем мок-объект для authenticationManager */
-        /* В данном случае он проверяет есть ли данный пользователь. Ничего не возвращает, если user авторизован */
+        /* В данном случае он проверяет есть ли данный пользователь. Кидает exception, если user не смог авторизоваться */
         Mockito.when(authenticationManager.authenticate(ArgumentMatchers.any(UsernamePasswordAuthenticationToken.class))).thenThrow(new UsernameNotFoundException("User not found"));
 
         // Проверка на получении ошибки

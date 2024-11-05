@@ -1,7 +1,7 @@
 package ru.urfu.sv.studentvoice.services;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,6 +9,8 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.urfu.sv.studentvoice.model.domain.dto.response.UserInfoResponse;
+import ru.urfu.sv.studentvoice.model.domain.entity.Authority;
 import ru.urfu.sv.studentvoice.model.repository.UserRepository;
 import ru.urfu.sv.studentvoice.utils.consts.Parameters;
 import ru.urfu.sv.studentvoice.utils.consts.Roles;
@@ -21,14 +23,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class UserService {
+
     private final JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager();
-    private final PasswordEncoder encoder;
-    private final AuthorityRepository authorityRepository;
-    private final UserRepository userRepository;
-    private final ProfessorService professorService;
+    @Autowired
+    private PasswordEncoder encoder;
+    @Autowired
+    private AuthorityRepository authorityRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ProfessorService professorService;
+    @Autowired
+    private AuthorityService authorityService;
 
     public boolean isUserExists(String username) {
         return userDetailsManager.userExists(username);
@@ -101,5 +109,14 @@ public class UserService {
                 .findAll()
                 .stream()
                 .anyMatch(auth -> adminAuth.equals(auth.getAuthority()));
+    }
+
+    public UserInfoResponse getInfoForUser() {
+        final Authority authority = authorityService.findAuthorityForCheck();
+
+        final UserInfoResponse userInfoResponse = new UserInfoResponse();
+        userInfoResponse.setUsername(authority.getUsername());
+        userInfoResponse.setUserRole(authority.getAuthority());
+        return userInfoResponse;
     }
 }

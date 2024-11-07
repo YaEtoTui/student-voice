@@ -4,15 +4,14 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import ru.urfu.sv.studentvoice.model.domain.dto.response.PairResponse;
 import ru.urfu.sv.studentvoice.model.domain.entity.ClassSession;
 import ru.urfu.sv.studentvoice.model.domain.entity.Professor;
 import ru.urfu.sv.studentvoice.services.ClassSessionService;
@@ -27,17 +26,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static ru.urfu.sv.studentvoice.controllers.links.Links.BASE_API;
+import static ru.urfu.sv.studentvoice.controllers.links.Links.PROFESSORS;
 import static ru.urfu.sv.studentvoice.utils.consts.Parameters.*;
 import static ru.urfu.sv.studentvoice.utils.consts.Parameters.CLASS_SESSIONS_LIST;
 
 @RestController
-@RequiredArgsConstructor
-@RequestMapping("/api/professors")
+@RequestMapping(BASE_API + PROFESSORS)
 @PreAuthorize("@AuthoritiesAC.isProfessor()")
 public class ProfessorApiController {
-    private final ProfessorService professorService;
-    private final CourseService courseService;
-    private final ClassSessionService sessionService;
+
+    @Autowired
+    private ProfessorService professorService;
+    @Autowired
+    private CourseService courseService;
+    @Autowired
+    private ClassSessionService sessionService;
 
     @GetMapping("current")
     @Parameters(value = {
@@ -88,6 +92,12 @@ public class ProfessorApiController {
                 return ResponseEntity.ok(Map.of(RESULT, new ActionResultResponse(false, "Во время получения пар из модеуса произошла ошибка")));
             }
         }
+    }
 
+    @RequestMapping(path = "/list/pair", method = RequestMethod.GET)
+    public ResponseEntity<List<PairResponse>> findListPair() {
+
+        final List<PairResponse> response = professorService.findListPair();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

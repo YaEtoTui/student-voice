@@ -1,7 +1,7 @@
 package ru.urfu.sv.studentvoice.services;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.urfu.sv.studentvoice.model.domain.entity.ClassSession;
@@ -17,13 +17,17 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class ClassSessionService {
-    private final ClassSessionRepository repository;
-    private final CourseService courseService;
-    private final InstituteService instituteService;
-    private final ModeusService modeusService;
+
+    @Autowired
+    private ClassSessionRepository repository;
+    @Autowired
+    private CourseService courseService;
+    @Autowired
+    private InstituteService instituteService;
+    @Autowired
+    private ModeusService modeusService;
 
     @Transactional
     public ActionResult createClassSession(UUID courseId, String sessionName, String roomName, String professorName,

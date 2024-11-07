@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.ExtendedModelMap;
@@ -32,12 +32,14 @@ import static ru.urfu.sv.studentvoice.utils.model.ModelUtils.orNull;
 import static ru.urfu.sv.studentvoice.utils.result.ActionResultResponse.fromActionResult;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/sessions")
 @PreAuthorize("@AuthoritiesAC.isAdminOrProfessor()")
 public class ClassSessionApiController {
-    private final ClassSessionController sessionController;
-    private final ClassSessionService sessionService;
+
+    @Autowired
+    private ClassSessionController sessionController;
+    @Autowired
+    private ClassSessionService sessionService;
 
     @PostMapping("create")
     @Parameters(value = {
@@ -141,5 +143,4 @@ public class ClassSessionApiController {
         ActionResultResponse result = fromActionResult(model.getAttribute(RESULT));
         return ResponseEntity.ok().body(Map.of(RESULT, result));
     }
-
 }

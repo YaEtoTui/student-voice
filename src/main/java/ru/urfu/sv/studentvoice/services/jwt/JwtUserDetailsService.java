@@ -1,6 +1,10 @@
 package ru.urfu.sv.studentvoice.services.jwt;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,5 +39,30 @@ public class JwtUserDetailsService implements UserDetailsService {
         }
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), new ArrayList<>());
+    }
+
+    /**
+     * Ищем username пользователя
+     */
+    public String findUsername() {
+
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (!authentication.isAuthenticated()) {
+            throw new AuthenticationCredentialsNotFoundException("Current user not authenticated");
+        }
+
+        String username;
+        if (authentication.getPrincipal() instanceof org.springframework.security.core.userdetails.User) {
+            username = ((User) authentication.getPrincipal()).getUsername();
+        } else {
+            username = (String) authentication.getPrincipal();
+        }
+
+        if (isNull(username)) {
+            return null;
+        }
+
+        return username;
     }
 }

@@ -4,4 +4,5 @@ public interface Links {
 
     String BASE_API = "/api";
     String USER = "/user";
+    String PROFESSORS = "/professors";
 }

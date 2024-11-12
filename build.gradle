@@ -90,7 +90,6 @@ dependencies {
 
     annotationProcessor(
             "org.projectlombok:lombok",
-            "com.querydsl:querydsl-apt:$queryDslVersion:jpa",
             "javax.annotation:javax.annotation-api:1.3.2",
             "org.springframework.boot:spring-boot-configuration-processor"
     )

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="2024_11_12_20_20" author="Egor Sazhin">
+
+        <addColumn tableName="reviews">
+            <column name="category_id" type="BIGINT">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </addColumn>
+
+        <addForeignKeyConstraint baseTableName="reviews"
+                                 baseColumnNames="category_id"
+                                 referencedTableName="category_reviews"
+                                 referencedColumnNames="id"
+                                 constraintName="category_id_reviews_link"/>
+
+    </changeSet>
+
+</databaseChangeLog>

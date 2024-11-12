@@ -6,5 +6,7 @@
 
     <include file="db/changelog/2024-11-12_create_users.xml"/>
     <include file="db/changelog/2024-11-12_create_reviews.xml"/>
+    <include file="db/changelog/2024-11-12_create_category_reviews.xml"/>
+    <include file="db/changelog/2024-11-12_add_category_id_in_reviews.xml"/>
 
 </databaseChangeLog>

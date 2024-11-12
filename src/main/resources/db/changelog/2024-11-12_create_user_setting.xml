@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="2024_11_12_23_20" author="Egor Sazhin">
+
+        <createTable tableName="user_setting">
+
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="settings_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="available" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="user_setting"
+                                 baseColumnNames="user_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"
+                                 constraintName="user_link"/>
+
+        <addForeignKeyConstraint baseTableName="user_setting"
+                                 baseColumnNames="settings_id"
+                                 referencedTableName="settings"
+                                 referencedColumnNames="id"
+                                 constraintName="setting_link"/>
+
+    </changeSet>
+
+</databaseChangeLog>

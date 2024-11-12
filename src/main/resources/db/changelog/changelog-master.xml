@@ -17,5 +17,7 @@
     <include file="db/changelog/2024-11-12_create_courses.xml"/>
     <include file="db/changelog/2024-11-12_create_institutes.xml"/>
     <include file="db/changelog/2024-11-12_add_institute_id.xml"/>
+    <include file="db/changelog/2024-11-12_create_settings.xml"/>
+    <include file="db/changelog/2024-11-12_create_roles.xml"/>
 
 </databaseChangeLog>

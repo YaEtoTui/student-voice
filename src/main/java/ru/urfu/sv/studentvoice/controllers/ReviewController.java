@@ -116,45 +116,45 @@ public class ReviewController {
         return new ResponseEntity<>(report, HttpStatus.OK);
     }
 
-    @PostMapping("/save")
-    public String saveReview(HttpServletRequest request, Model model) {
-        Optional<ClassSession> sessionOpt = sessionService.findSessionById(UUID.fromString(request.getParameter(CLASS_SESSION_ID)));
-        if(sessionOpt.isEmpty()){
-            model.addAttribute(RESULT, ActionResultFactory.sessionNotExist());
-            return Templates.REVIEW_STATUS;
-        }
-        if (sessionOpt.get().getDisableAfterTimestamp() != null && Instant.now().isAfter(sessionOpt.get().getDisableAfterTimestamp())) {
-            model.addAttribute(RESULT, new ActionResult(false, "Отзыв на эту пару больше нельзя оставить"));
-            return Templates.REVIEW_STATUS;
-        }
-
-        ActionResult result = saveReview(request.getParameterMap());
-        model.addAttribute(RESULT, result);
-
-        if (result.isSuccess()) {
-            return Templates.REVIEW_STATUS;
-        } else {
-            return Templates.CREATE_REVIEW;
-        }
-    }
-
-    private ActionResult saveReview(Map<String, String[]> parameters) {
-        Review review = Review
-                .builder()
-                .sessionId(UUID.fromString(parameters.get(CLASS_SESSION_ID)[0]))
-                .studentFullName(parameters.get(STUDENT_FULL_NAME)[0])
-                .value(Byte.valueOf(parameters.get(REVIEW_VALUE)[0]))
-                .comment(parameters.get(COMMENT)[0])
-                .timestamp(Instant.now())
-                .build();
-
-        try {
-            ActionResult result = reviewService.saveReview(review);
-            log.info(result.getFormattedMessage());
-            return result;
-        } catch (IllegalArgumentException e) {
-            log.error("Отзыв не был сохранен", e);
-            return ActionResultFactory.reviewCreatingError();
-        }
-    }
+//    @PostMapping("/save")
+//    public String saveReview(HttpServletRequest request, Model model) {
+//        Optional<ClassSession> sessionOpt = sessionService.findSessionById(UUID.fromString(request.getParameter(CLASS_SESSION_ID)));
+//        if(sessionOpt.isEmpty()){
+//            model.addAttribute(RESULT, ActionResultFactory.sessionNotExist());
+//            return Templates.REVIEW_STATUS;
+//        }
+//        if (sessionOpt.get().getDisableAfterTimestamp() != null && Instant.now().isAfter(sessionOpt.get().getDisableAfterTimestamp())) {
+//            model.addAttribute(RESULT, new ActionResult(false, "Отзыв на эту пару больше нельзя оставить"));
+//            return Templates.REVIEW_STATUS;
+//        }
+//
+//        ActionResult result = saveReview(request.getParameterMap());
+//        model.addAttribute(RESULT, result);
+//
+//        if (result.isSuccess()) {
+//            return Templates.REVIEW_STATUS;
+//        } else {
+//            return Templates.CREATE_REVIEW;
+//        }
+//    }
+//
+//    private ActionResult saveReview(Map<String, String[]> parameters) {
+//        Review review = Review
+//                .builder()
+//                .sessionId(UUID.fromString(parameters.get(CLASS_SESSION_ID)[0]))
+//                .studentFullName(parameters.get(STUDENT_FULL_NAME)[0])
+//                .value(Byte.valueOf(parameters.get(REVIEW_VALUE)[0]))
+//                .comment(parameters.get(COMMENT)[0])
+//                .timestamp(Instant.now())
+//                .build();
+//
+//        try {
+//            ActionResult result = reviewService.saveReview(review);
+//            log.info(result.getFormattedMessage());
+//            return result;
+//        } catch (IllegalArgumentException e) {
+//            log.error("Отзыв не был сохранен", e);
+//            return ActionResultFactory.reviewCreatingError();
+//        }
+//    }
 }

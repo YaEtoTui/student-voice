@@ -10,9 +10,10 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface ReviewRepository extends JpaRepository<Review, UUID> {
-    List<Review> findAllBySessionId(UUID sessionId);
+public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    @Query(nativeQuery = true, value = "select * from reviews where session_id in (:ids)")
-    List<Review> findAllBySessionsIds(@Param("ids") List<UUID> sessionsIds);
+//    List<Review> findAllBySessionId(UUID sessionId);
+//
+//    @Query(nativeQuery = true, value = "select * from reviews where session_id in (:ids)")
+//    List<Review> findAllBySessionsIds(@Param("ids") List<UUID> sessionsIds);
 }

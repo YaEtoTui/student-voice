@@ -38,41 +38,41 @@ public class ReviewService {
     @Autowired
     private ReviewsReportService reportService;
 
-    @Transactional
-    public ActionResult saveReview(Review review) {
-        Optional<ClassSession> classSession = sessionService.findSessionById(review.getSessionId());
+//    @Transactional
+//    public ActionResult saveReview(Review review) {
+//        Optional<ClassSession> classSession = sessionService.findSessionById(review.getSessionId());
+//
+//        if (classSession.isEmpty()) {
+//            String message = "Пара из отзыва %s не найдена".formatted(review);
+//            log.warn(message);
+//            throw new IllegalArgumentException(message);
+//        }
+//
+//        Review saved = repository.save(review);
+//        return repository.existsById(saved.getReviewId()) ? ActionResultFactory.reviewCreated(saved.toString()) : ActionResultFactory.reviewCreatingError();
+//    }
 
-        if (classSession.isEmpty()) {
-            String message = "Пара из отзыва %s не найдена".formatted(review);
-            log.warn(message);
-            throw new IllegalArgumentException(message);
-        }
+//    public Float getAverageRatingBySessions(List<ClassSession> sessions) {
+//        List<UUID> sessionsIds = sessions
+//                .stream()
+//                .map(ClassSession::getSessionId)
+//                .toList();
+//
+//        if(sessionsIds.isEmpty()) return 0f;
+//
+//        List<Review> reviews = repository.findAllBySessionsIds(sessionsIds);
+//
+//        Integer sum = 0;
+//        for (Review review : reviews) {
+//            sum += review.getValue();
+//        }
+//
+//        return reviews.isEmpty() ? 0f : (float) sum / reviews.size();
+//    }
 
-        Review saved = repository.save(review);
-        return repository.existsById(saved.getReviewId()) ? ActionResultFactory.reviewCreated(saved.toString()) : ActionResultFactory.reviewCreatingError();
-    }
-
-    public Float getAverageRatingBySessions(List<ClassSession> sessions) {
-        List<UUID> sessionsIds = sessions
-                .stream()
-                .map(ClassSession::getSessionId)
-                .toList();
-
-        if(sessionsIds.isEmpty()) return 0f;
-
-        List<Review> reviews = repository.findAllBySessionsIds(sessionsIds);
-
-        Integer sum = 0;
-        for (Review review : reviews) {
-            sum += review.getValue();
-        }
-
-        return reviews.isEmpty() ? 0f : (float) sum / reviews.size();
-    }
-
-    public List<Review> findReviewsBySessionId(UUID sessionId) {
-        return repository.findAllBySessionId(sessionId);
-    }
+//    public List<Review> findReviewsBySessionId(UUID sessionId) {
+//        return repository.findAllBySessionId(sessionId);
+//    }
 
     @Transactional
     public byte[] getReport() throws IOException {

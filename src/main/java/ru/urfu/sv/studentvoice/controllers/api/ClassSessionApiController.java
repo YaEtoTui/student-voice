@@ -115,21 +115,21 @@ public class ClassSessionApiController {
                         "Таймер успешно запущен. Ссылка перестанет работать %s".formatted(TemporalFormatter.formatToDateTime(time)))));
     }
 
-    @GetMapping("reviews-list")
-    @Parameters(value = {
-            @Parameter(name = "sessionId", in = ParameterIn.QUERY, required = true)
-    })
-    public ResponseEntity<Map<String, Object>> getSessionStudents(HttpServletRequest request) {
-        ExtendedModelMap model = new ExtendedModelMap();
-        sessionController.sessionStudentsPage(request.getParameter(CLASS_SESSION_ID), model);
-
-        ActionResultResponse result = fromActionResult(model.getAttribute(RESULT));
-        return ResponseEntity.ok().body(
-                Map.of(RESULT, result,
-                        REVIEWS_LIST, orNull(model.getAttribute(REVIEWS_LIST))
-                )
-        );
-    }
+//    @GetMapping("reviews-list")
+//    @Parameters(value = {
+//            @Parameter(name = "sessionId", in = ParameterIn.QUERY, required = true)
+//    })
+//    public ResponseEntity<Map<String, Object>> getSessionStudents(HttpServletRequest request) {
+//        ExtendedModelMap model = new ExtendedModelMap();
+//        sessionController.sessionStudentsPage(request.getParameter(CLASS_SESSION_ID), model);
+//
+//        ActionResultResponse result = fromActionResult(model.getAttribute(RESULT));
+//        return ResponseEntity.ok().body(
+//                Map.of(RESULT, result,
+//                        REVIEWS_LIST, orNull(model.getAttribute(REVIEWS_LIST))
+//                )
+//        );
+//    }
 
     @PostMapping("change-professor")
     @Parameters(value = {

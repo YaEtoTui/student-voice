@@ -24,18 +24,18 @@ import static ru.urfu.sv.studentvoice.utils.result.ActionResultResponse.fromActi
 public class ReviewApiController {
     private final ReviewController reviewController;
 
-    @PostMapping("save")
-    @Parameters(value = {
-            @Parameter(name = "sessionId", in = ParameterIn.QUERY, required = true),
-            @Parameter(name = "studentFullName", in = ParameterIn.QUERY, required = true),
-            @Parameter(name = "reviewValue", in = ParameterIn.QUERY, required = true),
-            @Parameter(name = "comment", in = ParameterIn.QUERY, required = true)
-    })
-    public ResponseEntity<Map<String, Object>> createCourse(HttpServletRequest request) {
-        ExtendedModelMap model = new ExtendedModelMap();
-        reviewController.saveReview(request, model);
-
-        ActionResultResponse result = fromActionResult(model.getAttribute(RESULT));
-        return ResponseEntity.ok().body(Map.of(RESULT, result));
-    }
+//    @PostMapping("save")
+//    @Parameters(value = {
+//            @Parameter(name = "sessionId", in = ParameterIn.QUERY, required = true),
+//            @Parameter(name = "studentFullName", in = ParameterIn.QUERY, required = true),
+//            @Parameter(name = "reviewValue", in = ParameterIn.QUERY, required = true),
+//            @Parameter(name = "comment", in = ParameterIn.QUERY, required = true)
+//    })
+//    public ResponseEntity<Map<String, Object>> createCourse(HttpServletRequest request) {
+//        ExtendedModelMap model = new ExtendedModelMap();
+//        reviewController.saveReview(request, model);
+//
+//        ActionResultResponse result = fromActionResult(model.getAttribute(RESULT));
+//        return ResponseEntity.ok().body(Map.of(RESULT, result));
+//    }
 }

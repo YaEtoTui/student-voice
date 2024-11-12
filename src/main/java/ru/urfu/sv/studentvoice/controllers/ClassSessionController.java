@@ -127,20 +127,20 @@ public class ClassSessionController {
         return REDIRECT.concat("/sessions/").concat(sessionId.toString());
     }
 
-    @GetMapping("/{sessionId}/students")
-    public String sessionStudentsPage(@PathVariable("sessionId") String sessionIdStr, Model model) {
-        Optional<ClassSession> sessionOpt = sessionService.findSessionById(UUID.fromString(sessionIdStr));
-        if (sessionOpt.isEmpty()) {
-            model.addAttribute(RESULT, ActionResultFactory.sessionNotExist());
-            return SESSION_STUDENTS;
-        }
-        ClassSession session = sessionOpt.get();
-        List<Review> reviews = reviewService.findReviewsBySessionId(session.getSessionId());
-        model.addAttribute(REVIEWS_LIST, reviews);
-        model.addAttribute(CLASS_SESSION, session);
-        model.addAttribute(CLASS_SESSION_DATE, TemporalFormatter.formatToSessionDateTime(session));
-        return SESSION_STUDENTS;
-    }
+//    @GetMapping("/{sessionId}/students")
+//    public String sessionStudentsPage(@PathVariable("sessionId") String sessionIdStr, Model model) {
+//        Optional<ClassSession> sessionOpt = sessionService.findSessionById(UUID.fromString(sessionIdStr));
+//        if (sessionOpt.isEmpty()) {
+//            model.addAttribute(RESULT, ActionResultFactory.sessionNotExist());
+//            return SESSION_STUDENTS;
+//        }
+//        ClassSession session = sessionOpt.get();
+//        List<Review> reviews = reviewService.findReviewsBySessionId(session.getSessionId());
+//        model.addAttribute(REVIEWS_LIST, reviews);
+//        model.addAttribute(CLASS_SESSION, session);
+//        model.addAttribute(CLASS_SESSION_DATE, TemporalFormatter.formatToSessionDateTime(session));
+//        return SESSION_STUDENTS;
+//    }
 
     @GetMapping("/{sessionId}/update")
     public String updateSessionPage(@PathVariable("sessionId") String sessionIdStr, Model model) {

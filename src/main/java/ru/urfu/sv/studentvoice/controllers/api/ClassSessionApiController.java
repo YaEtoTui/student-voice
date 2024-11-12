@@ -41,22 +41,22 @@ public class ClassSessionApiController {
     @Autowired
     private ClassSessionService sessionService;
 
-    @PostMapping("create")
-    @Parameters(value = {
-            @Parameter(name = "courseId", in = ParameterIn.QUERY, required = true),
-            @Parameter(name = "professorName", in = ParameterIn.QUERY, required = true),
-            @Parameter(name = "startSession", in = ParameterIn.QUERY, required = true),
-            @Parameter(name = "endSession", in = ParameterIn.QUERY, required = true),
-            @Parameter(name = "roomName", in = ParameterIn.QUERY, required = true),
-            @Parameter(name = "sessionName", in = ParameterIn.QUERY, required = true)
-    })
-    public ResponseEntity<Map<String, Object>> createSession(HttpServletRequest request) {
-        ExtendedModelMap model = new ExtendedModelMap();
-        sessionController.createSession(null, request, model);
-
-        ActionResultResponse result = fromActionResult(model.getAttribute(RESULT));
-        return ResponseEntity.ok().body(Map.of(RESULT, result));
-    }
+//    @PostMapping("create")
+//    @Parameters(value = {
+//            @Parameter(name = "courseId", in = ParameterIn.QUERY, required = true),
+//            @Parameter(name = "professorName", in = ParameterIn.QUERY, required = true),
+//            @Parameter(name = "startSession", in = ParameterIn.QUERY, required = true),
+//            @Parameter(name = "endSession", in = ParameterIn.QUERY, required = true),
+//            @Parameter(name = "roomName", in = ParameterIn.QUERY, required = true),
+//            @Parameter(name = "sessionName", in = ParameterIn.QUERY, required = true)
+//    })
+//    public ResponseEntity<Map<String, Object>> createSession(HttpServletRequest request) {
+//        ExtendedModelMap model = new ExtendedModelMap();
+//        sessionController.createSession(null, request, model);
+//
+//        ActionResultResponse result = fromActionResult(model.getAttribute(RESULT));
+//        return ResponseEntity.ok().body(Map.of(RESULT, result));
+//    }
 
     @GetMapping("find")
     @Parameters(value = {

@@ -64,21 +64,21 @@ public class ProfessorService {
         return repository.existsById(professor.getProfessorId()) ? ActionResultFactory.professorCreated() : ActionResultFactory.professorCreatingError();
     }
 
-    @Transactional
-    public ActionResult updateProfessor(String username, String newProfessorName) {
-        Optional<Professor> professor = findProfessorByUsername(username);
-        if (professor.isEmpty()) {
-            return ActionResultFactory.professorNotExist(username);
-        }
-        String oldProfessorName = professor.get().getFullName();
-        professor.get().setFullName(newProfessorName);
-        repository.save(professor.get());
-
-        courseService.updateProfessor(oldProfessorName, newProfessorName);
-        sessionService.updateProfessorName(oldProfessorName, newProfessorName);
-
-        return ActionResultFactory.professorCreated();
-    }
+//    @Transactional
+//    public ActionResult updateProfessor(String username, String newProfessorName) {
+//        Optional<Professor> professor = findProfessorByUsername(username);
+//        if (professor.isEmpty()) {
+//            return ActionResultFactory.professorNotExist(username);
+//        }
+//        String oldProfessorName = professor.get().getFullName();
+//        professor.get().setFullName(newProfessorName);
+//        repository.save(professor.get());
+//
+//        courseService.updateProfessor(oldProfessorName, newProfessorName);
+//        sessionService.updateProfessorName(oldProfessorName, newProfessorName);
+//
+//        return ActionResultFactory.professorCreated();
+//    }
 
     public Optional<Professor> findProfessorByUsername(String username) {
         return repository.findByUsername(username);

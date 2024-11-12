@@ -44,44 +44,44 @@ public class ClassSessionController {
     @Value("${application.host}")
     private String applicationHost;
 
-    @GetMapping("/create")
-    public String createSessionPage(@RequestParam(value = COURSE_ID, required = false) UUID courseId,
-                                    @AuthenticationPrincipal UserDetails userDetails,
-                                    Model model) {
-        model.addAttribute(INSTITUTES_LIST, instituteService.findAllInstitutes());
-        model.addAttribute(COURSES_LIST, courseService.findAll());
-        addProfessorName(professorService, model, userDetails);
+//    @GetMapping("/create")
+//    public String createSessionPage(@RequestParam(value = COURSE_ID, required = false) UUID courseId,
+//                                    @AuthenticationPrincipal UserDetails userDetails,
+//                                    Model model) {
+//        model.addAttribute(INSTITUTES_LIST, instituteService.findAllInstitutes());
+//        model.addAttribute(COURSES_LIST, courseService.findAll());
+//        addProfessorName(professorService, model, userDetails);
+//
+//        if (courseId != null) {
+//            Optional<Course> courseOpt = courseService.findCourseById(courseId);
+//            if (courseOpt.isEmpty()) {
+//                model.addAttribute(RESULT, ActionResultFactory.courseNotExist());
+//                return CREATE_SESSION;
+//            }
+//            model.addAttribute("requestedCourse", courseOpt.get());
+//        }
+//
+//        return CREATE_SESSION;
+//    }
 
-        if (courseId != null) {
-            Optional<Course> courseOpt = courseService.findCourseById(courseId);
-            if (courseOpt.isEmpty()) {
-                model.addAttribute(RESULT, ActionResultFactory.courseNotExist());
-                return CREATE_SESSION;
-            }
-            model.addAttribute("requestedCourse", courseOpt.get());
-        }
-
-        return CREATE_SESSION;
-    }
-
-    @PostMapping("/create")
-    public String createSession(@AuthenticationPrincipal UserDetails userDetails, HttpServletRequest request, Model model) {
-        UUID courseId = UUID.fromString(request.getParameter(COURSE_ID));
-        String professorName = request.getParameter(PROFESSOR_NAME);
-        LocalDateTime startSessionDate = LocalDateTime.parse(request.getParameter("startSession"));
-        LocalDateTime endSessionDate = LocalDateTime.parse(request.getParameter("endSession"));
-        String roomName = request.getParameter("roomName");
-        String sessionName = request.getParameter("sessionName");
-
-        ActionResult result = sessionService.createClassSession(courseId, sessionName, roomName, professorName,
-                startSessionDate, endSessionDate);
-
-        model.addAttribute(INSTITUTES_LIST, instituteService.findAllInstitutes());
-        model.addAttribute(COURSES_LIST, courseService.findAll());
-        model.addAttribute(RESULT, result);
-        addProfessorName(professorService, model, userDetails);
-        return CREATE_SESSION;
-    }
+//    @PostMapping("/create")
+//    public String createSession(@AuthenticationPrincipal UserDetails userDetails, HttpServletRequest request, Model model) {
+//        UUID courseId = UUID.fromString(request.getParameter(COURSE_ID));
+//        String professorName = request.getParameter(PROFESSOR_NAME);
+//        LocalDateTime startSessionDate = LocalDateTime.parse(request.getParameter("startSession"));
+//        LocalDateTime endSessionDate = LocalDateTime.parse(request.getParameter("endSession"));
+//        String roomName = request.getParameter("roomName");
+//        String sessionName = request.getParameter("sessionName");
+//
+//        ActionResult result = sessionService.createClassSession(courseId, sessionName, roomName, professorName,
+//                startSessionDate, endSessionDate);
+//
+//        model.addAttribute(INSTITUTES_LIST, instituteService.findAllInstitutes());
+//        model.addAttribute(COURSES_LIST, courseService.findAll());
+//        model.addAttribute(RESULT, result);
+//        addProfessorName(professorService, model, userDetails);
+//        return CREATE_SESSION;
+//    }
 
     @GetMapping("/{sessionId}")
     public String sessionPage(@PathVariable("sessionId") String sessionIdStr, Model model) {

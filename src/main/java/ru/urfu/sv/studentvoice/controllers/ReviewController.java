@@ -49,35 +49,35 @@ public class ReviewController {
     @Autowired
     private ReviewsReportService reportService;
 
-    @GetMapping("/create")
-    public String createReviewPage(@RequestParam("sessionId") String sessionIdStr, Model model) {
-        UUID sessionId = UUID.fromString(sessionIdStr);
-        Optional<ClassSession> sessionOpt = sessionService.findSessionById(sessionId);
-        if (sessionOpt.isEmpty()) {
-            model.addAttribute(RESULT, ActionResultFactory.sessionNotExist());
-            return Templates.REVIEW_STATUS;
-        }
-
-        if (sessionOpt.get().getDisableAfterTimestamp() != null && Instant.now().isAfter(sessionOpt.get().getDisableAfterTimestamp())) {
-            model.addAttribute(RESULT, new ActionResult(false, "Отзыв на эту пару больше нельзя оставить"));
-            return Templates.REVIEW_STATUS;
-        }
-
-        Optional<Course> courseOpt = courseService.findCourseBySession(sessionOpt.get());
-        if (courseOpt.isEmpty()) {
-            model.addAttribute(RESULT, ActionResultFactory.courseNotExist());
-            return Templates.REVIEW_STATUS;
-        }
-
-        Course course = courseOpt.get();
-        ClassSession session = sessionOpt.get();
-        model.addAttribute(COURSE_NAME, course.getCourseDetails().getCourseName());
-        model.addAttribute("address", "%s / %s".formatted(course.getCourseDetails().getInstituteAddress(), session.getRoomName()));
-        model.addAttribute(CLASS_SESSION_DATE, TemporalFormatter.formatToDateTime(session.getStartDateTime()));
-        model.addAttribute(PROFESSOR_NAME, session.getProfessorName());
-
-        return Templates.CREATE_REVIEW;
-    }
+//    @GetMapping("/create")
+//    public String createReviewPage(@RequestParam("sessionId") String sessionIdStr, Model model) {
+//        UUID sessionId = UUID.fromString(sessionIdStr);
+//        Optional<ClassSession> sessionOpt = sessionService.findSessionById(sessionId);
+//        if (sessionOpt.isEmpty()) {
+//            model.addAttribute(RESULT, ActionResultFactory.sessionNotExist());
+//            return Templates.REVIEW_STATUS;
+//        }
+//
+//        if (sessionOpt.get().getDisableAfterTimestamp() != null && Instant.now().isAfter(sessionOpt.get().getDisableAfterTimestamp())) {
+//            model.addAttribute(RESULT, new ActionResult(false, "Отзыв на эту пару больше нельзя оставить"));
+//            return Templates.REVIEW_STATUS;
+//        }
+//
+//        Optional<Course> courseOpt = courseService.findCourseBySession(sessionOpt.get());
+//        if (courseOpt.isEmpty()) {
+//            model.addAttribute(RESULT, ActionResultFactory.courseNotExist());
+//            return Templates.REVIEW_STATUS;
+//        }
+//
+//        Course course = courseOpt.get();
+//        ClassSession session = sessionOpt.get();
+//        model.addAttribute(COURSE_NAME, course.getCourseDetails().getCourseName());
+//        model.addAttribute("address", "%s / %s".formatted(course.getCourseDetails().getInstituteAddress(), session.getRoomName()));
+//        model.addAttribute(CLASS_SESSION_DATE, TemporalFormatter.formatToDateTime(session.getStartDateTime()));
+//        model.addAttribute(PROFESSOR_NAME, session.getProfessorName());
+//
+//        return Templates.CREATE_REVIEW;
+//    }
 
     @GetMapping("/download-report")
     @ResponseBody

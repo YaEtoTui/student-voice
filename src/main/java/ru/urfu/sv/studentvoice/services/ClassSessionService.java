@@ -29,35 +29,35 @@ public class ClassSessionService {
     @Autowired
     private ModeusService modeusService;
 
-    @Transactional
-    public ActionResult createClassSession(UUID courseId, String sessionName, String roomName, String professorName,
-                                           LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        Optional<Course> courseOpt = courseService.findCourseById(courseId);
-
-        if (courseOpt.isEmpty()) {
-            log.error("Предмета с идентификатором {} не найдено", courseId);
-            return ActionResultFactory.courseNotExist();
-        }
-
-        ClassSession session = ClassSession
-                .builder()
-                .sessionId(UUID.randomUUID())
-                .status("Запланировано")
-                .sessionName(sessionName)
-                .roomName(roomName)
-                .courseId(courseId)
-                .courseDetails(courseOpt.get().getCourseDetails())
-                .professorName(professorName)
-                .startDateTime(startDateTime)
-                .endDateTime(endDateTime)
-                .disableAfterTimestamp(endDateTime.toInstant(ZoneOffset.ofHours(5)))
-                .createTimestamp(Instant.now())
-                .build();
-
-        session = repository.save(session);
-
-        return repository.existsById(session.getSessionId()) ? ActionResultFactory.sessionCreated() : ActionResultFactory.sessionCreatingError();
-    }
+//    @Transactional
+//    public ActionResult createClassSession(UUID courseId, String sessionName, String roomName, String professorName,
+//                                           LocalDateTime startDateTime, LocalDateTime endDateTime) {
+//        Optional<Course> courseOpt = courseService.findCourseById(courseId);
+//
+//        if (courseOpt.isEmpty()) {
+//            log.error("Предмета с идентификатором {} не найдено", courseId);
+//            return ActionResultFactory.courseNotExist();
+//        }
+//
+//        ClassSession session = ClassSession
+//                .builder()
+//                .sessionId(UUID.randomUUID())
+//                .status("Запланировано")
+//                .sessionName(sessionName)
+//                .roomName(roomName)
+//                .courseId(courseId)
+//                .courseDetails(courseOpt.get().getCourseDetails())
+//                .professorName(professorName)
+//                .startDateTime(startDateTime)
+//                .endDateTime(endDateTime)
+//                .disableAfterTimestamp(endDateTime.toInstant(ZoneOffset.ofHours(5)))
+//                .createTimestamp(Instant.now())
+//                .build();
+//
+//        session = repository.save(session);
+//
+//        return repository.existsById(session.getSessionId()) ? ActionResultFactory.sessionCreated() : ActionResultFactory.sessionCreatingError();
+//    }
 
     @Transactional
     public ActionResult setDisableTimestamp(ClassSession session, LocalTime duration) {
@@ -98,24 +98,24 @@ public class ClassSessionService {
         return new ActionResult(true, "Пара успешно изменена");
     }
 
-    @Transactional
-    public List<ClassSession> findAllClassSessionsByProfessorName(String professorName, LocalDate dateFrom, LocalDate dateTo) throws ModeusException {
-        final List<UUID> savedClassSessions = repository.findAllByProfessorNameIgnoreCase(professorName).stream().map(ClassSession::getSessionId).toList();
-        List<ClassSession> modeusClassSessions = modeusService.getSessionsOfProfessor(professorName, dateFrom, dateTo);
-        List<ClassSession> unsaved = modeusClassSessions.stream().filter(session -> !savedClassSessions.contains(session.getSessionId())).toList();
-        if (!unsaved.isEmpty()) {
-            String newClassSessionStr = String.join("\n", unsaved.stream().map(ClassSession::toString).toList());
-            log.info("Для преподавателя найдены новые пары {}", newClassSessionStr);
-            instituteService.createInstitutesByClassSessions(unsaved);
-            courseService.createCoursesByClassSessions(unsaved);
-            saveAll(unsaved);
-        }
-
-        List<ClassSession> allClassSessions = repository.findAllByProfessorNameIgnoreCase(professorName);
-        String classSessionsStr = String.join("\n", allClassSessions.stream().map(ClassSession::toString).toList());
-        log.info("Для преподавателя {} найдены следующие пары: {}", professorName, classSessionsStr);
-        return allClassSessions;
-    }
+//    @Transactional
+//    public List<ClassSession> findAllClassSessionsByProfessorName(String professorName, LocalDate dateFrom, LocalDate dateTo) throws ModeusException {
+//        final List<UUID> savedClassSessions = repository.findAllByProfessorNameIgnoreCase(professorName).stream().map(ClassSession::getSessionId).toList();
+//        List<ClassSession> modeusClassSessions = modeusService.getSessionsOfProfessor(professorName, dateFrom, dateTo);
+//        List<ClassSession> unsaved = modeusClassSessions.stream().filter(session -> !savedClassSessions.contains(session.getSessionId())).toList();
+//        if (!unsaved.isEmpty()) {
+//            String newClassSessionStr = String.join("\n", unsaved.stream().map(ClassSession::toString).toList());
+//            log.info("Для преподавателя найдены новые пары {}", newClassSessionStr);
+//            instituteService.createInstitutesByClassSessions(unsaved);
+//            courseService.createCoursesByClassSessions(unsaved);
+//            saveAll(unsaved);
+//        }
+//
+//        List<ClassSession> allClassSessions = repository.findAllByProfessorNameIgnoreCase(professorName);
+//        String classSessionsStr = String.join("\n", allClassSessions.stream().map(ClassSession::toString).toList());
+//        log.info("Для преподавателя {} найдены следующие пары: {}", professorName, classSessionsStr);
+//        return allClassSessions;
+//    }
 
     private ActionResult saveAll(List<ClassSession> sessions) {
         sessions.forEach(session -> session.setDisableAfterTimestamp(session.getEndDateTime().toInstant(ZoneOffset.ofHours(5))));

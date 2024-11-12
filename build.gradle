@@ -92,12 +92,6 @@ dependencies {
     testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 }
 
-dependencyManagement {
-    imports {
-        mavenBom "org.springframework.boot:spring-boot-dependencies:3.1.0"
-    }
-}
-
 tasks.named('test') {
     useJUnitPlatform()
 }

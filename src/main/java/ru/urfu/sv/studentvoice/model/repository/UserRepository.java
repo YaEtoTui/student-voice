@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+
     @Query(value = "select username from users", nativeQuery = true)
     List<String> findAllUsernames();
 

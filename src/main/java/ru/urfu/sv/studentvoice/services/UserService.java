@@ -2,24 +2,16 @@ package ru.urfu.sv.studentvoice.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.UserInfoResponse;
 import ru.urfu.sv.studentvoice.model.domain.entity.Authority;
 import ru.urfu.sv.studentvoice.model.repository.UserRepository;
-import ru.urfu.sv.studentvoice.utils.consts.Parameters;
 import ru.urfu.sv.studentvoice.utils.consts.Roles;
-import ru.urfu.sv.studentvoice.model.domain.entity.User;
 import ru.urfu.sv.studentvoice.model.repository.AuthorityRepository;
 import ru.urfu.sv.studentvoice.utils.result.ActionResult;
-import ru.urfu.sv.studentvoice.utils.result.ActionResultFactory;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j

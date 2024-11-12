@@ -16,8 +16,8 @@ public class Course extends AbstractEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-//    @Column(name = "institute_id", nullable = false)
-//    private Long instituteId;
+    @Column(name = "institute_id", nullable = false)
+    private Long instituteId;
 
 
     @Column(name = "create_timestamp", nullable = false)

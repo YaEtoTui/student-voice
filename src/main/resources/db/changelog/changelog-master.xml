@@ -15,5 +15,7 @@
     <include file="db/changelog/2024-11-12_create_lessons.xml"/>
     <include file="db/changelog/2024-11-12_add_lesson_id_in_lessons_review.xml"/>
     <include file="db/changelog/2024-11-12_create_courses.xml"/>
+    <include file="db/changelog/2024-11-12_create_institutes.xml"/>
+    <include file="db/changelog/2024-11-12_add_institute_id.xml"/>
 
 </databaseChangeLog>

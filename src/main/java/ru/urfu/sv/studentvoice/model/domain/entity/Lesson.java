@@ -25,8 +25,8 @@ public class Lesson extends AbstractEntity {
 //    @Column(name = "course_id", nullable = false)
 //    private Long courseId;
 
-//    @Column(name = "institute_id", nullable = false)
-//    private Long instituteId;
+    @Column(name = "institute_id", nullable = false)
+    private Long instituteId;
 
     @Column(name = "start_date_time", nullable = false)
     private Instant startDateTime;

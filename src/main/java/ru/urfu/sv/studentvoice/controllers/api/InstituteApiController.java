@@ -32,19 +32,19 @@ public class InstituteApiController {
     private final InstituteController instituteController;
     private final InstituteService instituteService;
 
-    @PostMapping("create")
-    @Parameters(value = {
-            @Parameter(name = "instituteFullName", in = ParameterIn.QUERY, required = true),
-            @Parameter(name = "instituteShortName", in = ParameterIn.QUERY, required = true),
-            @Parameter(name = "instituteAddress", in = ParameterIn.QUERY, required = true)
-    })
-    public ResponseEntity<Map<String, Object>> create(HttpServletRequest request) {
-        ExtendedModelMap model = new ExtendedModelMap();
-        instituteController.createInstitute(request, model);
-
-        ActionResultResponse result = fromActionResult(model.getAttribute(RESULT));
-        return ResponseEntity.ok().body(Map.of(RESULT, result));
-    }
+//    @PostMapping("create")
+//    @Parameters(value = {
+//            @Parameter(name = "instituteFullName", in = ParameterIn.QUERY, required = true),
+//            @Parameter(name = "instituteShortName", in = ParameterIn.QUERY, required = true),
+//            @Parameter(name = "instituteAddress", in = ParameterIn.QUERY, required = true)
+//    })
+//    public ResponseEntity<Map<String, Object>> create(HttpServletRequest request) {
+//        ExtendedModelMap model = new ExtendedModelMap();
+//        instituteController.createInstitute(request, model);
+//
+//        ActionResultResponse result = fromActionResult(model.getAttribute(RESULT));
+//        return ResponseEntity.ok().body(Map.of(RESULT, result));
+//    }
 
     @GetMapping("list")
     public ResponseEntity<Map<String, Object>> list() {

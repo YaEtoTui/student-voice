@@ -39,23 +39,23 @@ public class CourseController {
     private final ClassSessionService sessionService;
     private final InstituteService instituteService;
 
-    @GetMapping("/create")
-    public String createCoursePage(
-            @RequestParam(name = INSTITUTE_ID, required = false, defaultValue = "-1") Integer instituteId,
-            @AuthenticationPrincipal UserDetails userDetails,
-            Model model) {
-        if (instituteId != -1) {
-            Optional<Institute> instituteOpt = instituteService.findInstituteById(instituteId);
-            if (instituteOpt.isEmpty()) {
-                model.addAttribute(RESULT, ActionResultFactory.instituteNotExist());
-                return Templates.CREATE_COURSE;
-            }
-            model.addAttribute(INSTITUTE_ID, instituteId);
-        }
-        model.addAttribute(INSTITUTES_LIST, instituteService.findAllInstitutes());
-        addProfessorName(professorService, model, userDetails);
-        return Templates.CREATE_COURSE;
-    }
+//    @GetMapping("/create")
+//    public String createCoursePage(
+//            @RequestParam(name = INSTITUTE_ID, required = false, defaultValue = "-1") Integer instituteId,
+//            @AuthenticationPrincipal UserDetails userDetails,
+//            Model model) {
+//        if (instituteId != -1) {
+//            Optional<Institute> instituteOpt = instituteService.findInstituteById(instituteId);
+//            if (instituteOpt.isEmpty()) {
+//                model.addAttribute(RESULT, ActionResultFactory.instituteNotExist());
+//                return Templates.CREATE_COURSE;
+//            }
+//            model.addAttribute(INSTITUTE_ID, instituteId);
+//        }
+//        model.addAttribute(INSTITUTES_LIST, instituteService.findAllInstitutes());
+//        addProfessorName(professorService, model, userDetails);
+//        return Templates.CREATE_COURSE;
+//    }
 
 //    @PostMapping("/create")
 //    public String createCourse(@AuthenticationPrincipal UserDetails userDetails, HttpServletRequest request, Model model) {

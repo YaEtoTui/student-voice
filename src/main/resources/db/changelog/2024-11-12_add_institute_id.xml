@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="2024_11_12_23_05" author="Egor Sazhin">
+
+        <addColumn tableName="courses">
+            <column name="institute_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addForeignKeyConstraint baseTableName="courses"
+                                 baseColumnNames="institute_id"
+                                 referencedTableName="institutes"
+                                 referencedColumnNames="id"
+                                 constraintName="courses_institutes_link"/>
+
+    </changeSet>
+
+    <changeSet id="2024_11_12_23_10" author="Egor Sazhin">
+
+        <addColumn tableName="lessons">
+            <column name="institute_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addForeignKeyConstraint baseTableName="lessons"
+                                 baseColumnNames="institute_id"
+                                 referencedTableName="institutes"
+                                 referencedColumnNames="id"
+                                 constraintName="lessons_institutes_link"/>
+
+    </changeSet>
+
+</databaseChangeLog>

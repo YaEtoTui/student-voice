@@ -28,14 +28,14 @@ public class InstituteController {
         return CREATE_INSTITUTE;
     }
 
-    @PostMapping("/create")
-    public String createInstitute(HttpServletRequest request, Model model) {
-        String instituteFullName = request.getParameter(INSTITUTE_FULL_NAME);
-        String instituteShortName = request.getParameter(INSTITUTE_SHORT_NAME);
-        String instituteAddress = request.getParameter(INSTITUTE_ADDRESS);
-
-        ActionResult result = instituteService.createInstitute(instituteFullName, instituteShortName, instituteAddress);
-        model.addAttribute(RESULT, result);
-        return CREATE_INSTITUTE;
-    }
+//    @PostMapping("/create")
+//    public String createInstitute(HttpServletRequest request, Model model) {
+//        String instituteFullName = request.getParameter(INSTITUTE_FULL_NAME);
+//        String instituteShortName = request.getParameter(INSTITUTE_SHORT_NAME);
+//        String instituteAddress = request.getParameter(INSTITUTE_ADDRESS);
+//
+//        ActionResult result = instituteService.createInstitute(instituteFullName, instituteShortName, instituteAddress);
+//        model.addAttribute(RESULT, result);
+//        return CREATE_INSTITUTE;
+//    }
 }

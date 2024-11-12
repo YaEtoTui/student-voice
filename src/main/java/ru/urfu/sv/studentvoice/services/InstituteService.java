@@ -19,30 +19,30 @@ import java.util.Optional;
 public class InstituteService {
     private final InstituteRepository repository;
 
-    @Transactional
-    public ActionResult createInstitute(String instituteFullName, String instituteShortName, String instituteAddress) {
-        Institute institute = repository.save(new Institute(instituteFullName, instituteShortName, instituteAddress));
-        return repository.existsById(institute.getInstituteId()) ? ActionResultFactory.instituteCreated() : ActionResultFactory.instituteCreatingError();
-    }
+//    @Transactional
+//    public ActionResult createInstitute(String instituteFullName, String instituteShortName, String instituteAddress) {
+//        Institute institute = repository.save(new Institute(instituteFullName, instituteShortName, instituteAddress));
+//        return repository.existsById(institute.getInstituteId()) ? ActionResultFactory.instituteCreated() : ActionResultFactory.instituteCreatingError();
+//    }
 
-    @Transactional
-    public void createInstitutesByClassSessions(List<ClassSession> sessions) {
-        for (ClassSession session : sessions) {
-            String address = session.getCourseDetails().getInstituteAddress();
-            if (!repository.existsByAddress(address)) {
-                ActionResult result = createInstitute("Не указано", "Не указано", address);
-                if (!result.isSuccess()) {
-                    log.error("Институт {} не создался - {}", session.getCourseDetails().getCourseName(), result.getFormattedMessage());
-                } else {
-                    log.info("Создался новый институт - {}", address);
-                }
-            }
-        }
-    }
+//    @Transactional
+//    public void createInstitutesByClassSessions(List<ClassSession> sessions) {
+//        for (ClassSession session : sessions) {
+//            String address = session.getCourseDetails().getInstituteAddress();
+//            if (!repository.existsByAddress(address)) {
+//                ActionResult result = createInstitute("Не указано", "Не указано", address);
+//                if (!result.isSuccess()) {
+//                    log.error("Институт {} не создался - {}", session.getCourseDetails().getCourseName(), result.getFormattedMessage());
+//                } else {
+//                    log.info("Создался новый институт - {}", address);
+//                }
+//            }
+//        }
+//    }
 
-    public Optional<Institute> findInstituteById(Integer instituteId) {
-        return repository.findById(instituteId);
-    }
+//    public Optional<Institute> findInstituteById(Integer instituteId) {
+//        return repository.findById(instituteId);
+//    }
 
     public Optional<Institute> findInstituteByAddress(String address){
         return repository.findByAddressIgnoreCase(address);

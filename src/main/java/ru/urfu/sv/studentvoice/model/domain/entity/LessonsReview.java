@@ -19,8 +19,8 @@ import java.time.Instant;
 @Table(name = "lessons_review")
 public class LessonsReview extends AbstractEntity {
 
-//    @Column(name = "lesson_id", nullable = false, unique = true)
-//    private Long lessonId;
+    @Column(name = "lesson_id", nullable = false, unique = true)
+    private Long lessonId;
 
     @Column(name = "value", nullable = false)
     private String value;

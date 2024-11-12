@@ -8,5 +8,8 @@
     <include file="db/changelog/2024-11-12_create_reviews.xml"/>
     <include file="db/changelog/2024-11-12_create_category_reviews.xml"/>
     <include file="db/changelog/2024-11-12_add_category_id_in_reviews.xml"/>
+    <include file="db/changelog/2024-11-12_create_lessons_review.xml"/>
+    <include file="db/changelog/2024-11-12_create_comments.xml"/>
+    <include file="db/changelog/2024-11-12_add_lesson_review_id_in_comment.xml"/>
 
 </databaseChangeLog>

@@ -22,8 +22,8 @@ public class Lesson extends AbstractEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-//    @Column(name = "course_id", nullable = false)
-//    private Long courseId;
+    @Column(name = "course_id", nullable = false)
+    private Long courseId;
 
     @Column(name = "institute_id", nullable = false)
     private Long instituteId;

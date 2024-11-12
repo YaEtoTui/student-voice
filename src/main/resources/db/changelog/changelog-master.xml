@@ -21,5 +21,7 @@
     <include file="db/changelog/2024-11-12_create_roles.xml"/>
     <include file="db/changelog/2024-11-12_create_user_role.xml"/>
     <include file="db/changelog/2024-11-12_create_user_setting.xml"/>
+    <include file="db/changelog/2024-11-12_create_user_course.xml"/>
+    <include file="/db/changelog/2024-11-12_add_course_id_in_lessons.xml"/>
 
 </databaseChangeLog>

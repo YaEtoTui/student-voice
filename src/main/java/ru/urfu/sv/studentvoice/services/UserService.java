@@ -2,7 +2,6 @@ package ru.urfu.sv.studentvoice.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
@@ -14,7 +13,7 @@ import ru.urfu.sv.studentvoice.model.domain.entity.Authority;
 import ru.urfu.sv.studentvoice.model.repository.UserRepository;
 import ru.urfu.sv.studentvoice.utils.consts.Parameters;
 import ru.urfu.sv.studentvoice.utils.consts.Roles;
-import ru.urfu.sv.studentvoice.model.domain.entity.UserInfo;
+import ru.urfu.sv.studentvoice.model.domain.entity.User;
 import ru.urfu.sv.studentvoice.model.repository.AuthorityRepository;
 import ru.urfu.sv.studentvoice.utils.result.ActionResult;
 import ru.urfu.sv.studentvoice.utils.result.ActionResultFactory;
@@ -42,60 +41,60 @@ public class UserService {
         return userDetailsManager.userExists(username);
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public ActionResult createUser(UserInfo userInfo) {
-        String username = userInfo.getUsername();
-        if (isUserExists(username)) {
-            return ActionResultFactory.userExist(username);
-        }
+//    @Transactional(propagation = Propagation.REQUIRES_NEW)
+//    public ActionResult createUser(User user) {
+//        String username = user.getUsername();
+//        if (isUserExists(username)) {
+//            return ActionResultFactory.userExist(username);
+//        }
+//
+//        userDetailsManager.createUser(
+//                org.springframework.security.core.userdetails.User.builder()
+//                        .passwordEncoder(encoder::encode)
+//                        .username(username)
+//                        .password(user.getPassword())
+//                        .roles(user.getRole())
+//                        .build());
+//
+//
+//        return isUserExists(username) ? ActionResultFactory.userCreated() : ActionResultFactory.userCreatingError();
+//    }
 
-        userDetailsManager.createUser(
-                User.builder()
-                        .passwordEncoder(encoder::encode)
-                        .username(username)
-                        .password(userInfo.getPassword())
-                        .roles(userInfo.getRole())
-                        .build());
-
-
-        return isUserExists(username) ? ActionResultFactory.userCreated() : ActionResultFactory.userCreatingError();
-    }
-
-    @Transactional
-    public ActionResult updateUser(String username, UserInfo newUserInfo) {
-        if (!isUserExists(username)) {
-            return ActionResultFactory.userNotExist(username);
-        }
-
-        UserDetails current = userDetailsManager.loadUserByUsername(username);
-
-        userDetailsManager.updateUser(User
-                .builder()
-                .username(username)
-                .authorities(current.getAuthorities())
-                .passwordEncoder(encoder::encode)
-                .password(newUserInfo.getPassword().isBlank() ? current.getPassword() : newUserInfo.getPassword())
-                .build());
-
-        if (newUserInfo.getAdditionalData() != null && newUserInfo.getAdditionalData().get(Parameters.PROFESSOR_NAME) != null) {
-            ActionResult professorResult = professorService
-                    .updateProfessor(username, newUserInfo.getAdditionalData().get(Parameters.PROFESSOR_NAME));
-            if (!professorResult.isSuccess()) return professorResult;
-        }
-
-        return new ActionResult(true, "Пользователь успешно обновлен");
-    }
-
-    public List<UserInfo> findAllUsers() {
-        List<String> usernames = userRepository.findAllUsernames();
-        return usernames.stream().map(username -> UserInfo.fromUserDetails(userDetailsManager.loadUserByUsername(username))).toList();
-    }
-
-    public Optional<UserInfo> findUserByUsername(String username) {
-        if (!isUserExists(username)) return Optional.empty();
-
-        return Optional.of(UserInfo.fromUserDetails(userDetailsManager.loadUserByUsername(username)));
-    }
+//    @Transactional
+//    public ActionResult updateUser(String username, User newUser) {
+//        if (!isUserExists(username)) {
+//            return ActionResultFactory.userNotExist(username);
+//        }
+//
+//        UserDetails current = userDetailsManager.loadUserByUsername(username);
+//
+//        userDetailsManager.updateUser(org.springframework.security.core.userdetails.User
+//                .builder()
+//                .username(username)
+//                .authorities(current.getAuthorities())
+//                .passwordEncoder(encoder::encode)
+//                .password(newUser.getPassword().isBlank() ? current.getPassword() : newUser.getPassword())
+//                .build());
+//
+//        if (newUser.getAdditionalData() != null && newUser.getAdditionalData().get(Parameters.PROFESSOR_NAME) != null) {
+//            ActionResult professorResult = professorService
+//                    .updateProfessor(username, newUser.getAdditionalData().get(Parameters.PROFESSOR_NAME));
+//            if (!professorResult.isSuccess()) return professorResult;
+//        }
+//
+//        return new ActionResult(true, "Пользователь успешно обновлен");
+//    }
+//
+//    public List<User> findAllUsers() {
+//        List<String> usernames = userRepository.findAllUsernames();
+//        return usernames.stream().map(username -> User.fromUserDetails(userDetailsManager.loadUserByUsername(username))).toList();
+//    }
+//
+//    public Optional<User> findUserByUsername(String username) {
+//        if (!isUserExists(username)) return Optional.empty();
+//
+//        return Optional.of(User.fromUserDetails(userDetailsManager.loadUserByUsername(username)));
+//    }
 
     @Transactional
     public ActionResult deleteUser(String username) {

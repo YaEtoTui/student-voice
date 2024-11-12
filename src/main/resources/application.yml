@@ -21,6 +21,11 @@ spring:
     properties:
       hibernate.show_sql: false
 
+  liquibase:
+    default-schema: ${POSTGRES_SCHEMA:public}
+    change-log: classpath:db/changelog/changelog-master.xml
+    enabled: true
+
 urfu:
   user:
     username: ${URFU_USER_USERNAME}

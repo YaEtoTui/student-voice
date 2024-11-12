@@ -6,6 +6,13 @@ plugins {
 
 group = 'ru.urfu.sv'
 version = '0.0.1-SNAPSHOT'
+ext {
+    springBootVersion = '3.1.0'
+    swaggerVersion = '2.6.0'
+    springSecurityVersion = '3.1.1.RELEASE'
+    jsonWebTokenVersion = '0.11.5'
+    poiVersion = '5.2.3'
+}
 
 compileJava.options.encoding = 'UTF-8'
 
@@ -40,41 +47,49 @@ sourceSets {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    runtimeOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'org.postgresql:postgresql'
-    implementation 'org.flywaydb:flyway-core:9.21.0'
-    implementation 'org.seleniumhq.selenium:selenium-java:4.19.1'
-    implementation 'org.apache.httpcomponents.client5:httpclient5'
-    implementation 'org.projectlombok:lombok'
-    implementation 'com.google.zxing:core:3.5.3'
-    implementation 'com.google.zxing:javase:3.5.3'
-    implementation 'com.opencsv:opencsv:5.9'
-    implementation 'ru.homyakin:iuliia-java:1.8'
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
-    implementation 'org.apache.poi:poi-ooxml:5.2.3'
-    implementation 'com.querydsl:querydsl-jpa'
-    annotationProcessor 'com.querydsl:querydsl-apt'
-    implementation 'javax.persistence:javax.persistence-api:2.2'
-    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
-    implementation 'org.springframework.boot:spring-boot-starter'
-//    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    implementation 'io.github.cdimascio:dotenv-java:3.0.0'
-}
+    /* PostgreSQL */
+    runtimeOnly("org.postgresql:postgresql",
+            "org.liquibase:liquibase-core")
 
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
+    implementation "org.seleniumhq.selenium:selenium-java:4.19.1"
+    implementation "org.apache.httpcomponents.client5:httpclient5"
+    implementation "org.projectlombok:lombok"
+    implementation "com.google.zxing:core:3.5.3"
+    implementation "com.google.zxing:javase:3.5.3"
+    implementation "com.opencsv:opencsv:5.9"
+    implementation "ru.homyakin:iuliia-java:1.8"
+
+    /* Excel */
+    implementation "org.apache.poi:poi-ooxml:$poiVersion"
+
+    /* JWT */
+    implementation "io.jsonwebtoken:jjwt-api:$jsonWebTokenVersion"
+    runtimeOnly "io.jsonwebtoken:jjwt-impl:$jsonWebTokenVersion"
+    runtimeOnly "io.jsonwebtoken:jjwt-jackson:$jsonWebTokenVersion"
+
+    implementation "javax.persistence:javax.persistence-api:2.2"
+
+    /* Swagger_3.0 */
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:$swaggerVersion"
+
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter', version: springBootVersion
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: springBootVersion
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: springBootVersion
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: springBootVersion
+
+    implementation "org.thymeleaf.extras:thymeleaf-extras-springsecurity6:$springSecurityVersion"
+
+    developmentOnly "org.springframework.boot:spring-boot-devtools"
+
+    annotationProcessor(
+            "org.projectlombok:lombok",
+            "org.springframework.boot:spring-boot-configuration-processor"
+    )
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 }
 
 dependencyManagement {

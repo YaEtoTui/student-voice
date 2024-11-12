@@ -22,16 +22,16 @@ import static ru.urfu.sv.studentvoice.utils.consts.Parameters.RESULT;
 public class AdminApiController {
     private final AdminController adminController;
 
-    @PostMapping("/api/admin/create-first")
-    @Parameters(value = {
-            @Parameter(name = "username", in = ParameterIn.QUERY, required = true),
-            @Parameter(name = "password", in = ParameterIn.QUERY, required = true)
-    })
-    public ResponseEntity<Map<String, Object>> createFirstAdmin(HttpServletRequest request) {
-        ExtendedModelMap model = new ExtendedModelMap();
-        adminController.createFirstAdmin(request, model);
-        ActionResultResponse resultResponse = ActionResultResponse.fromActionResult(model.getAttribute(RESULT));
-        Map<String, Object> body = Map.of(RESULT, resultResponse);
-        return ResponseEntity.ok().body(body);
-    }
+//    @PostMapping("/api/admin/create-first")
+//    @Parameters(value = {
+//            @Parameter(name = "username", in = ParameterIn.QUERY, required = true),
+//            @Parameter(name = "password", in = ParameterIn.QUERY, required = true)
+//    })
+//    public ResponseEntity<Map<String, Object>> createFirstAdmin(HttpServletRequest request) {
+//        ExtendedModelMap model = new ExtendedModelMap();
+//        adminController.createFirstAdmin(request, model);
+//        ActionResultResponse resultResponse = ActionResultResponse.fromActionResult(model.getAttribute(RESULT));
+//        Map<String, Object> body = Map.of(RESULT, resultResponse);
+//        return ResponseEntity.ok().body(body);
+//    }
 }

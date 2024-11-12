@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import ru.urfu.sv.studentvoice.utils.consts.AdminPaths;
 import ru.urfu.sv.studentvoice.utils.result.ActionResult;
 import ru.urfu.sv.studentvoice.utils.consts.Roles;
-import ru.urfu.sv.studentvoice.model.domain.entity.UserInfo;
+import ru.urfu.sv.studentvoice.model.domain.entity.User;
 import ru.urfu.sv.studentvoice.services.UserService;
 import ru.urfu.sv.studentvoice.utils.result.ActionResultFactory;
 
@@ -40,22 +40,22 @@ public class AdminController {
         return CREATE_FIRST_ADMIN;
     }
 
-    @PostMapping("/admin/create-first")
-    public String createFirstAdmin(HttpServletRequest request, Model model) {
-        if (userService.isAnyAdminExists()) {
-            model.addAttribute(RESULT, ActionResultFactory.firstAdminExist());
-            return CREATE_FIRST_ADMIN;
-        }
-
-        UserInfo userInfo = UserInfo.builder()
-                .username(request.getParameter(USERNAME))
-                .password(request.getParameter(PASSWORD))
-                .role(Roles.ADMIN)
-                .build();
-
-        ActionResult result = userService.createUser(userInfo);
-
-        model.addAttribute(RESULT, result);
-        return CREATE_FIRST_ADMIN;
-    }
+//    @PostMapping("/admin/create-first")
+//    public String createFirstAdmin(HttpServletRequest request, Model model) {
+//        if (userService.isAnyAdminExists()) {
+//            model.addAttribute(RESULT, ActionResultFactory.firstAdminExist());
+//            return CREATE_FIRST_ADMIN;
+//        }
+//
+//        User user = User.builder()
+//                .username(request.getParameter(USERNAME))
+//                .password(request.getParameter(PASSWORD))
+//                .role(Roles.ADMIN)
+//                .build();
+//
+//        ActionResult result = userService.createUser(user);
+//
+//        model.addAttribute(RESULT, result);
+//        return CREATE_FIRST_ADMIN;
+//    }
 }

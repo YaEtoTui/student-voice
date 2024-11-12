@@ -4,13 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.urfu.sv.studentvoice.model.domain.entity.UserInfo;
+import ru.urfu.sv.studentvoice.model.domain.entity.User;
 import ru.urfu.sv.studentvoice.model.repository.UserRepository;
 
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        final UserInfo user = userRepository.findByUsername(username);
+        final User user = userRepository.findByUsername(username);
         if (isNull(user)) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
@@ -54,7 +53,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
         String username;
         if (authentication.getPrincipal() instanceof org.springframework.security.core.userdetails.User) {
-            username = ((User) authentication.getPrincipal()).getUsername();
+            username = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
         } else {
             username = (String) authentication.getPrincipal();
         }

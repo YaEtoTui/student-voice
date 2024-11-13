@@ -94,10 +94,10 @@ public class ProfessorApiController {
 //        }
 //    }
 
-    @RequestMapping(path = "/list/pair", method = RequestMethod.GET)
-    public ResponseEntity<List<PairResponse>> findListPair() {
-
-        final List<PairResponse> response = professorService.findListPair();
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+//    @RequestMapping(path = "/list/pair", method = RequestMethod.GET)
+//    public ResponseEntity<List<PairResponse>> findListPair() {
+//
+//        final List<PairResponse> response = professorService.findListPair();
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
 }

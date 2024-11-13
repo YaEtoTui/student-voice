@@ -20,8 +20,8 @@ import java.util.UUID;
 @Slf4j
 public class ClassSessionService {
 
-    @Autowired
-    private ClassSessionRepository repository;
+//    @Autowired
+//    private ClassSessionRepository repository;
     @Autowired
     private CourseService courseService;
     @Autowired
@@ -59,44 +59,44 @@ public class ClassSessionService {
 //        return repository.existsById(session.getSessionId()) ? ActionResultFactory.sessionCreated() : ActionResultFactory.sessionCreatingError();
 //    }
 
-    @Transactional
-    public ActionResult setDisableTimestamp(ClassSession session, LocalTime duration) {
-        Instant disableTimestamp = Instant.now()
-                .plus(Duration.ofHours(duration.getHour())
-                        .plus(Duration.ofMinutes(duration.getMinute()))
-                        .plus(Duration.ofSeconds(duration.getSecond())));
-        session.setDisableAfterTimestamp(disableTimestamp);
-        repository.save(session);
-
-        return repository.existsById(session.getSessionId()) ? ActionResultFactory.sessionCreated() : ActionResultFactory.sessionCreatingError();
-    }
-
-    @Transactional
-    public ActionResult updateProfessorName(String professorName, String newProfessorName) {
-        List<ClassSession> sessions = findAllSavedClassSessionsByProfessorName(professorName);
-        sessions.forEach(session -> {
-            String names = session.getCourseDetails().getProfessorsNames();
-            String name = session.getProfessorName();
-            if (names.contains(professorName)) {
-                session.getCourseDetails().setProfessorsNames(names.replace(professorName, newProfessorName));
-                repository.save(session);
-            }
-            if (name.contains(professorName)) {
-                session.setProfessorName(newProfessorName);
-                repository.save(session);
-            }
-        });
-
-        return new ActionResult(true, "Пары успешно обновлены");
-    }
-
-    @Transactional
-    public ActionResult updateSessionProfessor(UUID sessionId, String professorName) {
-        Optional<ClassSession> session = repository.findById(sessionId);
-        session.orElseThrow().setProfessorName(professorName);
-        repository.save(session.orElseThrow());
-        return new ActionResult(true, "Пара успешно изменена");
-    }
+//    @Transactional
+//    public ActionResult setDisableTimestamp(ClassSession session, LocalTime duration) {
+//        Instant disableTimestamp = Instant.now()
+//                .plus(Duration.ofHours(duration.getHour())
+//                        .plus(Duration.ofMinutes(duration.getMinute()))
+//                        .plus(Duration.ofSeconds(duration.getSecond())));
+//        session.setDisableAfterTimestamp(disableTimestamp);
+//        repository.save(session);
+//
+//        return repository.existsById(session.getSessionId()) ? ActionResultFactory.sessionCreated() : ActionResultFactory.sessionCreatingError();
+//    }
+//
+//    @Transactional
+//    public ActionResult updateProfessorName(String professorName, String newProfessorName) {
+//        List<ClassSession> sessions = findAllSavedClassSessionsByProfessorName(professorName);
+//        sessions.forEach(session -> {
+//            String names = session.getCourseDetails().getProfessorsNames();
+//            String name = session.getProfessorName();
+//            if (names.contains(professorName)) {
+//                session.getCourseDetails().setProfessorsNames(names.replace(professorName, newProfessorName));
+//                repository.save(session);
+//            }
+//            if (name.contains(professorName)) {
+//                session.setProfessorName(newProfessorName);
+//                repository.save(session);
+//            }
+//        });
+//
+//        return new ActionResult(true, "Пары успешно обновлены");
+//    }
+//
+//    @Transactional
+//    public ActionResult updateSessionProfessor(UUID sessionId, String professorName) {
+//        Optional<ClassSession> session = repository.findById(sessionId);
+//        session.orElseThrow().setProfessorName(professorName);
+//        repository.save(session.orElseThrow());
+//        return new ActionResult(true, "Пара успешно изменена");
+//    }
 
 //    @Transactional
 //    public List<ClassSession> findAllClassSessionsByProfessorName(String professorName, LocalDate dateFrom, LocalDate dateTo) throws ModeusException {
@@ -117,44 +117,44 @@ public class ClassSessionService {
 //        return allClassSessions;
 //    }
 
-    private ActionResult saveAll(List<ClassSession> sessions) {
-        sessions.forEach(session -> session.setDisableAfterTimestamp(session.getEndDateTime().toInstant(ZoneOffset.ofHours(5))));
-        repository.saveAll(sessions);
-        return ActionResultFactory.sessionCreated();
-    }
-
-    public List<ClassSession> findSavedClassSessionsByProfessorName(String professorName, LocalDate dateFrom, LocalDate dateTo) {
-        final List<ClassSession> savedClassSessions = repository
-                .findAllByProfessorNameIgnoreCaseAndStartDateTimeAfterAndEndDateTimeBefore(professorName, dateFrom.atStartOfDay(), dateTo.atStartOfDay());
-        String classSessionsStr = String.join("\n", savedClassSessions.stream().map(ClassSession::toString).toList());
-        log.info("Для преподавателя {} найдены следующие пары: {}", professorName, classSessionsStr);
-        return savedClassSessions;
-    }
-
-    public List<ClassSession> findAllSavedClassSessionsByProfessorName(String professorName) {
-        final List<ClassSession> savedClassSessions = repository
-                .findAllByProfessorNameIgnoreCase(professorName);
-        String classSessionsStr = String.join("\n", savedClassSessions.stream().map(ClassSession::toString).toList());
-        log.info("Для преподавателя {} найдены следующие пары: {}", professorName, classSessionsStr);
-        return savedClassSessions;
-    }
-
-    public List<ClassSession> findClassSessionsByCourseId(UUID courseId) {
-        return repository.findAllByCourseId(courseId);
-    }
-
-    public List<ClassSession> findClassSessionsByInstituteName(String instituteShortName) {
-        return repository.findAllByCourseDetails_InstituteNameIgnoreCase(instituteShortName);
-    }
-
-    public List<ClassSession> getClassSessionsAfterDate(LocalDateTime dateTime, List<ClassSession> classSessions) {
-        return classSessions.stream().filter(session -> {
-            LocalDateTime sessionDate = session.getStartDateTime();
-            return sessionDate.isAfter(dateTime);
-        }).toList();
-    }
-
-    public Optional<ClassSession> findSessionById(UUID sessionId) {
-        return repository.findById(sessionId);
-    }
+//    private ActionResult saveAll(List<ClassSession> sessions) {
+//        sessions.forEach(session -> session.setDisableAfterTimestamp(session.getEndDateTime().toInstant(ZoneOffset.ofHours(5))));
+//        repository.saveAll(sessions);
+//        return ActionResultFactory.sessionCreated();
+//    }
+//
+//    public List<ClassSession> findSavedClassSessionsByProfessorName(String professorName, LocalDate dateFrom, LocalDate dateTo) {
+//        final List<ClassSession> savedClassSessions = repository
+//                .findAllByProfessorNameIgnoreCaseAndStartDateTimeAfterAndEndDateTimeBefore(professorName, dateFrom.atStartOfDay(), dateTo.atStartOfDay());
+//        String classSessionsStr = String.join("\n", savedClassSessions.stream().map(ClassSession::toString).toList());
+//        log.info("Для преподавателя {} найдены следующие пары: {}", professorName, classSessionsStr);
+//        return savedClassSessions;
+//    }
+//
+//    public List<ClassSession> findAllSavedClassSessionsByProfessorName(String professorName) {
+//        final List<ClassSession> savedClassSessions = repository
+//                .findAllByProfessorNameIgnoreCase(professorName);
+//        String classSessionsStr = String.join("\n", savedClassSessions.stream().map(ClassSession::toString).toList());
+//        log.info("Для преподавателя {} найдены следующие пары: {}", professorName, classSessionsStr);
+//        return savedClassSessions;
+//    }
+//
+//    public List<ClassSession> findClassSessionsByCourseId(UUID courseId) {
+//        return repository.findAllByCourseId(courseId);
+//    }
+//
+//    public List<ClassSession> findClassSessionsByInstituteName(String instituteShortName) {
+//        return repository.findAllByCourseDetails_InstituteNameIgnoreCase(instituteShortName);
+//    }
+//
+//    public List<ClassSession> getClassSessionsAfterDate(LocalDateTime dateTime, List<ClassSession> classSessions) {
+//        return classSessions.stream().filter(session -> {
+//            LocalDateTime sessionDate = session.getStartDateTime();
+//            return sessionDate.isAfter(dateTime);
+//        }).toList();
+//    }
+//
+//    public Optional<ClassSession> findSessionById(UUID sessionId) {
+//        return repository.findById(sessionId);
+//    }
 }

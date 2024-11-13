@@ -1,6 +1,6 @@
 package ru.urfu.sv.studentvoice.model.domain.entity;
 
-import jakarta.persistence.*;
+//import jakarta.persistence.*;
 import lombok.*;
 import ru.urfu.sv.studentvoice.model.domain.dto.CourseDetails;
 
@@ -8,48 +8,48 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity
-@Table(name = "class_sessions")
+//@Entity
+//@Table(name = "class_sessions")
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
 public class ClassSession {
-    @Id
-    @Column(name = "id", nullable = false)
+//    @Id
+//    @Column(name = "id", nullable = false)
     private UUID sessionId;
 
-    @Column(name = "status", nullable = false)
+//    @Column(name = "status", nullable = false)
     private String status;
 
-    @Column(name = "course_id", nullable = false)
+//    @Column(name = "course_id", nullable = false)
     private UUID courseId;
 
-    @Embedded
+//    @Embedded
     private CourseDetails courseDetails;
 
-    @Column(name = "room_name")
+//    @Column(name = "room_name")
     private String roomName;
 
-    @Column(name = "session_name", nullable = false)
+//    @Column(name = "session_name", nullable = false)
     private String sessionName;
 
-    @Column(name = "professor_name", nullable = false)
+//    @Column(name = "professor_name", nullable = false)
     private String professorName;
 
-    @Column(name = "start_date_time", nullable = false)
+//    @Column(name = "start_date_time", nullable = false)
     private LocalDateTime startDateTime;
 
-    @Column(name = "end_date_time", nullable = false)
+//    @Column(name = "end_date_time", nullable = false)
     private LocalDateTime endDateTime;
 
-    @Column(name = "disable_timestamp")
+//    @Column(name = "disable_timestamp")
     private Instant disableAfterTimestamp;
 
-    @Column(name = "create_timestamp", nullable = false)
+//    @Column(name = "create_timestamp", nullable = false)
     private Instant createTimestamp;
 
-    @Transient
+//    @Transient
     @Getter
     @Setter
     private float avgRating;

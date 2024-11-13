@@ -1,32 +1,14 @@
 package ru.urfu.sv.studentvoice.controllers;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.urfu.sv.studentvoice.model.domain.entity.ClassSession;
-import ru.urfu.sv.studentvoice.model.domain.entity.Course;
-import ru.urfu.sv.studentvoice.model.domain.dto.CourseDetails;
-import ru.urfu.sv.studentvoice.model.domain.entity.Institute;
 import ru.urfu.sv.studentvoice.services.ClassSessionService;
 import ru.urfu.sv.studentvoice.services.CourseService;
 import ru.urfu.sv.studentvoice.services.InstituteService;
 import ru.urfu.sv.studentvoice.services.ProfessorService;
-import ru.urfu.sv.studentvoice.utils.consts.Templates;
-import ru.urfu.sv.studentvoice.utils.result.ActionResult;
-import ru.urfu.sv.studentvoice.utils.result.ActionResultFactory;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static ru.urfu.sv.studentvoice.utils.consts.Parameters.*;
-import static ru.urfu.sv.studentvoice.utils.model.ModelUtils.addProfessorName;
 
 @Controller
 @RequiredArgsConstructor

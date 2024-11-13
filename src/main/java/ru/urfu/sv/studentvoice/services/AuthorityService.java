@@ -9,8 +9,8 @@ import ru.urfu.sv.studentvoice.services.jwt.JwtUserDetailsService;
 @Service
 public class AuthorityService {
 
-    @Autowired
-    private AuthorityRepository authorityRepository;
+//    @Autowired
+//    private AuthorityRepository authorityRepository;
     @Autowired
     private JwtUserDetailsService jwtUserDetailsService;
 
@@ -20,6 +20,7 @@ public class AuthorityService {
     public Authority findAuthorityForCheck() {
 
         final String username = jwtUserDetailsService.findUsername();
-        return authorityRepository.findAuthorityByUsername(username);
+//        return authorityRepository.findAuthorityByUsername(username);
+        return new Authority();
     }
 }

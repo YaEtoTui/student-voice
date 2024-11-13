@@ -8,8 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Repository
-public interface ClassSessionRepository extends JpaRepository<ClassSession, UUID> {
+public interface ClassSessionRepository {
     List<ClassSession> findAllByCourseId(UUID courseId);
     List<ClassSession> findAllByProfessorNameIgnoreCase(String professorName);
     List<ClassSession> findAllByProfessorNameIgnoreCaseAndStartDateTimeAfterAndEndDateTimeBefore(String professorName, LocalDateTime from, LocalDateTime to);

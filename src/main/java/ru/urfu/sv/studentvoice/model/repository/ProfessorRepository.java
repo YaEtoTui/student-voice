@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository
-public interface ProfessorRepository extends JpaRepository<Professor, UUID> {
+public interface ProfessorRepository {
     Optional<Professor> findByFullNameIgnoreCase(String professorName);
     Optional<Professor> findByUsername(String username);
 

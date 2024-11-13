@@ -10,7 +10,6 @@ import ru.urfu.sv.studentvoice.model.domain.dto.response.UserInfoResponse;
 import ru.urfu.sv.studentvoice.model.domain.entity.Authority;
 import ru.urfu.sv.studentvoice.model.repository.UserRepository;
 import ru.urfu.sv.studentvoice.utils.consts.Roles;
-import ru.urfu.sv.studentvoice.model.repository.AuthorityRepository;
 import ru.urfu.sv.studentvoice.utils.result.ActionResult;
 
 @Service
@@ -20,8 +19,8 @@ public class UserService {
     private final JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager();
     @Autowired
     private PasswordEncoder encoder;
-    @Autowired
-    private AuthorityRepository authorityRepository;
+//    @Autowired
+//    private AuthorityRepository authorityRepository;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -96,10 +95,11 @@ public class UserService {
 
     public boolean isAnyAdminExists() {
         String adminAuth = "ROLE_".concat(Roles.ADMIN);
-        return authorityRepository
-                .findAll()
-                .stream()
-                .anyMatch(auth -> adminAuth.equals(auth.getAuthority()));
+//        return authorityRepository
+//                .findAll()
+//                .stream()
+//                .anyMatch(auth -> adminAuth.equals(auth.getAuthority()));
+        return true;
     }
 
     public UserInfoResponse getInfoForUser() {

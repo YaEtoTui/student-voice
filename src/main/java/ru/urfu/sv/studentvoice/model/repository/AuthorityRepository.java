@@ -4,8 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.urfu.sv.studentvoice.model.domain.entity.Authority;
 
-@Repository
-public interface AuthorityRepository extends JpaRepository<Authority, String> {
+public interface AuthorityRepository {
 
     Authority findAuthorityByUsername(String username);
 }

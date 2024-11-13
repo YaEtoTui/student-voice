@@ -5,15 +5,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.urfu.sv.studentvoice.model.domain.entity.ClassSession;
-import ru.urfu.sv.studentvoice.model.domain.entity.Course;
 import ru.urfu.sv.studentvoice.model.domain.entity.Professor;
-import ru.urfu.sv.studentvoice.model.domain.entity.Review;
 import ru.urfu.sv.studentvoice.services.*;
 import ru.urfu.sv.studentvoice.utils.formatters.TemporalFormatter;
 import ru.urfu.sv.studentvoice.utils.result.ActionResult;
@@ -26,7 +22,6 @@ import java.util.UUID;
 
 import static ru.urfu.sv.studentvoice.utils.consts.Parameters.*;
 import static ru.urfu.sv.studentvoice.utils.consts.Templates.*;
-import static ru.urfu.sv.studentvoice.utils.model.ModelUtils.addProfessorName;
 
 @Controller
 @RequiredArgsConstructor
@@ -83,49 +78,49 @@ public class ClassSessionController {
 //        return CREATE_SESSION;
 //    }
 
-    @GetMapping("/{sessionId}")
-    public String sessionPage(@PathVariable("sessionId") String sessionIdStr, Model model) {
-        UUID sessionId = UUID.fromString(sessionIdStr);
-        Optional<ClassSession> sessionOpt = sessionService.findSessionById(sessionId);
-
-        if (sessionOpt.isEmpty()) {
-            model.addAttribute(RESULT, ActionResultFactory.sessionNotExist());
-            return SESSION_PAGE;
-        }
-
-        ClassSession session = sessionOpt.get();
-
-        if (session.getDisableAfterTimestamp() != null) {
-            if (Instant.now().isAfter(session.getDisableAfterTimestamp())) {
-                model.addAttribute(RESULT, new ActionResult(false, "Время действия кода для отзыва вышло"));
-            } else {
-                //Костыль для зоны UTC+5
-                OffsetDateTime disableTime = session.getDisableAfterTimestamp().atOffset(ZoneOffset.ofHours(5));
-                model.addAttribute(RESULT, new ActionResult(true, "Таймер успешно запущен. Ссылка перестанет работать %s",
-                        TemporalFormatter.formatToDateTime(disableTime)));
-            }
-        }
-
-        fillSessionModel(model, session);
-        return SESSION_PAGE;
-    }
-
-    @PostMapping("/start-timer")
-    public String startTimer(HttpServletRequest request, Model model) {
-        UUID sessionId = UUID.fromString(request.getParameter("sessionId"));
-        Optional<ClassSession> sessionOpt = sessionService.findSessionById(sessionId);
-        if (sessionOpt.isEmpty()) {
-            model.addAttribute(RESULT, ActionResultFactory.sessionNotExist());
-            return SESSION_PAGE;
-        }
-
-        ClassSession session = sessionOpt.get();
-
-        LocalTime time = LocalTime.parse(request.getParameter("time"));
-        sessionService.setDisableTimestamp(session, time);
-
-        return REDIRECT.concat("/sessions/").concat(sessionId.toString());
-    }
+//    @GetMapping("/{sessionId}")
+//    public String sessionPage(@PathVariable("sessionId") String sessionIdStr, Model model) {
+//        UUID sessionId = UUID.fromString(sessionIdStr);
+//        Optional<ClassSession> sessionOpt = sessionService.findSessionById(sessionId);
+//
+//        if (sessionOpt.isEmpty()) {
+//            model.addAttribute(RESULT, ActionResultFactory.sessionNotExist());
+//            return SESSION_PAGE;
+//        }
+//
+//        ClassSession session = sessionOpt.get();
+//
+//        if (session.getDisableAfterTimestamp() != null) {
+//            if (Instant.now().isAfter(session.getDisableAfterTimestamp())) {
+//                model.addAttribute(RESULT, new ActionResult(false, "Время действия кода для отзыва вышло"));
+//            } else {
+//                //Костыль для зоны UTC+5
+//                OffsetDateTime disableTime = session.getDisableAfterTimestamp().atOffset(ZoneOffset.ofHours(5));
+//                model.addAttribute(RESULT, new ActionResult(true, "Таймер успешно запущен. Ссылка перестанет работать %s",
+//                        TemporalFormatter.formatToDateTime(disableTime)));
+//            }
+//        }
+//
+//        fillSessionModel(model, session);
+//        return SESSION_PAGE;
+//    }
+//
+//    @PostMapping("/start-timer")
+//    public String startTimer(HttpServletRequest request, Model model) {
+//        UUID sessionId = UUID.fromString(request.getParameter("sessionId"));
+//        Optional<ClassSession> sessionOpt = sessionService.findSessionById(sessionId);
+//        if (sessionOpt.isEmpty()) {
+//            model.addAttribute(RESULT, ActionResultFactory.sessionNotExist());
+//            return SESSION_PAGE;
+//        }
+//
+//        ClassSession session = sessionOpt.get();
+//
+//        LocalTime time = LocalTime.parse(request.getParameter("time"));
+//        sessionService.setDisableTimestamp(session, time);
+//
+//        return REDIRECT.concat("/sessions/").concat(sessionId.toString());
+//    }
 
 //    @GetMapping("/{sessionId}/students")
 //    public String sessionStudentsPage(@PathVariable("sessionId") String sessionIdStr, Model model) {
@@ -142,40 +137,40 @@ public class ClassSessionController {
 //        return SESSION_STUDENTS;
 //    }
 
-    @GetMapping("/{sessionId}/update")
-    public String updateSessionPage(@PathVariable("sessionId") String sessionIdStr, Model model) {
-        Optional<ClassSession> session = sessionService.findSessionById(UUID.fromString(sessionIdStr));
-        if (session.isEmpty()) {
-            model.addAttribute(RESULT, ActionResultFactory.sessionNotExist());
-            return UPDATE_SESSION;
-        }
-        List<Professor> professors = professorService.getAllProfessors();
-        model.addAttribute(PROFESSORS_LIST, professors);
-        model.addAttribute(CLASS_SESSION, session.get());
-        model.addAttribute(CLASS_SESSION_DATE, TemporalFormatter.formatToSessionDateTime(session.get()));
-        return UPDATE_SESSION;
-    }
+//    @GetMapping("/{sessionId}/update")
+//    public String updateSessionPage(@PathVariable("sessionId") String sessionIdStr, Model model) {
+//        Optional<ClassSession> session = sessionService.findSessionById(UUID.fromString(sessionIdStr));
+//        if (session.isEmpty()) {
+//            model.addAttribute(RESULT, ActionResultFactory.sessionNotExist());
+//            return UPDATE_SESSION;
+//        }
+//        List<Professor> professors = professorService.getAllProfessors();
+//        model.addAttribute(PROFESSORS_LIST, professors);
+//        model.addAttribute(CLASS_SESSION, session.get());
+//        model.addAttribute(CLASS_SESSION_DATE, TemporalFormatter.formatToSessionDateTime(session.get()));
+//        return UPDATE_SESSION;
+//    }
 
-    @PostMapping("update")
-    public String updateSession(HttpServletRequest request, Model model) {
-        UUID sessionId = UUID.fromString(request.getParameter(CLASS_SESSION_ID));
-        Optional<ClassSession> session = sessionService.findSessionById(sessionId);
-        if (session.isEmpty()) {
-            model.addAttribute(RESULT, ActionResultFactory.sessionNotExist());
-            return UPDATE_SESSION;
-        }
-        String newProfessor = request.getParameter("newProfessor");
-        ActionResult result = sessionService.updateSessionProfessor(sessionId, newProfessor);
-        model.addAttribute(RESULT, result);
-        return REDIRECT.concat("/professor-home");
-    }
-
-    private void fillSessionModel(Model model, ClassSession session) {
-        String reviewUrl = "%s/reviews/create?sessionId=%s".formatted(applicationHost, session.getSessionId());
-        String qrCode = qrCodeService.getEncodedCode(reviewUrl, 256, 256);
-        model.addAttribute(SESSION_QR, qrCode);
-        model.addAttribute(CLASS_SESSION, session);
-        model.addAttribute(CLASS_SESSION_DATE, TemporalFormatter.formatToSessionDateTime(session));
-        model.addAttribute(REVIEW_URL, reviewUrl);
-    }
+//    @PostMapping("update")
+//    public String updateSession(HttpServletRequest request, Model model) {
+//        UUID sessionId = UUID.fromString(request.getParameter(CLASS_SESSION_ID));
+//        Optional<ClassSession> session = sessionService.findSessionById(sessionId);
+//        if (session.isEmpty()) {
+//            model.addAttribute(RESULT, ActionResultFactory.sessionNotExist());
+//            return UPDATE_SESSION;
+//        }
+//        String newProfessor = request.getParameter("newProfessor");
+//        ActionResult result = sessionService.updateSessionProfessor(sessionId, newProfessor);
+//        model.addAttribute(RESULT, result);
+//        return REDIRECT.concat("/professor-home");
+//    }
+//
+//    private void fillSessionModel(Model model, ClassSession session) {
+//        String reviewUrl = "%s/reviews/create?sessionId=%s".formatted(applicationHost, session.getSessionId());
+//        String qrCode = qrCodeService.getEncodedCode(reviewUrl, 256, 256);
+//        model.addAttribute(SESSION_QR, qrCode);
+//        model.addAttribute(CLASS_SESSION, session);
+//        model.addAttribute(CLASS_SESSION_DATE, TemporalFormatter.formatToSessionDateTime(session));
+//        model.addAttribute(REVIEW_URL, reviewUrl);
+//    }
 }

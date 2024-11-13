@@ -33,7 +33,7 @@ public class UserService {
      * @param userInfoDto Dto по пользователю
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    @PreAuthorize("@UserAC.isExistUser(#userInfoDto.username)")
+    @PreAuthorize("@UserAC.isCreateNewUser(#userInfoDto.username)")
     public void createUser(UserInfoDto userInfoDto) {
 
         final String username = userInfoDto.getUsername();

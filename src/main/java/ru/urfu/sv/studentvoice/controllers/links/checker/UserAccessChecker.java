@@ -13,4 +13,11 @@ public class UserAccessChecker {
     public boolean isExistUser(String username) {
         return userQuery.isExistUser(username);
     }
+
+    /**
+     * Можно ли создавать нового пользователя с таким username
+     */
+    public boolean isCreateNewUser(String username) {
+        return !isExistUser(username);
+    }
 }

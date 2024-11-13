@@ -41,6 +41,6 @@ public class UserQuery {
                 .where(exp)
                 .fetch();
 
-        return nonNull(users);
+        return !users.isEmpty();
     }
 }

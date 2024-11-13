@@ -6,11 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import ru.urfu.sv.studentvoice.controllers.links.Links;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.UserInfoResponse;
 import ru.urfu.sv.studentvoice.services.UserService;
-
-import static ru.urfu.sv.studentvoice.controllers.links.Links.BASE_API;
-import static ru.urfu.sv.studentvoice.controllers.links.Links.USER;
 
 /**
  * Контроллер отвечает за информацию по пользователю
@@ -19,7 +17,7 @@ import static ru.urfu.sv.studentvoice.controllers.links.Links.USER;
  * @since 05.11.2024
  */
 @RestController
-@RequestMapping(BASE_API + USER)
+@RequestMapping(Links.BASE_API + Links.USER)
 public class UserInfoController {
 
     @Autowired

@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.urfu.sv.studentvoice.model.domain.entity.User;
+import ru.urfu.sv.studentvoice.model.query.UserQuery;
 import ru.urfu.sv.studentvoice.model.repository.UserRepository;
 
 import java.util.ArrayList;
@@ -28,11 +29,13 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserQuery userQuery;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        final User user = userRepository.findByUsername(username);
+        final User user = userQuery.findUserByUsername(username);
         if (isNull(user)) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
@@ -41,7 +44,7 @@ public class JwtUserDetailsService implements UserDetailsService {
     }
 
     /**
-     * Ищем username пользователя
+     * Ищем username пользователя, если он уже существует
      */
     public String findUsername() {
 

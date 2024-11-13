@@ -1,38 +1,15 @@
 package ru.urfu.sv.studentvoice.controllers.api;
 
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import ru.urfu.sv.studentvoice.model.domain.dto.response.PairResponse;
-import ru.urfu.sv.studentvoice.model.domain.entity.ClassSession;
-import ru.urfu.sv.studentvoice.model.domain.entity.Professor;
+import ru.urfu.sv.studentvoice.controllers.links.Links;
 import ru.urfu.sv.studentvoice.services.ClassSessionService;
 import ru.urfu.sv.studentvoice.services.CourseService;
 import ru.urfu.sv.studentvoice.services.ProfessorService;
-import ru.urfu.sv.studentvoice.utils.exceptions.ModeusException;
-import ru.urfu.sv.studentvoice.utils.result.ActionResultFactory;
-import ru.urfu.sv.studentvoice.utils.result.ActionResultResponse;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import static ru.urfu.sv.studentvoice.controllers.links.Links.BASE_API;
-import static ru.urfu.sv.studentvoice.controllers.links.Links.PROFESSORS;
-import static ru.urfu.sv.studentvoice.utils.consts.Parameters.*;
-import static ru.urfu.sv.studentvoice.utils.consts.Parameters.CLASS_SESSIONS_LIST;
 
 @RestController
-@RequestMapping(BASE_API + PROFESSORS)
+@RequestMapping(Links.BASE_API + Links.PROFESSORS)
 @PreAuthorize("@AuthoritiesAC.isProfessor()")
 public class ProfessorApiController {
 

@@ -3,8 +3,6 @@ package ru.urfu.sv.studentvoice.model.domain.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-
-
 @Entity
 @Getter
 @Setter

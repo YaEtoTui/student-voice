@@ -1,35 +1,25 @@
 package ru.urfu.sv.studentvoice.controllers.api;
 
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.ui.ExtendedModelMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import ru.urfu.sv.studentvoice.controllers.UsersController;
-import ru.urfu.sv.studentvoice.utils.result.ActionResultResponse;
-
-import java.io.IOException;
-import java.util.Map;
-
-import static ru.urfu.sv.studentvoice.utils.consts.Parameters.*;
-import static ru.urfu.sv.studentvoice.utils.model.ModelUtils.orNull;
+import ru.urfu.sv.studentvoice.controllers.links.Links;
+import ru.urfu.sv.studentvoice.model.domain.dto.auth.UserInfoDto;
+import ru.urfu.sv.studentvoice.services.UserService;
 
 @RestController
-@RequiredArgsConstructor
-@RequestMapping("/api/users")
-@PreAuthorize("@AuthoritiesAC.isAdmin()")
+@RequestMapping(Links.BASE_API + Links.USERS)
 public class UsersApiController {
-    private final UsersController usersController;
+
+    @Autowired
+    private UserService userService;
 
 //    @PostMapping("create-from-file")
 //    @Parameters(value = {
 //            @Parameter(name = "file", required = true)
 //    })
+//@PreAuthorize("@AuthoritiesAC.isAdmin()")
 //    public ResponseEntity<Map<String, Object>> uploadUsers(@RequestParam("file") MultipartFile file) throws IOException {
 //        ExtendedModelMap model = new ExtendedModelMap();
 //        usersController.uploadUsers(file, model);
@@ -42,23 +32,15 @@ public class UsersApiController {
 //        String encodedFile = (String) model.getAttribute(CREATED_USERS);
 //        return ResponseEntity.ok().body(Map.of(RESULT, result, "createdUsersFile", orNull(encodedFile)));
 //    }
-//
-//    @PostMapping("create")
-//    @Parameters(value = {
-//            @Parameter(name = "username", in = ParameterIn.QUERY, required = true),
-//            @Parameter(name = "password", in = ParameterIn.QUERY, required = true),
-//            @Parameter(name = "role", in = ParameterIn.QUERY, required = true),
-//            @Parameter(name = "professorName", in = ParameterIn.QUERY)
-//    })
-//    public ResponseEntity<Map<String, Object>> createUser(HttpServletRequest request) {
-//        ExtendedModelMap model = new ExtendedModelMap();
-//        usersController.createUser(request, model);
-//
-//        ActionResultResponse result = ActionResultResponse.fromActionResult(model.getAttribute(RESULT));
-//        return ResponseEntity.ok().body(Map.of(RESULT, result));
-//    }
-//
+
+    @RequestMapping(path = "create", method = RequestMethod.POST)
+    public ResponseEntity<Void> createUser(@RequestBody UserInfoDto userInfoDto) {
+        userService.createUser(userInfoDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
 //    @GetMapping("list")
+//    @PreAuthorize("@AuthoritiesAC.isAdmin()")
 //    public ResponseEntity<Map<String, Object>> usersList(HttpServletRequest request) {
 //        ExtendedModelMap model = new ExtendedModelMap();
 //        usersController.usersPage(request, model);
@@ -71,6 +53,7 @@ public class UsersApiController {
 //            @Parameter(name = "password", in = ParameterIn.QUERY),
 //            @Parameter(name = "professorName", in = ParameterIn.QUERY),
 //    })
+//    @PreAuthorize("@AuthoritiesAC.isAdmin()")
 //    public ResponseEntity<Map<String, Object>> updateUser(HttpServletRequest request) {
 //        ExtendedModelMap model = new ExtendedModelMap();
 //        usersController.updateUser(request, model);
@@ -83,6 +66,7 @@ public class UsersApiController {
 //    @Parameters(value = {
 //            @Parameter(name = "username", in = ParameterIn.QUERY, required = true)
 //    })
+//    @PreAuthorize("@AuthoritiesAC.isAdmin()")
 //    public ResponseEntity<Map<String, Object>> deleteUser(HttpServletRequest request) {
 //        ExtendedModelMap model = new ExtendedModelMap();
 //        usersController.deleteUser(request.getParameter(USERNAME), model);

@@ -7,19 +7,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import ru.urfu.sv.studentvoice.model.domain.entity.User;
 import ru.urfu.sv.studentvoice.services.CreateUserFromFileService;
 import ru.urfu.sv.studentvoice.services.ProfessorService;
 import ru.urfu.sv.studentvoice.services.UserService;
-import ru.urfu.sv.studentvoice.utils.consts.Parameters;
-import ru.urfu.sv.studentvoice.utils.consts.Roles;
-import ru.urfu.sv.studentvoice.utils.formatters.TemporalFormatter;
-import ru.urfu.sv.studentvoice.utils.result.ActionResult;
-import ru.urfu.sv.studentvoice.utils.result.ActionResultFactory;
 
-import java.io.IOException;
-import java.time.Instant;
 import java.util.*;
 
 import static ru.urfu.sv.studentvoice.utils.consts.Parameters.*;
@@ -69,14 +60,14 @@ public class UsersController {
 //        model.addAttribute(CREATED_USERS, encodedUsers);
 //        return CREATE_USERS_FROM_FILE;
 //    }
-//
+
 //    @PostMapping("create")
 //    public String createUser(HttpServletRequest request, Model model) {
 //        log.info("user create command sent from {}", request.getRemoteUser());
 //
 //        return userCreateTemplate(request, model);
 //    }
-//
+
 //    @GetMapping("list")
 //    public String usersPage(HttpServletRequest request, Model model) {
 //        model.addAttribute("users", userService.findAllUsers());

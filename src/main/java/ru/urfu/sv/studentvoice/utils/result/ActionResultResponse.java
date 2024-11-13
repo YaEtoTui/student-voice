@@ -6,8 +6,9 @@ import lombok.Value;
 @Value
 @JsonSerialize
 public class ActionResultResponse {
-    boolean success;
-    String message;
+
+    final boolean success;
+    final String message;
 
     public static ActionResultResponse fromActionResult(Object result){
         if(!(result instanceof ActionResult actionResult)) return new ActionResultResponse(true, "Успешно");

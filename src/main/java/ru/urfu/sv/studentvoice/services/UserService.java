@@ -2,25 +2,24 @@ package ru.urfu.sv.studentvoice.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.urfu.sv.studentvoice.model.domain.dto.auth.UserInfoDto;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.UserInfoResponse;
 import ru.urfu.sv.studentvoice.model.domain.entity.Authority;
+import ru.urfu.sv.studentvoice.model.domain.entity.User;
 import ru.urfu.sv.studentvoice.model.repository.UserRepository;
 import ru.urfu.sv.studentvoice.utils.consts.Roles;
-import ru.urfu.sv.studentvoice.utils.result.ActionResult;
 
 @Service
 @Slf4j
 public class UserService {
 
-    private final JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager();
     @Autowired
     private PasswordEncoder encoder;
-//    @Autowired
-//    private AuthorityRepository authorityRepository;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -28,28 +27,27 @@ public class UserService {
     @Autowired
     private AuthorityService authorityService;
 
-    public boolean isUserExists(String username) {
-        return userDetailsManager.userExists(username);
-    }
+    /**
+     * Создаем нового пользователя
+     *
+     * @param userInfoDto Dto по пользователю
+     */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @PreAuthorize("@UserAC.isExistUser(#userInfoDto.username)")
+    public void createUser(UserInfoDto userInfoDto) {
 
-//    @Transactional(propagation = Propagation.REQUIRES_NEW)
-//    public ActionResult createUser(User user) {
-//        String username = user.getUsername();
-//        if (isUserExists(username)) {
-//            return ActionResultFactory.userExist(username);
-//        }
-//
-//        userDetailsManager.createUser(
-//                org.springframework.security.core.userdetails.User.builder()
-//                        .passwordEncoder(encoder::encode)
-//                        .username(username)
-//                        .password(user.getPassword())
-//                        .roles(user.getRole())
-//                        .build());
-//
-//
-//        return isUserExists(username) ? ActionResultFactory.userCreated() : ActionResultFactory.userCreatingError();
-//    }
+        final String username = userInfoDto.getUsername();
+
+        final User user = new User();
+        user.setUsername(username);
+        user.setPassword(encoder.encode(userInfoDto.getPassword()));
+        user.setActive(true);
+        user.setName(userInfoDto.getName());
+        user.setSurname(userInfoDto.getSurname());
+        user.setPatronymic(userInfoDto.getPatronymic());
+
+        userRepository.save(user);
+    }
 
 //    @Transactional
 //    public ActionResult updateUser(String username, User newUser) {
@@ -87,11 +85,11 @@ public class UserService {
 //        return Optional.of(User.fromUserDetails(userDetailsManager.loadUserByUsername(username)));
 //    }
 
-    @Transactional
-    public ActionResult deleteUser(String username) {
-        userDetailsManager.deleteUser(username);
-        return new ActionResult(true, "Пользователь %s успешно удален", username);
-    }
+//    @Transactional
+//    public ActionResult deleteUser(String username) {
+//        userDetailsManager.deleteUser(username);
+//        return new ActionResult(true, "Пользователь %s успешно удален", username);
+//    }
 
     public boolean isAnyAdminExists() {
         String adminAuth = "ROLE_".concat(Roles.ADMIN);

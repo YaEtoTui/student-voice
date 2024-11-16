@@ -1,7 +1,5 @@
 package ru.urfu.sv.studentvoice.services;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -12,6 +10,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.urfu.sv.studentvoice.model.query.ReportQuery;
 import ru.urfu.sv.studentvoice.utils.excel.ExcelUtil;
 import ru.urfu.sv.studentvoice.utils.formatters.CsvFormatter;
 import ru.urfu.sv.studentvoice.utils.model.ReviewInfo;
@@ -27,21 +26,16 @@ import static ru.urfu.sv.studentvoice.utils.formatters.DateFormatter.DATE_FORMAT
 @Service
 public class ReportService {
 
-    @PersistenceContext
     @Autowired
-    private EntityManager entityManager;
+    private ReportQuery reportQuery;
 
+    /**
+     * Создаем отчет CSV по выгрузке пар
+     */
     public String getCvsReport() {
-        List<ReviewInfo> reviewInfos = entityManager.createNamedQuery("findAllReviewInfo", ReviewInfo.class).getResultList();
+        List<ReviewInfo> reviewInfos = reportQuery.findReviewInfo();
         return CsvFormatter.toCsv(reviewInfos,
                 "id;review_value;student_name;review_comment;session_name;course_name;professors;professor_name;institute_name;institute_address;room_name;create_timestamp\n");
-    }
-
-    private List<ReviewInfo> getXlsxReport() {
-
-        //To Do
-
-        return entityManager.createNamedQuery("findAllReviewInfo", ReviewInfo.class).getResultList();
     }
 
     /**
@@ -50,7 +44,8 @@ public class ReportService {
     @Transactional
     public byte[] getReport() throws IOException {
 
-        final List<ReviewInfo> reviewInfoList = getXlsxReport();
+        final List<ReviewInfo> reviewInfoList = reportQuery.findReviewInfo();
+
         if (reviewInfoList.isEmpty()) {
             return null;
         }

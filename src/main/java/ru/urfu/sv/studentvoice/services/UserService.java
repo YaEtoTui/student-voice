@@ -46,6 +46,8 @@ public class UserService {
         user.setSurname(userInfoDto.getSurname());
         user.setPatronymic(userInfoDto.getPatronymic());
 
+        /*To Do назначить роль */
+
         userRepository.save(user);
     }
 
@@ -90,15 +92,6 @@ public class UserService {
 //        userDetailsManager.deleteUser(username);
 //        return new ActionResult(true, "Пользователь %s успешно удален", username);
 //    }
-
-    public boolean isAnyAdminExists() {
-        String adminAuth = "ROLE_".concat(Roles.ADMIN);
-//        return authorityRepository
-//                .findAll()
-//                .stream()
-//                .anyMatch(auth -> adminAuth.equals(auth.getAuthority()));
-        return true;
-    }
 
     public UserInfoResponse getInfoForUser() {
         final Authority authority = authorityService.findAuthorityForCheck();

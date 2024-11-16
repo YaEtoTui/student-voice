@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.urfu.sv.studentvoice.model.domain.entity.User;
 import ru.urfu.sv.studentvoice.model.query.UserQuery;
-import ru.urfu.sv.studentvoice.model.repository.UserRepository;
 
 import java.util.ArrayList;
 
@@ -27,8 +26,6 @@ import static java.util.Objects.isNull;
 @Transactional
 public class JwtUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
     @Autowired
     private UserQuery userQuery;
 

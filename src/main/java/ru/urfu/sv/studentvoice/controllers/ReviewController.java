@@ -1,39 +1,12 @@
 package ru.urfu.sv.studentvoice.controllers;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-import ru.urfu.sv.studentvoice.model.domain.entity.ClassSession;
-import ru.urfu.sv.studentvoice.model.domain.entity.Course;
-import ru.urfu.sv.studentvoice.model.domain.entity.Review;
 import ru.urfu.sv.studentvoice.services.ClassSessionService;
 import ru.urfu.sv.studentvoice.services.CourseService;
 import ru.urfu.sv.studentvoice.services.ReviewService;
-import ru.urfu.sv.studentvoice.services.ReviewsReportService;
-import ru.urfu.sv.studentvoice.utils.consts.Templates;
-import ru.urfu.sv.studentvoice.utils.formatters.TemporalFormatter;
-import ru.urfu.sv.studentvoice.utils.result.ActionResult;
-import ru.urfu.sv.studentvoice.utils.result.ActionResultFactory;
-
-import java.io.PrintWriter;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
-
-import static ru.urfu.sv.studentvoice.utils.consts.Parameters.*;
 
 @Controller
 @Slf4j
@@ -46,8 +19,6 @@ public class ReviewController {
     private ClassSessionService sessionService;
     @Autowired
     private CourseService courseService;
-    @Autowired
-    private ReviewsReportService reportService;
 
 //    @GetMapping("/create")
 //    public String createReviewPage(@RequestParam("sessionId") String sessionIdStr, Model model) {
@@ -78,43 +49,6 @@ public class ReviewController {
 //
 //        return Templates.CREATE_REVIEW;
 //    }
-
-    @GetMapping("/download-report")
-    @ResponseBody
-    public ResponseEntity<StreamingResponseBody> downloadReport(){
-        String content = reportService.getCvsReport();
-        String fileName = "reviews_report".concat("_")
-                .concat(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm")))
-                .concat(".csv");
-
-        StreamingResponseBody responseBody = outputStream -> {
-            try (PrintWriter writer = new PrintWriter(outputStream)) {
-                writer.write(content);
-            }
-        };
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
-        headers.add(HttpHeaders.CONTENT_TYPE, "text/plain; charset=UTF-8");
-
-        return new ResponseEntity<>(responseBody, headers, HttpStatus.OK);
-    }
-
-    @SneakyThrows
-    @ResponseBody
-    @RequestMapping(path = "/download-report-xslx", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public ResponseEntity<byte[]> downloadReportXSLX(HttpServletResponse response) {
-
-        final String fileName = "reviews_report".concat("_")
-                .concat(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm")))
-                .concat(".xlsx");
-
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
-        response.setContentType(HttpHeaders.CONTENT_TYPE);
-        final byte[] report = reviewService.getReport();
-
-        return new ResponseEntity<>(report, HttpStatus.OK);
-    }
 
 //    @PostMapping("/save")
 //    public String saveReview(HttpServletRequest request, Model model) {

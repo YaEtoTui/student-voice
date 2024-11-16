@@ -1,4 +1,4 @@
-package ru.urfu.sv.studentvoice.controllers.api;
+package ru.urfu.sv.studentvoice.controllers.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

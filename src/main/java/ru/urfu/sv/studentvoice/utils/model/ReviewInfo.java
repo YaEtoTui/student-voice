@@ -1,13 +1,14 @@
 package ru.urfu.sv.studentvoice.utils.model;
 
 import com.opencsv.bean.CsvBindByPosition;
-import lombok.Value;
+import lombok.Getter;
 
 import java.time.Instant;
 import java.util.UUID;
 
-@Value
-public class ReviewInfo{
+@Getter
+public class ReviewInfo {
+
     @CsvBindByPosition(position = 0)
     UUID id;
     @CsvBindByPosition(position = 1)

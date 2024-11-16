@@ -42,11 +42,6 @@ repositories {
 }
 
 sourceSets {
-    generated {
-        java {
-            srcDirs = ['build/generated/sources/annotationProcessor/java/main']
-        }
-    }
     main {
         resources {
             srcDir 'src/main/resources'

@@ -12,10 +12,7 @@ import java.util.Collection;
 import static java.util.Objects.nonNull;
 
 @Repository
-public class UserQuery {
-
-    @Autowired
-    private JPQLQueryFactory query;
+public class UserQuery extends AbstractQuery {
 
     private final static QUser user = new QUser("user");
 
@@ -23,7 +20,7 @@ public class UserQuery {
 
         final BooleanExpression exp = user.username.eq(username);
 
-        return query
+        return query()
                 .selectFrom(user)
                 .where(exp)
                 .fetchOne();
@@ -36,7 +33,7 @@ public class UserQuery {
 
         final BooleanExpression exp = user.username.eq(username);
 
-        final Collection<User> users = query
+        final Collection<User> users = query()
                 .selectFrom(user)
                 .where(exp)
                 .fetch();

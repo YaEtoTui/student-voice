@@ -22,4 +22,18 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="2024_11_16_19_45" author="Egor Sazhin">
+
+        <insert tableName="roles">
+            <column name="name" value="ROLE_ADMIN"/>
+            <column name="description" value="Роль администратора"/>
+        </insert>
+
+        <insert tableName="roles">
+            <column name="name" value="ROLE_PROFESSOR"/>
+            <column name="description" value="Роль преподавателя"/>
+        </insert>
+
+    </changeSet>
+
 </databaseChangeLog>

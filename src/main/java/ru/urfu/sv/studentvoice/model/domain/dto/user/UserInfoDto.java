@@ -1,5 +1,6 @@
-package ru.urfu.sv.studentvoice.model.domain.dto.auth;
+package ru.urfu.sv.studentvoice.model.domain.dto.user;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 @Getter
@@ -10,4 +11,7 @@ public class UserInfoDto {
     private String name;
     private String surname;
     private String patronymic;
+
+    @JsonProperty("role_name")
+    private String roleName;
 }

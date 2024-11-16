@@ -13,7 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import ru.urfu.sv.studentvoice.controllers.jwt.JwtAuthenticationController;
-import ru.urfu.sv.studentvoice.model.domain.dto.auth.UserClient;
+import ru.urfu.sv.studentvoice.model.domain.dto.user.UserClient;
 import ru.urfu.sv.studentvoice.services.jwt.JwtUserDetailsService;
 import ru.urfu.sv.studentvoice.utils.jwt.JwtUtil;
 

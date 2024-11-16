@@ -57,7 +57,7 @@ sourceSets {
 
 dependencies {
 
-    /* PostgreSQL */
+    /* PostgreSQL и Liquibase */
     runtimeOnly("org.postgresql:postgresql",
             "org.liquibase:liquibase-core")
 
@@ -79,13 +79,16 @@ dependencies {
     runtimeOnly "io.jsonwebtoken:jjwt-impl:$jsonWebTokenVersion"
     runtimeOnly "io.jsonwebtoken:jjwt-jackson:$jsonWebTokenVersion"
 
+    /* ORM */
     implementation group: 'com.querydsl', name: 'querydsl-core', version: queryDslVersion
     implementation "com.querydsl:querydsl-jpa:$queryDslVersion:jakarta"
+    implementation "com.querydsl:querydsl-sql:$queryDslVersion"
 
 
     /* Swagger_3.0 */
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:$swaggerVersion"
 
+    /* Spring */
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter', version: springBootVersion
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: springBootVersion

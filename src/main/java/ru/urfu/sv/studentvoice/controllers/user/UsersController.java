@@ -5,12 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.urfu.sv.studentvoice.controllers.links.Links;
-import ru.urfu.sv.studentvoice.model.domain.dto.auth.UserInfoDto;
+import ru.urfu.sv.studentvoice.model.domain.dto.user.UserInfoDto;
 import ru.urfu.sv.studentvoice.services.UserService;
 
 @RestController
 @RequestMapping(Links.BASE_API + Links.USERS)
-public class UsersApiController {
+public class UsersController {
 
     @Autowired
     private UserService userService;

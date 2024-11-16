@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.urfu.sv.studentvoice.services.CreateUserFromFileService;
 import ru.urfu.sv.studentvoice.services.ProfessorService;
@@ -14,8 +13,6 @@ import ru.urfu.sv.studentvoice.services.UserService;
 import java.util.*;
 
 import static ru.urfu.sv.studentvoice.utils.consts.Parameters.*;
-import static ru.urfu.sv.studentvoice.utils.consts.Roles.ADMIN;
-import static ru.urfu.sv.studentvoice.utils.consts.Roles.PROFESSOR;
 import static ru.urfu.sv.studentvoice.utils.consts.Templates.*;
 
 @Controller
@@ -28,13 +25,13 @@ public class UsersController {
     private final CreateUserFromFileService createUsersFromFileService;
     private final ProfessorService professorService;
 
-    @GetMapping("create")
-    public String createUserPage(HttpServletRequest request, Model model) {
-        model.addAttribute("roles", List.of(ADMIN, PROFESSOR));
-
-        log.info("user create page requested from {}", request.getRemoteUser());
-        return CREATE_USER;
-    }
+//    @GetMapping("create")
+//    public String createUserPage(HttpServletRequest request, Model model) {
+//        model.addAttribute("roles", List.of(ADMIN, PROFESSOR));
+//
+//        log.info("user create page requested from {}", request.getRemoteUser());
+//        return CREATE_USER;
+//    }
 
     @GetMapping("create-from-file")
     public String createFromFilePage(){

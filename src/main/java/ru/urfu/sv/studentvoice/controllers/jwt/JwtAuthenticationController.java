@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.urfu.sv.studentvoice.controllers.links.Links;
-import ru.urfu.sv.studentvoice.model.domain.dto.auth.UserClient;
+import ru.urfu.sv.studentvoice.model.domain.dto.user.UserClient;
 import ru.urfu.sv.studentvoice.services.jwt.JwtUserDetailsService;
 import ru.urfu.sv.studentvoice.utils.exceptions.InvalidLoginException;
 import ru.urfu.sv.studentvoice.utils.jwt.JwtUtil;

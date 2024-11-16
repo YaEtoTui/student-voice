@@ -7,12 +7,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.urfu.sv.studentvoice.model.domain.dto.auth.UserInfoDto;
+import ru.urfu.sv.studentvoice.model.domain.dto.user.UserInfoDto;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.UserInfoResponse;
-import ru.urfu.sv.studentvoice.model.domain.entity.Authority;
+import ru.urfu.sv.studentvoice.model.domain.dto.user.UsernameAndRole;
 import ru.urfu.sv.studentvoice.model.domain.entity.User;
 import ru.urfu.sv.studentvoice.model.repository.UserRepository;
-import ru.urfu.sv.studentvoice.utils.consts.Roles;
+import ru.urfu.sv.studentvoice.model.repository.UserRoleRepository;
 
 @Service
 @Slf4j
@@ -21,11 +21,11 @@ public class UserService {
     @Autowired
     private PasswordEncoder encoder;
     @Autowired
+    private RoleService roleService;
+    @Autowired
     private UserRepository userRepository;
     @Autowired
-    private ProfessorService professorService;
-    @Autowired
-    private AuthorityService authorityService;
+    private UserRoleRepository userRoleRepository;
 
     /**
      * Создаем нового пользователя
@@ -46,9 +46,12 @@ public class UserService {
         user.setSurname(userInfoDto.getSurname());
         user.setPatronymic(userInfoDto.getPatronymic());
 
+//        final UserRol
+
         /*To Do назначить роль */
 
         userRepository.save(user);
+//        userRoleRepository.save()
     }
 
 //    @Transactional
@@ -80,12 +83,6 @@ public class UserService {
 //        List<String> usernames = userRepository.findAllUsernames();
 //        return usernames.stream().map(username -> User.fromUserDetails(userDetailsManager.loadUserByUsername(username))).toList();
 //    }
-//
-//    public Optional<User> findUserByUsername(String username) {
-//        if (!isUserExists(username)) return Optional.empty();
-//
-//        return Optional.of(User.fromUserDetails(userDetailsManager.loadUserByUsername(username)));
-//    }
 
 //    @Transactional
 //    public ActionResult deleteUser(String username) {
@@ -93,12 +90,16 @@ public class UserService {
 //        return new ActionResult(true, "Пользователь %s успешно удален", username);
 //    }
 
+    /**
+     * Получаем краткую информацию об пользователе,
+     * Нужно фронту для понимания вывода на UI
+     */
     public UserInfoResponse getInfoForUser() {
-        final Authority authority = authorityService.findAuthorityForCheck();
+        final UsernameAndRole usernameAndRole = roleService.findRoleForCheck();
 
         final UserInfoResponse userInfoResponse = new UserInfoResponse();
-        userInfoResponse.setUsername(authority.getUsername());
-        userInfoResponse.setUserRole(authority.getAuthority());
+        userInfoResponse.setUsername(usernameAndRole.getUsername());
+        userInfoResponse.setUserRole(usernameAndRole.getRole());
         return userInfoResponse;
     }
 }

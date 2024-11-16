@@ -1,4 +1,4 @@
-package ru.urfu.sv.studentvoice.model.domain.dto.auth;
+package ru.urfu.sv.studentvoice.model.domain.dto.user;
 
 import lombok.Getter;
 

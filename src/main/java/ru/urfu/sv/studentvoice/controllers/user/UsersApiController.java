@@ -10,7 +10,7 @@ import ru.urfu.sv.studentvoice.services.UserService;
 
 @RestController
 @RequestMapping(Links.BASE_API + Links.USERS)
-public class UsersController {
+public class UsersApiController {
 
     @Autowired
     private UserService userService;

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.PairResponse;
 import ru.urfu.sv.studentvoice.model.domain.entity.User;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonWithCourse;
-import ru.urfu.sv.studentvoice.model.query.LessonQuery;
+import ru.urfu.sv.studentvoice.model.query.CourseQuery;
 import ru.urfu.sv.studentvoice.model.query.UserQuery;
 import ru.urfu.sv.studentvoice.services.jwt.JwtUserDetailsService;
 import ru.urfu.sv.studentvoice.services.mapper.PairMapper;
@@ -36,7 +36,7 @@ public class ProfessorService {
     @Autowired
     private UserQuery userQuery;
     @Autowired
-    private LessonQuery lessonQuery;
+    private CourseQuery courseQuery;
 
 //    public List<Professor> getAllProfessors() {
 //        return repository.findAllByOrderByFullNameAsc();
@@ -91,7 +91,7 @@ public class ProfessorService {
 
         if (Objects.nonNull(professor)) {
             final String professorName = professor.getUsername();
-            final List<LessonWithCourse> lessonWithCourseList = lessonQuery.findAllLessonsByProfessorUsername(professorName);
+            final List<LessonWithCourse> lessonWithCourseList = courseQuery.findAllLessonsByProfessorUsername(professorName);
             return pairMapper.createPairResponseListFromLessonWithCourseList(lessonWithCourseList);
         } else {
             throw new IllegalArgumentException("Not found professor");

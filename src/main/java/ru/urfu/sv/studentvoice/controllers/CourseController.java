@@ -21,51 +21,6 @@ public class CourseController {
     private final ClassSessionService sessionService;
     private final InstituteService instituteService;
 
-//    @GetMapping("/create")
-//    public String createCoursePage(
-//            @RequestParam(name = INSTITUTE_ID, required = false, defaultValue = "-1") Integer instituteId,
-//            @AuthenticationPrincipal UserDetails userDetails,
-//            Model model) {
-//        if (instituteId != -1) {
-//            Optional<Institute> instituteOpt = instituteService.findInstituteById(instituteId);
-//            if (instituteOpt.isEmpty()) {
-//                model.addAttribute(RESULT, ActionResultFactory.instituteNotExist());
-//                return Templates.CREATE_COURSE;
-//            }
-//            model.addAttribute(INSTITUTE_ID, instituteId);
-//        }
-//        model.addAttribute(INSTITUTES_LIST, instituteService.findAllInstitutes());
-//        addProfessorName(professorService, model, userDetails);
-//        return Templates.CREATE_COURSE;
-//    }
-
-//    @PostMapping("/create")
-//    public String createCourse(@AuthenticationPrincipal UserDetails userDetails, HttpServletRequest request, Model model) {
-//        Integer instituteId = Integer.parseInt(request.getParameter(INSTITUTE_ID));
-//        String courseName = request.getParameter(COURSE_NAME);
-//        String professorsNames = request.getParameter(PROFESSORS_NAMES);
-//        Optional<Institute> institute = instituteService.findInstituteById(instituteId);
-//
-//        ActionResult result;
-//        if (institute.isEmpty()) {
-//            result = ActionResultFactory.instituteNotExist();
-//        } else {
-//            CourseDetails courseDetails = CourseDetails.builder()
-//                    .instituteName(institute.get().getShortName())
-//                    .instituteAddress(institute.get().getAddress())
-//                    .courseName(courseName)
-//                    .professorsNames(professorsNames)
-//                    .build();
-//
-//            result = courseService.createCourse(UUID.randomUUID(), courseDetails);
-//            model.addAttribute(INSTITUTES_LIST, instituteService.findAllInstitutes());
-//            addProfessorName(professorService, model, userDetails);
-//        }
-//
-//        model.addAttribute(RESULT, result);
-//        return Templates.CREATE_COURSE;
-//    }
-//
 //    @GetMapping("/{courseId}")
 //    public String coursePage(@PathVariable("courseId") UUID courseId, Model model) {
 //        Optional<Course> courseOpt = courseService.findCourseById(courseId);

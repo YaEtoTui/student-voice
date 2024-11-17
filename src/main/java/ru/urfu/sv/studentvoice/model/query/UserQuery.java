@@ -83,7 +83,8 @@ public class UserQuery extends AbstractQuery {
 
     /**
      * Создаем связь между пользователем и его ролью
-     * @param userId индентификатор пользователя
+     *
+     * @param userId   индентификатор пользователя
      * @param roleName Название роли
      */
     public void insertUserRole(Long userId, String roleName) {

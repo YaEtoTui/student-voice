@@ -1,43 +1,38 @@
 package ru.urfu.sv.studentvoice.services;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.urfu.sv.studentvoice.model.domain.entity.ClassSession;
+import ru.urfu.sv.studentvoice.model.domain.dto.course.CourseInfo;
 import ru.urfu.sv.studentvoice.model.domain.entity.Course;
-import ru.urfu.sv.studentvoice.model.domain.dto.CourseDetails;
-import ru.urfu.sv.studentvoice.model.domain.entity.Institute;
+import ru.urfu.sv.studentvoice.model.query.CourseQuery;
 import ru.urfu.sv.studentvoice.model.repository.CourseRepository;
-import ru.urfu.sv.studentvoice.utils.result.ActionResult;
-import ru.urfu.sv.studentvoice.utils.result.ActionResultFactory;
 
-import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
-@Service
-@RequiredArgsConstructor
 @Slf4j
+@Service
 public class CourseService {
-    private final CourseRepository repository;
-    private final InstituteService instituteService;
 
-//    @Transactional
-//    public ActionResult createCourse(UUID courseId, CourseDetails courseDetails) {
-//        if (repository.existsById(courseId)){
-//            log.warn("Курс с идентификатором {} уже существует", courseId);
-//            return ActionResultFactory.courseExist();
-//        }
-//
-//        Optional<Institute> institute = instituteService.findInstituteByAddress(courseDetails.getInstituteAddress());
-//        institute.ifPresent(value -> courseDetails.setInstituteName(value.getShortName()));
-//
-//        Course course = repository.save(new Course(courseId, courseDetails, Instant.now()));
-//        return repository.existsById(course.getCourseId()) ? ActionResultFactory.courseCreated() : ActionResultFactory.courseCreatingError();
-//    }
-//
+    @Autowired
+    private CourseRepository courseRepository;
+    @Autowired
+    private CourseQuery courseQuery;
+
+    @Transactional
+    @PreAuthorize("@CoursesAC.isCreateNewCourse(#courseInfo)")
+    public void createCourse(CourseInfo courseInfo) {
+
+        final Course course = new Course();
+        course.setName(courseInfo.getCourseName());
+        course.setInstituteId(courseInfo.getInstituteId());
+
+        final Course courseResponse = courseRepository.save(course);
+        courseQuery.insertUserCourse(courseInfo.getProfessorId(), courseResponse.getId());
+    }
+
 //    @Transactional
 //    public void createCoursesByClassSessions(List<ClassSession> sessions) {
 //        for (ClassSession session : sessions) {
@@ -90,6 +85,6 @@ public class CourseService {
 //    }
 
     public List<Course> findAll() {
-        return repository.findAll();
+        return courseRepository.findAll();
     }
 }

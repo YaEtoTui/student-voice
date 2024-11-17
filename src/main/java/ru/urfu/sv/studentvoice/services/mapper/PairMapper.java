@@ -2,7 +2,7 @@ package ru.urfu.sv.studentvoice.services.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.PairResponse;
-import ru.urfu.sv.studentvoice.model.domain.lesson.LessonWithCourse;
+import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonWithCourse;
 
 import java.util.Collection;
 import java.util.List;

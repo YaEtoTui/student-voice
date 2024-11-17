@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.urfu.sv.studentvoice.model.query.UserQuery;
 
 @Component("UserAC")
-public class UserAccessChecker {
+public class UsersAccessChecker {
 
     @Autowired
     private UserQuery userQuery;

@@ -1,29 +1,38 @@
 package ru.urfu.sv.studentvoice.services;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.urfu.sv.studentvoice.model.domain.entity.ClassSession;
+import ru.urfu.sv.studentvoice.model.domain.dto.institute.InstituteDto;
+import ru.urfu.sv.studentvoice.model.domain.dto.institute.InstituteInfo;
+import ru.urfu.sv.studentvoice.model.domain.dto.response.InstituteResponse;
 import ru.urfu.sv.studentvoice.model.domain.entity.Institute;
 import ru.urfu.sv.studentvoice.model.repository.InstituteRepository;
-import ru.urfu.sv.studentvoice.utils.result.ActionResult;
-import ru.urfu.sv.studentvoice.utils.result.ActionResultFactory;
+import ru.urfu.sv.studentvoice.services.mapper.InstituteMapper;
 
 import java.util.List;
-import java.util.Optional;
 
-@Service
-@RequiredArgsConstructor
 @Slf4j
+@Service
 public class InstituteService {
-    private final InstituteRepository repository;
 
-//    @Transactional
-//    public ActionResult createInstitute(String instituteFullName, String instituteShortName, String instituteAddress) {
-//        Institute institute = repository.save(new Institute(instituteFullName, instituteShortName, instituteAddress));
-//        return repository.existsById(institute.getInstituteId()) ? ActionResultFactory.instituteCreated() : ActionResultFactory.instituteCreatingError();
-//    }
+    @Autowired
+    private InstituteRepository instituteRepository;
+    @Autowired
+    private InstituteMapper instituteMapper;
+
+    @Transactional
+    @PreAuthorize("@InstitutesAC.isCreateNewInstitute(#instituteInfo.instituteFullName)")
+    public void createInstitute(InstituteInfo instituteInfo) {
+
+        final Institute institute = new Institute();
+        institute.setFullName(instituteInfo.getInstituteFullName());
+        institute.setShortName(instituteInfo.getInstituteShortName());
+        institute.setAddress(instituteInfo.getInstituteAddress());
+        instituteRepository.save(institute);
+    }
 
 //    @Transactional
 //    public void createInstitutesByClassSessions(List<ClassSession> sessions) {
@@ -40,19 +49,14 @@ public class InstituteService {
 //        }
 //    }
 
-//    public Optional<Institute> findInstituteById(Integer instituteId) {
-//        return repository.findById(instituteId);
-//    }
-
-    public Optional<Institute> findInstituteByAddress(String address){
-        return repository.findByAddressIgnoreCase(address);
+    public List<InstituteDto> findAllInstitutes() {
+        //To Do Когда будет много, это будет костылем
+        final List<Institute> instituteList = instituteRepository.findAll();
+        return instituteMapper.createInstituteDtoListFromInstituteList(instituteList);
     }
 
-    public Optional<Institute> findInstituteByShortName(String instituteShortName) {
-        return repository.findByShortNameIgnoreCase(instituteShortName);
-    }
-
-    public List<Institute> findAllInstitutes() {
-        return repository.findAll();
+    public List<InstituteResponse> findAllInstituteResponse() {
+        final List<InstituteDto> instituteDtoList = findAllInstitutes();
+        return instituteMapper.createInstituteResponseListFromInstituteDtoList(instituteDtoList);
     }
 }

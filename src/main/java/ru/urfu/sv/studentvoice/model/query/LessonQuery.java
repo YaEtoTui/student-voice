@@ -5,7 +5,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.stereotype.Repository;
 import ru.urfu.sv.studentvoice.model.domain.entity.QCourse;
 import ru.urfu.sv.studentvoice.model.domain.entity.QLesson;
-import ru.urfu.sv.studentvoice.model.domain.lesson.LessonWithCourse;
+import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonWithCourse;
 
 import java.util.List;
 

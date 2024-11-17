@@ -1,4 +1,4 @@
-package ru.urfu.sv.studentvoice.model.domain.lesson;
+package ru.urfu.sv.studentvoice.model.domain.dto.lesson;
 
 import lombok.Getter;
 import lombok.Setter;

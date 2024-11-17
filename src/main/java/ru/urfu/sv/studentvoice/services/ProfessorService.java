@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.PairResponse;
 import ru.urfu.sv.studentvoice.model.domain.entity.User;
-import ru.urfu.sv.studentvoice.model.domain.lesson.LessonWithCourse;
+import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonWithCourse;
 import ru.urfu.sv.studentvoice.model.query.LessonQuery;
 import ru.urfu.sv.studentvoice.model.query.UserQuery;
 import ru.urfu.sv.studentvoice.services.jwt.JwtUserDetailsService;

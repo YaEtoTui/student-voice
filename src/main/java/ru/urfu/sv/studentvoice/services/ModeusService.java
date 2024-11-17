@@ -3,14 +3,14 @@ package ru.urfu.sv.studentvoice.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import ru.urfu.sv.studentvoice.model.domain.dto.institute.InstituteDto;
 import ru.urfu.sv.studentvoice.model.domain.entity.ClassSession;
-import ru.urfu.sv.studentvoice.model.domain.entity.Institute;
 import ru.urfu.sv.studentvoice.utils.exceptions.ModeusException;
 import ru.urfu.sv.studentvoice.utils.formatters.TemporalFormatter;
 import ru.urfu.sv.studentvoice.utils.model.ClassSessionMapper;
@@ -19,19 +19,23 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Service
-@RequiredArgsConstructor
 @Slf4j
+@Service
 public class ModeusService {
+
     @Value("${modeus.persons.url}")
     private String personSearchUrl;
     @Value("${modeus.events.url}")
     private String eventsSearchUrl;
 
-    private final WebDriverService webDriverService;
-    private final RestTemplate restTemplate;
-    private final InstituteService instituteService;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    private WebDriverService webDriverService;
+    @Autowired
+    private RestTemplate restTemplate;
+    @Autowired
+    private InstituteService instituteService;
+    @Autowired
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     public List<ClassSession> getSessionsOfProfessor(String professorFullName, LocalDate dateFrom, LocalDate dateTo) throws ModeusException {
         Optional<String> modeusAuthToken = webDriverService.getModeusAuthToken();
@@ -52,8 +56,10 @@ public class ModeusService {
             return Collections.emptyList();
         }
 
-        Map<String, String> institutesAddressNameMap = instituteService.findAllInstitutes()
-                .stream().collect(Collectors.toMap(Institute::getAddress, Institute::getShortName));
+        final Map<String, String> institutesAddressNameMap = instituteService.findAllInstitutes()
+                .stream()
+                .collect(Collectors.toMap(InstituteDto::getInstituteAddress, InstituteDto::getInstituteShortName));
+
         return ClassSessionMapper.fromEventsJson(eventsJson.get(), professorFullName, institutesAddressNameMap);
     }
 

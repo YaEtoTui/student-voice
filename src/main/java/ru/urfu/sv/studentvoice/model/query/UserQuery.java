@@ -2,9 +2,8 @@ package ru.urfu.sv.studentvoice.model.query;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.sql.SQLExpressions;
-import com.querydsl.sql.SQLQuery;
-import jakarta.persistence.criteria.Subquery;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPQLQuery;
 import org.springframework.stereotype.Repository;
 import ru.urfu.sv.studentvoice.model.domain.dto.user.Roles;
 import ru.urfu.sv.studentvoice.model.domain.dto.user.UsernameAndRole;
@@ -38,7 +37,8 @@ public class UserQuery extends AbstractQuery {
      */
     public boolean isExistUser(String username) {
 
-        final BooleanExpression exp = user.username.eq(username);
+        final BooleanExpression exp = user.username.eq(username)
+                .and(user.active.isTrue());;
 
         final Collection<User> users = query()
                 .selectFrom(user)
@@ -81,21 +81,22 @@ public class UserQuery extends AbstractQuery {
                 .fetchOne();
     }
 
-    public void insertUserRole(String username, String roleName) {
+    /**
+     * Создаем связь между пользователем и его ролью
+     * @param userId индентификатор пользователя
+     * @param roleName Название роли
+     */
+    public void insertUserRole(Long userId, String roleName) {
 
-        //To Do
+        final JPQLQuery<?> query = query()
+                .select(Expressions.numberTemplate(Long.class, userId + "L"), role.id)
+                .from(role)
+                .where(role.name.eq(roleName));
 
-//        final SQLQuery<?> query = SQLExpressions.select(
-//                user.id,
-//                role.id
-//        )
-//
-//        query()
-//                .insert(userRole)
-//                .columns(
-//                        userRole.userId,
-//                        userRole.roleId
-//                )
-//                .select(query)
+        query()
+                .insert(userRole)
+                .columns(userRole.userId, userRole.roleId)
+                .select(query)
+                .execute();
     }
 }

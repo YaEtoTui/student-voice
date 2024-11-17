@@ -7,12 +7,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.urfu.sv.studentvoice.model.domain.dto.user.Roles;
 import ru.urfu.sv.studentvoice.model.domain.dto.user.UserInfoDto;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.UserInfoResponse;
 import ru.urfu.sv.studentvoice.model.domain.dto.user.UsernameAndRole;
 import ru.urfu.sv.studentvoice.model.domain.entity.User;
+import ru.urfu.sv.studentvoice.model.query.UserQuery;
 import ru.urfu.sv.studentvoice.model.repository.UserRepository;
-import ru.urfu.sv.studentvoice.model.repository.UserRoleRepository;
 
 @Service
 @Slf4j
@@ -25,7 +26,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private UserRoleRepository userRoleRepository;
+    private UserQuery userQuery;
 
     /**
      * Создаем нового пользователя
@@ -37,6 +38,7 @@ public class UserService {
     public void createUser(UserInfoDto userInfoDto) {
 
         final String username = userInfoDto.getUsername();
+        final Roles role = Roles.valueOf(userInfoDto.getRoleName());
 
         final User user = new User();
         user.setUsername(username);
@@ -46,12 +48,8 @@ public class UserService {
         user.setSurname(userInfoDto.getSurname());
         user.setPatronymic(userInfoDto.getPatronymic());
 
-//        final UserRol
-
-        /*To Do назначить роль */
-
-        userRepository.save(user);
-//        userRoleRepository.save()
+        final User userResponse = userRepository.save(user);
+        userQuery.insertUserRole(userResponse.getId(), role.getName());
     }
 
 //    @Transactional

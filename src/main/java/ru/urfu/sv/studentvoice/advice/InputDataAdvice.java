@@ -7,17 +7,23 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.urfu.sv.studentvoice.utils.exceptions.InvalidLoginException;
 
 /**
- * Advice, который ловит exception при неправильном аутентификации
+ * Advice, который ловит exception из-за неправильного ввода данных
  *
  * @author Egor Sazhin
  * @since 03.11.2024
  */
 @RestControllerAdvice
-public class AuthenticationAdvice {
+public class InputDataAdvice {
 
     @ExceptionHandler(InvalidLoginException.class)
     public ResponseEntity<String> handleInvalid(Exception e) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgument(Exception e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(e.getMessage());
     }
 }

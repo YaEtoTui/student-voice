@@ -1,4 +1,4 @@
-package ru.urfu.sv.studentvoice.services;
+package ru.urfu.sv.studentvoice.services.user;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +8,8 @@ import ru.urfu.sv.studentvoice.model.domain.entity.User;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonWithCourse;
 import ru.urfu.sv.studentvoice.model.query.CourseQuery;
 import ru.urfu.sv.studentvoice.model.query.UserQuery;
+import ru.urfu.sv.studentvoice.services.ClassSessionService;
+import ru.urfu.sv.studentvoice.services.CourseService;
 import ru.urfu.sv.studentvoice.services.jwt.JwtUserDetailsService;
 import ru.urfu.sv.studentvoice.services.mapper.PairMapper;
 

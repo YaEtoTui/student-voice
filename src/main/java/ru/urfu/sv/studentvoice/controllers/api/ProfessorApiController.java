@@ -9,7 +9,7 @@ import ru.urfu.sv.studentvoice.controllers.links.Links;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.PairResponse;
 import ru.urfu.sv.studentvoice.services.ClassSessionService;
 import ru.urfu.sv.studentvoice.services.CourseService;
-import ru.urfu.sv.studentvoice.services.ProfessorService;
+import ru.urfu.sv.studentvoice.services.user.ProfessorService;
 
 import java.util.List;
 

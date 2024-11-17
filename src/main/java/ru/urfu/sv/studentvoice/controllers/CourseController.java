@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.urfu.sv.studentvoice.services.ClassSessionService;
 import ru.urfu.sv.studentvoice.services.CourseService;
 import ru.urfu.sv.studentvoice.services.InstituteService;
-import ru.urfu.sv.studentvoice.services.ProfessorService;
+import ru.urfu.sv.studentvoice.services.user.ProfessorService;
 
 @Controller
 @RequiredArgsConstructor

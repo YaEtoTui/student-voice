@@ -1,4 +1,4 @@
-package ru.urfu.sv.studentvoice.services;
+package ru.urfu.sv.studentvoice.services.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

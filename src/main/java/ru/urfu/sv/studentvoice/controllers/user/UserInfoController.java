@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.urfu.sv.studentvoice.controllers.links.Links;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.UserInfoResponse;
-import ru.urfu.sv.studentvoice.services.UserService;
+import ru.urfu.sv.studentvoice.services.user.UserService;
 
 /**
  * Контроллер отвечает за информацию по пользователю

@@ -1,27 +1,13 @@
 package ru.urfu.sv.studentvoice.controllers;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.urfu.sv.studentvoice.model.domain.entity.ClassSession;
-import ru.urfu.sv.studentvoice.model.domain.entity.Professor;
 import ru.urfu.sv.studentvoice.services.*;
-import ru.urfu.sv.studentvoice.utils.formatters.TemporalFormatter;
-import ru.urfu.sv.studentvoice.utils.result.ActionResult;
-import ru.urfu.sv.studentvoice.utils.result.ActionResultFactory;
-
-import java.time.*;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static ru.urfu.sv.studentvoice.utils.consts.Parameters.*;
-import static ru.urfu.sv.studentvoice.utils.consts.Templates.*;
+import ru.urfu.sv.studentvoice.services.user.ProfessorService;
 
 @Controller
 @RequiredArgsConstructor

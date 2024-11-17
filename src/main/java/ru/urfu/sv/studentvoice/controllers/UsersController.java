@@ -6,9 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import ru.urfu.sv.studentvoice.services.CreateUserFromFileService;
-import ru.urfu.sv.studentvoice.services.ProfessorService;
-import ru.urfu.sv.studentvoice.services.UserService;
+import ru.urfu.sv.studentvoice.services.user.CreateUserFromFileService;
+import ru.urfu.sv.studentvoice.services.user.ProfessorService;
+import ru.urfu.sv.studentvoice.services.user.UserService;
 
 import java.util.*;
 

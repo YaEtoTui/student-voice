@@ -3,7 +3,7 @@ package ru.urfu.sv.studentvoice.controllers.links.checker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.urfu.sv.studentvoice.model.domain.dto.user.UsernameAndRole;
-import ru.urfu.sv.studentvoice.services.RoleService;
+import ru.urfu.sv.studentvoice.services.user.RoleService;
 
 import static ru.urfu.sv.studentvoice.model.domain.dto.user.Roles.ROLE_ADMIN;
 import static ru.urfu.sv.studentvoice.model.domain.dto.user.Roles.ROLE_PROFESSOR;

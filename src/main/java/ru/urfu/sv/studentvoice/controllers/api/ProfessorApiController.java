@@ -1,12 +1,17 @@
 package ru.urfu.sv.studentvoice.controllers.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.urfu.sv.studentvoice.controllers.links.Links;
+import ru.urfu.sv.studentvoice.model.domain.dto.response.PairResponse;
 import ru.urfu.sv.studentvoice.services.ClassSessionService;
 import ru.urfu.sv.studentvoice.services.CourseService;
 import ru.urfu.sv.studentvoice.services.ProfessorService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(Links.BASE_API + Links.PROFESSORS)

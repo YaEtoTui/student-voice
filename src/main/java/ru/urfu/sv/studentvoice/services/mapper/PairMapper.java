@@ -2,12 +2,11 @@ package ru.urfu.sv.studentvoice.services.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.PairResponse;
-import ru.urfu.sv.studentvoice.model.domain.entity.ClassSession;
+import ru.urfu.sv.studentvoice.model.domain.lesson.LessonWithCourse;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static java.util.Objects.nonNull;
 
 /**
  * Mapper по созданию PairResponse
@@ -19,27 +18,27 @@ import static java.util.Objects.nonNull;
 public class PairMapper {
 
     /**
-     * Переделываем List<ClassSession> в List<PairResponse>
+     * Переделываем List<LessonWithCourse> в List<PairResponse>
      *
-     * @param classSessionList Список сессий
+     * @param lessonWithCourseList Список пар
      */
-    public List<PairResponse> createPairResponseList(List<ClassSession> classSessionList) {
-        return classSessionList.stream()
+    public List<PairResponse> createPairResponseListFromLessonWithCourseList(Collection<LessonWithCourse> lessonWithCourseList) {
+        return lessonWithCourseList.stream()
                 .map(this::createPairResponse)
                 .collect(Collectors.toList());
     }
 
     /**
-     * Переделываем ClassSession в PairResponse
+     * Переделываем LessonWithCourse в PairResponse
      *
-     * @param classSession Сессия
+     * @param lessonWithCourse Пара
      */
-    public PairResponse createPairResponse(ClassSession classSession) {
+    public PairResponse createPairResponse(LessonWithCourse lessonWithCourse) {
         final PairResponse pairResponse = new PairResponse();
-        pairResponse.setStatus(classSession.getStatus());
-        pairResponse.setCourseName(nonNull(classSession.getCourseDetails()) ? classSession.getCourseDetails().getCourseName() : null);
-        pairResponse.setDateStart(classSession.getStartDateTime());
-        pairResponse.setDateEnd(classSession.getEndDateTime());
+        pairResponse.setStatus(lessonWithCourse.getStatus());
+        pairResponse.setCourseName(lessonWithCourse.getCourseName());
+        pairResponse.setDateStart(lessonWithCourse.getDateStart());
+        pairResponse.setDateEnd(lessonWithCourse.getDateEnd());
 
         return pairResponse;
     }

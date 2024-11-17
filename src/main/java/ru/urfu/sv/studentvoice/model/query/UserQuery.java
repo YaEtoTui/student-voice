@@ -6,6 +6,7 @@ import com.querydsl.sql.SQLExpressions;
 import com.querydsl.sql.SQLQuery;
 import jakarta.persistence.criteria.Subquery;
 import org.springframework.stereotype.Repository;
+import ru.urfu.sv.studentvoice.model.domain.dto.user.Roles;
 import ru.urfu.sv.studentvoice.model.domain.dto.user.UsernameAndRole;
 import ru.urfu.sv.studentvoice.model.domain.entity.QRole;
 import ru.urfu.sv.studentvoice.model.domain.entity.QUser;
@@ -23,7 +24,8 @@ public class UserQuery extends AbstractQuery {
 
     public User findUserByUsername(String username) {
 
-        final BooleanExpression exp = user.username.eq(username);
+        final BooleanExpression exp = user.username.eq(username)
+                .and(user.active.isTrue());
 
         return query()
                 .selectFrom(user)
@@ -60,6 +62,23 @@ public class UserQuery extends AbstractQuery {
                         role.name.as("role")
                 ))
                 .fetchFirst();
+    }
+
+    /**
+     * Ищем преподавателя по username
+     */
+    public User findProfessorByUsername(String username) {
+
+        final BooleanExpression exp = user.username.eq(username)
+                .and(user.active.isTrue())
+                .and(role.name.eq(Roles.ROLE_PROFESSOR.getName()));
+
+        return query()
+                .selectFrom(user)
+                .join(userRole).on(userRole.userId.eq(user.id))
+                .join(role).on(userRole.roleId.eq(role.id))
+                .where(exp)
+                .fetchOne();
     }
 
     public void insertUserRole(String username, String roleName) {

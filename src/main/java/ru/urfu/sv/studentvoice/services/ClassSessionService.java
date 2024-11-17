@@ -3,25 +3,15 @@ package ru.urfu.sv.studentvoice.services;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.urfu.sv.studentvoice.model.domain.entity.ClassSession;
-import ru.urfu.sv.studentvoice.model.domain.entity.Course;
-import ru.urfu.sv.studentvoice.model.repository.ClassSessionRepository;
-import ru.urfu.sv.studentvoice.utils.exceptions.ModeusException;
-import ru.urfu.sv.studentvoice.utils.result.ActionResult;
-import ru.urfu.sv.studentvoice.utils.result.ActionResultFactory;
 
 import java.time.*;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Slf4j
 public class ClassSessionService {
 
-//    @Autowired
-//    private ClassSessionRepository repository;
     @Autowired
     private CourseService courseService;
     @Autowired
@@ -122,7 +112,7 @@ public class ClassSessionService {
 //        repository.saveAll(sessions);
 //        return ActionResultFactory.sessionCreated();
 //    }
-//
+
 //    public List<ClassSession> findSavedClassSessionsByProfessorName(String professorName, LocalDate dateFrom, LocalDate dateTo) {
 //        final List<ClassSession> savedClassSessions = repository
 //                .findAllByProfessorNameIgnoreCaseAndStartDateTimeAfterAndEndDateTimeBefore(professorName, dateFrom.atStartOfDay(), dateTo.atStartOfDay());
@@ -130,7 +120,7 @@ public class ClassSessionService {
 //        log.info("Для преподавателя {} найдены следующие пары: {}", professorName, classSessionsStr);
 //        return savedClassSessions;
 //    }
-//
+
 //    public List<ClassSession> findAllSavedClassSessionsByProfessorName(String professorName) {
 //        final List<ClassSession> savedClassSessions = repository
 //                .findAllByProfessorNameIgnoreCase(professorName);
@@ -138,7 +128,7 @@ public class ClassSessionService {
 //        log.info("Для преподавателя {} найдены следующие пары: {}", professorName, classSessionsStr);
 //        return savedClassSessions;
 //    }
-//
+
 //    public List<ClassSession> findClassSessionsByCourseId(UUID courseId) {
 //        return repository.findAllByCourseId(courseId);
 //    }

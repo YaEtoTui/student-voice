@@ -3,18 +3,16 @@ package ru.urfu.sv.studentvoice.services;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.PairResponse;
-import ru.urfu.sv.studentvoice.model.domain.entity.ClassSession;
-import ru.urfu.sv.studentvoice.model.domain.entity.Professor;
-import ru.urfu.sv.studentvoice.model.repository.ProfessorRepository;
+import ru.urfu.sv.studentvoice.model.domain.entity.User;
+import ru.urfu.sv.studentvoice.model.domain.lesson.LessonWithCourse;
+import ru.urfu.sv.studentvoice.model.query.LessonQuery;
+import ru.urfu.sv.studentvoice.model.query.UserQuery;
 import ru.urfu.sv.studentvoice.services.jwt.JwtUserDetailsService;
 import ru.urfu.sv.studentvoice.services.mapper.PairMapper;
-import ru.urfu.sv.studentvoice.utils.result.ActionResult;
-import ru.urfu.sv.studentvoice.utils.result.ActionResultFactory;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 /**
  * Сервис предназначен для обработки данных для преподаваталя,
@@ -23,22 +21,22 @@ import java.util.Optional;
  * @author Egor Sazhin
  * @since 07.11.2024
  */
-@Service
 @Slf4j
+@Service
 public class ProfessorService {
 
-//    @Autowired
-//    private ProfessorRepository repository;
-//    @Autowired
-//    private CourseService courseService;
-//    @Autowired
-//    private ClassSessionService sessionService;
-//    @Autowired
-//    private JwtUserDetailsService jwtUserDetailsService;
-//    @Autowired
-//    private ClassSessionService classSessionService;
-//    @Autowired
-//    private PairMapper pairMapper;
+    @Autowired
+    private CourseService courseService;
+    @Autowired
+    private ClassSessionService sessionService;
+    @Autowired
+    private JwtUserDetailsService jwtUserDetailsService;
+    @Autowired
+    private PairMapper pairMapper;
+    @Autowired
+    private UserQuery userQuery;
+    @Autowired
+    private LessonQuery lessonQuery;
 
 //    public List<Professor> getAllProfessors() {
 //        return repository.findAllByOrderByFullNameAsc();
@@ -83,20 +81,20 @@ public class ProfessorService {
 //    public Optional<Professor> findProfessorByUsername(String username) {
 //        return repository.findByUsername(username);
 //    }
-//
-//    /**
-//     * Ищем список пар для преподавателя
-//     */
-//    public List<PairResponse> findListPair() {
-//        final String username = jwtUserDetailsService.findUsername();
-//        final Optional<Professor> professor = findProfessorByUsername(username);
-//
-//        if (professor.isPresent()) {
-//            final String professorName = professor.get().getUsername();
-//            final List<ClassSession> classSessionList = classSessionService.findAllSavedClassSessionsByProfessorName(professorName);
-//            return pairMapper.createPairResponseList(classSessionList);
-//        } else {
-//            throw new IllegalArgumentException("Not found professor");
-//        }
-//    }
+
+    /**
+     * Ищем список пар для преподавателя
+     */
+    public List<PairResponse> findListPair() {
+        final String username = jwtUserDetailsService.findUsername();
+        final User professor = userQuery.findProfessorByUsername(username);
+
+        if (Objects.nonNull(professor)) {
+            final String professorName = professor.getUsername();
+            final List<LessonWithCourse> lessonWithCourseList = lessonQuery.findAllLessonsByProfessorUsername(professorName);
+            return pairMapper.createPairResponseListFromLessonWithCourseList(lessonWithCourseList);
+        } else {
+            throw new IllegalArgumentException("Not found professor");
+        }
+    }
 }

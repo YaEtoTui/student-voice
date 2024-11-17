@@ -33,7 +33,7 @@ import static ru.urfu.sv.studentvoice.utils.result.ActionResultResponse.fromActi
 
 @RestController
 @RequestMapping("/api/sessions")
-@PreAuthorize("@AuthoritiesAC.isAdminOrProfessor()")
+@PreAuthorize("@RolesAC.isAdminOrProfessor()")
 public class ClassSessionApiController {
 
     @Autowired

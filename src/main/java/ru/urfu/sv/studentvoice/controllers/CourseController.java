@@ -14,7 +14,7 @@ import ru.urfu.sv.studentvoice.services.ProfessorService;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/courses")
-@PreAuthorize("@AuthoritiesAC.isAdminOrProfessor()")
+@PreAuthorize("@RolesAC.isAdminOrProfessor()")
 public class CourseController {
     private final CourseService courseService;
     private final ProfessorService professorService;

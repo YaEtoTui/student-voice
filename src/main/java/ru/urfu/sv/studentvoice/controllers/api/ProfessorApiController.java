@@ -10,7 +10,7 @@ import ru.urfu.sv.studentvoice.services.ProfessorService;
 
 @RestController
 @RequestMapping(Links.BASE_API + Links.PROFESSORS)
-@PreAuthorize("@AuthoritiesAC.isProfessor()")
+@PreAuthorize("@RolesAC.isProfessor()")
 public class ProfessorApiController {
 
     @Autowired
@@ -71,10 +71,10 @@ public class ProfessorApiController {
 //        }
 //    }
 
-//    @RequestMapping(path = "/list/pair", method = RequestMethod.GET)
-//    public ResponseEntity<List<PairResponse>> findListPair() {
-//
-//        final List<PairResponse> response = professorService.findListPair();
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
+    @RequestMapping(path = "/list/pair", method = RequestMethod.GET)
+    public ResponseEntity<List<PairResponse>> findListPair() {
+
+        final List<PairResponse> response = professorService.findListPair();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

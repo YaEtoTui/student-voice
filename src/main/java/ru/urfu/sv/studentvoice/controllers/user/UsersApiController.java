@@ -19,7 +19,7 @@ public class UsersApiController {
 //    @Parameters(value = {
 //            @Parameter(name = "file", required = true)
 //    })
-//@PreAuthorize("@AuthoritiesAC.isAdmin()")
+//@PreAuthorize("@RolesAC.isAdmin()")
 //    public ResponseEntity<Map<String, Object>> uploadUsers(@RequestParam("file") MultipartFile file) throws IOException {
 //        ExtendedModelMap model = new ExtendedModelMap();
 //        usersController.uploadUsers(file, model);
@@ -40,7 +40,7 @@ public class UsersApiController {
     }
 
 //    @GetMapping("list")
-//    @PreAuthorize("@AuthoritiesAC.isAdmin()")
+//    @PreAuthorize("@RolesAC.isAdmin()")
 //    public ResponseEntity<Map<String, Object>> usersList(HttpServletRequest request) {
 //        ExtendedModelMap model = new ExtendedModelMap();
 //        usersController.usersPage(request, model);
@@ -53,7 +53,7 @@ public class UsersApiController {
 //            @Parameter(name = "password", in = ParameterIn.QUERY),
 //            @Parameter(name = "professorName", in = ParameterIn.QUERY),
 //    })
-//    @PreAuthorize("@AuthoritiesAC.isAdmin()")
+//    @PreAuthorize("@RolesAC.isAdmin()")
 //    public ResponseEntity<Map<String, Object>> updateUser(HttpServletRequest request) {
 //        ExtendedModelMap model = new ExtendedModelMap();
 //        usersController.updateUser(request, model);
@@ -66,7 +66,7 @@ public class UsersApiController {
 //    @Parameters(value = {
 //            @Parameter(name = "username", in = ParameterIn.QUERY, required = true)
 //    })
-//    @PreAuthorize("@AuthoritiesAC.isAdmin()")
+//    @PreAuthorize("@RolesAC.isAdmin()")
 //    public ResponseEntity<Map<String, Object>> deleteUser(HttpServletRequest request) {
 //        ExtendedModelMap model = new ExtendedModelMap();
 //        usersController.deleteUser(request.getParameter(USERNAME), model);

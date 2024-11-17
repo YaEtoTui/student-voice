@@ -25,7 +25,7 @@ import static ru.urfu.sv.studentvoice.utils.result.ActionResultResponse.fromActi
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/courses")
-@PreAuthorize("@AuthoritiesAC.isAdminOrProfessor()")
+@PreAuthorize("@RolesAC.isAdminOrProfessor()")
 public class CourseApiController {
     private final CourseController courseController;
 

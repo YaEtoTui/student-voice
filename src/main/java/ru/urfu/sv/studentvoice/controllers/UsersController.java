@@ -18,7 +18,7 @@ import static ru.urfu.sv.studentvoice.utils.consts.Templates.*;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-@PreAuthorize("@AuthoritiesAC.isAdmin()")
+@PreAuthorize("@RolesAC.isAdmin()")
 @RequestMapping("/admin/users")
 public class UsersController {
     private final UserService userService;

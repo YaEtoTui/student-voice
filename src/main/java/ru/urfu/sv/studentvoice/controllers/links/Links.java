@@ -7,4 +7,5 @@ public interface Links {
     String USERS = "/users";
     String PROFESSORS = "/professors";
     String REPORTS = "/reports";
+    String INSTITUTES = "/institutes";
 }

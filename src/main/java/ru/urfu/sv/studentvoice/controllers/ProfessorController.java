@@ -28,7 +28,7 @@ import static ru.urfu.sv.studentvoice.utils.consts.Parameters.*;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-@PreAuthorize("@AuthoritiesAC.isProfessor()")
+@PreAuthorize("@RolesAC.isProfessor()")
 public class ProfessorController {
     private final ProfessorService professorService;
     private final CourseService courseService;

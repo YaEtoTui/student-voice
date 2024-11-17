@@ -1,28 +1,14 @@
 package ru.urfu.sv.studentvoice.controllers.api;
 
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.ui.ExtendedModelMap;
 import org.springframework.web.bind.annotation.*;
 import ru.urfu.sv.studentvoice.controllers.RatingController;
-import ru.urfu.sv.studentvoice.utils.result.ActionResultResponse;
-
-import java.util.Map;
-import java.util.UUID;
-
-import static ru.urfu.sv.studentvoice.utils.consts.Parameters.*;
-import static ru.urfu.sv.studentvoice.utils.model.ModelUtils.orNull;
-import static ru.urfu.sv.studentvoice.utils.result.ActionResultResponse.fromActionResult;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/rating")
-@PreAuthorize("@AuthoritiesAC.isAdmin()")
+@PreAuthorize("@RolesAC.isAdmin()")
 public class RatingApiController {
     private final RatingController ratingController;
 

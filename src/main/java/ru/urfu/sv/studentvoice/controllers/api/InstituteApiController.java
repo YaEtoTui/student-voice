@@ -1,36 +1,30 @@
 package ru.urfu.sv.studentvoice.controllers.api;
 
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.ui.ExtendedModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.urfu.sv.studentvoice.controllers.InstituteController;
+import ru.urfu.sv.studentvoice.controllers.links.Links;
 import ru.urfu.sv.studentvoice.model.domain.entity.Institute;
 import ru.urfu.sv.studentvoice.services.InstituteService;
-import ru.urfu.sv.studentvoice.utils.result.ActionResultResponse;
 
 import java.util.List;
 import java.util.Map;
 
 import static ru.urfu.sv.studentvoice.utils.consts.Parameters.INSTITUTES_LIST;
-import static ru.urfu.sv.studentvoice.utils.consts.Parameters.RESULT;
-import static ru.urfu.sv.studentvoice.utils.result.ActionResultResponse.fromActionResult;
 
 @RestController
-@RequiredArgsConstructor
-@RequestMapping("/api/institutes")
-@PreAuthorize("@AuthoritiesAC.isAdmin")
+@RequestMapping(Links.BASE_API + Links.INSTITUTES)
+@PreAuthorize("@RolesAC.isAdmin")
 public class InstituteApiController {
-    private final InstituteController instituteController;
-    private final InstituteService instituteService;
+
+    @Autowired
+    private InstituteController instituteController;
+    @Autowired
+    private InstituteService instituteService;
 
 //    @PostMapping("create")
 //    @Parameters(value = {

@@ -27,7 +27,7 @@ import static ru.urfu.sv.studentvoice.utils.consts.Templates.*;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/sessions")
-@PreAuthorize("@AuthoritiesAC.isAdminOrProfessor()")
+@PreAuthorize("@RolesAC.isAdminOrProfessor()")
 public class ClassSessionController {
     private final ClassSessionService sessionService;
     private final ReviewService reviewService;

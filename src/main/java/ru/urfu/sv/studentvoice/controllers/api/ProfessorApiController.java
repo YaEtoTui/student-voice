@@ -1,5 +1,6 @@
 package ru.urfu.sv.studentvoice.controllers.api;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -80,6 +81,7 @@ public class ProfessorApiController {
     /**
      * Ищем список пар ПАГИНИРОВАННЫЙ у преподавателя
      */
+    @Operation(summary = "Поиск пар у преподавателя")
     @RequestMapping(path = "/list/pair", method = RequestMethod.GET)
     public ResponseEntity<Page<PairResponse>> findListPair(@PageableDefault(size = 10000) Pageable pageable) {
         return new ResponseEntity<>(professorService.findListPair(pageable), HttpStatus.OK);

@@ -1,14 +1,12 @@
 package ru.urfu.sv.studentvoice.model.query;
 
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPQLQuery;
 import org.springframework.stereotype.Repository;
 import ru.urfu.sv.studentvoice.model.domain.dto.course.CourseInfo;
 import ru.urfu.sv.studentvoice.model.domain.entity.*;
-import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonWithCourse;
 
 import java.util.Collection;
-import java.util.List;
 
 @Repository
 public class CourseQuery extends AbstractQuery {
@@ -21,22 +19,15 @@ public class CourseQuery extends AbstractQuery {
     /**
      * Ищем список пар для преподавателя
      */
-    public List<LessonWithCourse> findAllLessonsByProfessorUsername(String username) {
+    public JPQLQuery<?> findAllLessonsByProfessorUsername(String username) {
 
         //To Do связоки нет с преподом
         final BooleanExpression exp = null;
 
         return query()
-                .from(course)
-                .join(lesson).on(lesson.courseId.eq(course.id))
-                .where(exp)
-                .select(Projections.bean(LessonWithCourse.class,
-                        /* Статус добавить */
-                        course.name.as("courseName"),
-                        lesson.startDateTime.as("dateStart"),
-                        lesson.endDateTime.as("dateEnd")
-                ))
-                .fetch();
+                .from(lesson)
+                .join(course).on(lesson.courseId.eq(course.id))
+                .where(exp);
     }
 
     /**

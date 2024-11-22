@@ -1,6 +1,9 @@
 package ru.urfu.sv.studentvoice.controllers.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,8 +13,6 @@ import ru.urfu.sv.studentvoice.model.domain.dto.response.PairResponse;
 import ru.urfu.sv.studentvoice.services.ClassSessionService;
 import ru.urfu.sv.studentvoice.services.CourseService;
 import ru.urfu.sv.studentvoice.services.user.ProfessorService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(Links.BASE_API + Links.PROFESSORS)
@@ -76,10 +77,11 @@ public class ProfessorApiController {
 //        }
 //    }
 
+    /**
+     * Ищем список пар ПАГИНИРОВАННЫЙ у преподавателя
+     */
     @RequestMapping(path = "/list/pair", method = RequestMethod.GET)
-    public ResponseEntity<List<PairResponse>> findListPair() {
-
-        final List<PairResponse> response = professorService.findListPair();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<Page<PairResponse>> findListPair(@PageableDefault(size = 10000) Pageable pageable) {
+        return new ResponseEntity<>(professorService.findListPair(pageable), HttpStatus.OK);
     }
 }

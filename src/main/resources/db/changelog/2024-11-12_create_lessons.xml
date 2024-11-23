@@ -19,11 +19,11 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="start_date_time" type="TIMESTAMP">
+            <column name="start_date_time" type="TIMESTAMP WITHOUT TIME ZONE">
                 <constraints nullable="false"/>
             </column>
 
-            <column name="end_date_time" type="TIMESTAMP">
+            <column name="end_date_time" type="TIMESTAMP WITHOUT TIME ZONE">
                 <constraints nullable="false"/>
             </column>
 
@@ -31,9 +31,9 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="disable_timestamp" type="TIMESTAMP"/>
+            <column name="disable_timestamp" type="TIMESTAMP WITHOUT TIME ZONE"/>
 
-            <column name="create_timestamp" type="TIMESTAMP"/>
+            <column name="create_timestamp" type="TIMESTAMP WITHOUT TIME ZONE"/>
 
             <column name="address" type="VARCHAR">
                 <constraints nullable="false"/>

@@ -3,7 +3,7 @@ package ru.urfu.sv.studentvoice.model.domain.dto.lesson;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -11,6 +11,6 @@ public class LessonWithCourse {
 
     private String status;
     private String courseName;
-    private Instant dateStart;
-    private Instant dateEnd;
+    private LocalDateTime dateStart;
+    private LocalDateTime dateEnd;
 }

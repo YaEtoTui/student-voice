@@ -13,8 +13,10 @@ import org.springframework.data.jpa.repository.support.Querydsl;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonByCourse;
+import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonDetailsDto;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonWithCourse;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonByCourseResponse;
+import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonDetailsResponse;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonResponse;
 import ru.urfu.sv.studentvoice.model.domain.entity.QCourse;
 import ru.urfu.sv.studentvoice.model.domain.entity.QLesson;
@@ -115,8 +117,10 @@ public class LessonService {
     }
 
     @PreAuthorize("@RolesAC.isProfessor()")
-    public void findLessonInfo(Long lessonId) {
+    public LessonDetailsResponse findLessonDetailsById(Long lessonId) {
 
+        final LessonDetailsDto lessonDetailsDto = lessonQuery.findLessonDetailsById(lessonId);
+        return lessonMapper.createLessonDetailsResponse(lessonDetailsDto);
     }
 
 //    @Transactional

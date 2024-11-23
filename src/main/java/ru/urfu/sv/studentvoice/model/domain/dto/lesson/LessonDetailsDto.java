@@ -7,10 +7,11 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class LessonByCourse {
+public class LessonDetailsDto {
 
-    private String status;
+    private Long lessonId;
     private String courseName;
+    private String address;
     private LocalDateTime dateStart;
     private LocalDateTime dateEnd;
 }

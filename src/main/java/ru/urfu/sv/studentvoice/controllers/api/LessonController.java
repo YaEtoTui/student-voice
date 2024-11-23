@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.urfu.sv.studentvoice.controllers.ClassSessionController;
 import ru.urfu.sv.studentvoice.controllers.links.Links;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonByCourseResponse;
+import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonDetailsResponse;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonResponse;
 import ru.urfu.sv.studentvoice.services.LessonService;
 import ru.urfu.sv.studentvoice.services.user.ProfessorService;
@@ -44,7 +45,7 @@ public class LessonController {
     @Operation(summary = "Поиск пар у преподавателя по предмету")
     @RequestMapping(path = "/list/by-course/{courseId}", method = RequestMethod.GET)
     public ResponseEntity<Page<LessonByCourseResponse>> findLessonListByCourse(@PathVariable Long courseId,
-                                                                       @PageableDefault(size = 10000) Pageable pageable) {
+                                                                               @PageableDefault(size = 10000) Pageable pageable) {
         return new ResponseEntity<>(lessonService.findLessonListByCourseId(courseId, pageable), HttpStatus.OK);
     }
 
@@ -52,10 +53,9 @@ public class LessonController {
      * Подробнее отдаем информацию по паре
      */
     @Operation(summary = "Подробнее отдаем информацию по паре")
-    @RequestMapping(path = "/{lessonId}", method = RequestMethod.GET)
-    public ResponseEntity<Page<LessonByCourseResponse>> findLessonById(@PathVariable Long lessonId) {
-        lessonService.findLessonInfo(lessonId);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @RequestMapping(path = "{lessonId}", method = RequestMethod.GET)
+    public ResponseEntity<LessonDetailsResponse> findLessonById(@PathVariable Long lessonId) {
+        return new ResponseEntity<>(lessonService.findLessonDetailsById(lessonId), HttpStatus.OK);
     }
 
 //    @PostMapping("create")

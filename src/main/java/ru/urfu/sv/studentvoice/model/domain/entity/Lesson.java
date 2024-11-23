@@ -2,14 +2,13 @@ package ru.urfu.sv.studentvoice.model.domain.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -32,19 +31,19 @@ public class Lesson extends AbstractEntity {
     private Long instituteId;
 
     @Column(name = "start_date_time", nullable = false)
-    private Instant startDateTime;
+    private LocalDateTime startDateTime;
 
     @Column(name = "end_date_time", nullable = false)
-    private Instant endDateTime;
+    private LocalDateTime endDateTime;
 
     @Column(name = "cabinet", nullable = false)
     private String cabinet;
 
     @Column(name = "disable_timestamp")
-    private Instant disableTimestamp;
+    private LocalDateTime disableTimestamp;
 
     @Column(name = "create_timestamp")
-    private Instant createTimestamp;
+    private LocalDateTime createTimestamp;
 
     @Column(name = "address", nullable = false)
     private String address;

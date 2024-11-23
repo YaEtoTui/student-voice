@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
-
 @Configuration
 @EntityScan(basePackages = {"ru.urfu.sv.studentvoice.model.domain.entity"})
 @EnableJpaRepositories(basePackages = {"ru.urfu.sv.studentvoice.model.repository", "ru.urfu.sv.studentvoice.model.query"})

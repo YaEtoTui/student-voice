@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import ru.urfu.sv.studentvoice.services.ClassSessionService;
+import ru.urfu.sv.studentvoice.services.LessonService;
 import ru.urfu.sv.studentvoice.services.CourseService;
 import ru.urfu.sv.studentvoice.services.InstituteService;
 import ru.urfu.sv.studentvoice.services.user.ProfessorService;
@@ -18,7 +18,7 @@ import ru.urfu.sv.studentvoice.services.user.ProfessorService;
 public class CourseController {
     private final CourseService courseService;
     private final ProfessorService professorService;
-    private final ClassSessionService sessionService;
+    private final LessonService sessionService;
     private final InstituteService instituteService;
 
 //    @GetMapping("/{courseId}")

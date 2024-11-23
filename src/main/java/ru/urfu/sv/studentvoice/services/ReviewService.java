@@ -12,7 +12,7 @@ public class ReviewService {
     @Autowired
     private ReviewRepository repository;
     @Autowired
-    private ClassSessionService sessionService;
+    private LessonService sessionService;
     @Autowired
     private ReportService reportService;
 

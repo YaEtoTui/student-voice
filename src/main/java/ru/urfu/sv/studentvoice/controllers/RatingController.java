@@ -4,26 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.urfu.sv.studentvoice.model.domain.dto.CourseDetails;
-import ru.urfu.sv.studentvoice.model.domain.entity.*;
-import ru.urfu.sv.studentvoice.services.ClassSessionService;
+import ru.urfu.sv.studentvoice.services.LessonService;
 import ru.urfu.sv.studentvoice.services.CourseService;
 import ru.urfu.sv.studentvoice.services.InstituteService;
 import ru.urfu.sv.studentvoice.services.ReviewService;
-import ru.urfu.sv.studentvoice.utils.consts.Templates;
-import ru.urfu.sv.studentvoice.utils.formatters.TemporalFormatter;
-import ru.urfu.sv.studentvoice.utils.result.ActionResultFactory;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static ru.urfu.sv.studentvoice.utils.consts.Parameters.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -33,7 +18,7 @@ import static ru.urfu.sv.studentvoice.utils.consts.Parameters.*;
 public class RatingController {
     private final InstituteService instituteService;
     private final CourseService courseService;
-    private final ClassSessionService sessionService;
+    private final LessonService sessionService;
     private final ReviewService reviewService;
 
 //    @GetMapping("/institutes")

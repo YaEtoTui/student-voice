@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import ru.urfu.sv.studentvoice.services.ClassSessionService;
+import ru.urfu.sv.studentvoice.services.LessonService;
 import ru.urfu.sv.studentvoice.services.CourseService;
 import ru.urfu.sv.studentvoice.services.user.ProfessorService;
 
@@ -15,7 +15,7 @@ import ru.urfu.sv.studentvoice.services.user.ProfessorService;
 public class ProfessorController {
     private final ProfessorService professorService;
     private final CourseService courseService;
-    private final ClassSessionService sessionService;
+    private final LessonService sessionService;
 
 //    @GetMapping("/professor-home")
 //    public String professorHomePage(@AuthenticationPrincipal UserDetails userDetails, Model model) {

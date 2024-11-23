@@ -15,7 +15,7 @@ import ru.urfu.sv.studentvoice.services.user.ProfessorService;
 @RequestMapping("/sessions")
 @PreAuthorize("@RolesAC.isAdminOrProfessor()")
 public class ClassSessionController {
-    private final ClassSessionService sessionService;
+    private final LessonService sessionService;
     private final ReviewService reviewService;
     private final CourseService courseService;
     private final ProfessorService professorService;

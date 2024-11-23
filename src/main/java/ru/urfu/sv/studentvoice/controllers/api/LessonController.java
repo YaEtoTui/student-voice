@@ -1,45 +1,42 @@
 package ru.urfu.sv.studentvoice.controllers.api;
 
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import jakarta.servlet.http.HttpServletRequest;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.ui.ExtendedModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.urfu.sv.studentvoice.controllers.ClassSessionController;
-import ru.urfu.sv.studentvoice.model.domain.entity.ClassSession;
-import ru.urfu.sv.studentvoice.services.ClassSessionService;
-import ru.urfu.sv.studentvoice.utils.formatters.TemporalFormatter;
-import ru.urfu.sv.studentvoice.utils.result.ActionResultFactory;
-import ru.urfu.sv.studentvoice.utils.result.ActionResultResponse;
-
-import java.time.Instant;
-import java.time.LocalTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
-
-import static ru.urfu.sv.studentvoice.utils.consts.Parameters.*;
-import static ru.urfu.sv.studentvoice.utils.model.ModelUtils.orNull;
-import static ru.urfu.sv.studentvoice.utils.result.ActionResultResponse.fromActionResult;
+import ru.urfu.sv.studentvoice.controllers.links.Links;
+import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonResponse;
+import ru.urfu.sv.studentvoice.services.LessonService;
+import ru.urfu.sv.studentvoice.services.user.ProfessorService;
 
 @RestController
-@RequestMapping("/api/sessions")
+@RequestMapping(Links.BASE_API + Links.LESSONS)
 @PreAuthorize("@RolesAC.isAdminOrProfessor()")
-public class ClassSessionApiController {
+public class LessonController {
 
+    @Autowired
+    private ProfessorService professorService;
     @Autowired
     private ClassSessionController sessionController;
     @Autowired
-    private ClassSessionService sessionService;
+    private LessonService lessonService;
+
+    /**
+     * Ищем список пар ПАГИНИРОВАННЫЙ у преподавателя
+     */
+    @Operation(summary = "Поиск пар у преподавателя")
+    @RequestMapping(path = "/list/pair", method = RequestMethod.GET)
+    public ResponseEntity<Page<LessonResponse>> findListPair(@PageableDefault(size = 10000) Pageable pageable) {
+        return new ResponseEntity<>(lessonService.findListPair(pageable), HttpStatus.OK);
+    }
 
 //    @PostMapping("create")
 //    @Parameters(value = {

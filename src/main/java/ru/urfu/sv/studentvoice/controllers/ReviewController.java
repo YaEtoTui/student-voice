@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import ru.urfu.sv.studentvoice.services.ClassSessionService;
+import ru.urfu.sv.studentvoice.services.LessonService;
 import ru.urfu.sv.studentvoice.services.CourseService;
 import ru.urfu.sv.studentvoice.services.ReviewService;
 
@@ -16,7 +16,7 @@ public class ReviewController {
     @Autowired
     private ReviewService reviewService;
     @Autowired
-    private ClassSessionService sessionService;
+    private LessonService sessionService;
     @Autowired
     private CourseService courseService;
 

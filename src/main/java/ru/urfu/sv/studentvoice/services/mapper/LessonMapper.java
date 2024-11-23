@@ -1,7 +1,7 @@
 package ru.urfu.sv.studentvoice.services.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.urfu.sv.studentvoice.model.domain.dto.response.PairResponse;
+import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonResponse;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonWithCourse;
 
 import java.time.LocalDateTime;
@@ -17,14 +17,14 @@ import java.util.stream.Collectors;
  * @since 07.11.2024
  */
 @Component
-public class PairMapper {
+public class LessonMapper {
 
     /**
      * Переделываем List<LessonWithCourse> в List<PairResponse>
      *
      * @param lessonWithCourseList Список пар
      */
-    public List<PairResponse> createPairResponseListFromLessonWithCourseList(Collection<LessonWithCourse> lessonWithCourseList) {
+    public List<LessonResponse> createPairResponseListFromLessonWithCourseList(Collection<LessonWithCourse> lessonWithCourseList) {
         return lessonWithCourseList.stream()
                 .map(this::createPairResponse)
                 .collect(Collectors.toList());
@@ -35,15 +35,15 @@ public class PairMapper {
      *
      * @param lessonWithCourse Пара
      */
-    public PairResponse createPairResponse(LessonWithCourse lessonWithCourse) {
-        final PairResponse pairResponse = new PairResponse();
-        pairResponse.setStatus(lessonWithCourse.getStatus());
-        pairResponse.setCourseName(lessonWithCourse.getCourseName());
+    public LessonResponse createPairResponse(LessonWithCourse lessonWithCourse) {
+        final LessonResponse lessonResponse = new LessonResponse();
+        lessonResponse.setStatus(lessonWithCourse.getStatus());
+        lessonResponse.setCourseName(lessonWithCourse.getCourseName());
         final LocalDateTime startDateTime = LocalDateTime.ofInstant(lessonWithCourse.getDateStart(), ZoneId.systemDefault());
-        pairResponse.setDateStart(startDateTime);
+        lessonResponse.setDateStart(startDateTime);
         final LocalDateTime endDateTime = LocalDateTime.ofInstant(lessonWithCourse.getDateEnd(), ZoneId.systemDefault());
-        pairResponse.setDateEnd(endDateTime);
+        lessonResponse.setDateEnd(endDateTime);
 
-        return pairResponse;
+        return lessonResponse;
     }
 }

@@ -11,7 +11,8 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-public class PairResponse {
+public class LessonResponse {
+
     private String status;
     @JsonProperty("course_name")
     private String courseName;

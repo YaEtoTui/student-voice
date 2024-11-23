@@ -8,6 +8,7 @@ import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonDetailsDto;
 import ru.urfu.sv.studentvoice.model.domain.entity.QCourse;
 import ru.urfu.sv.studentvoice.model.domain.entity.QLesson;
 
+import java.util.List;
 import java.util.Objects;
 
 @Repository
@@ -65,5 +66,24 @@ public class LessonQuery extends AbstractQuery {
                                 lesson.endDateTime.as("dateEnd"))
                 )
                 .fetchFirst();
+    }
+
+    public List<LessonDetailsDto> findScheduleShort(String professorName) {
+
+        final BooleanExpression exp = null;
+
+        return query()
+                .from(lesson)
+                .join(course).on(lesson.courseId.eq(course.id))
+                .where(exp)
+                .select(
+                        Projections.bean(LessonDetailsDto.class,
+                                lesson.id.as("lessonId"),
+                                course.name.as("courseName"),
+                                lesson.address.as("address"),
+                                lesson.startDateTime.as("dateStart"),
+                                lesson.endDateTime.as("dateEnd"))
+                )
+                .fetch();
     }
 }

@@ -10,11 +10,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.urfu.sv.studentvoice.controllers.ClassSessionController;
 import ru.urfu.sv.studentvoice.controllers.links.Links;
+import ru.urfu.sv.studentvoice.model.domain.dto.ScheduleByDay;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonByCourseResponse;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonDetailsResponse;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonResponse;
 import ru.urfu.sv.studentvoice.services.LessonService;
+import ru.urfu.sv.studentvoice.services.ScheduleService;
 import ru.urfu.sv.studentvoice.services.user.ProfessorService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(Links.BASE_API + Links.LESSONS)
@@ -26,6 +30,8 @@ public class LessonController {
     private ClassSessionController sessionController;
     @Autowired
     private LessonService lessonService;
+    @Autowired
+    private ScheduleService scheduleService;
 
     /**
      * Ищем список пар ПАГИНИРОВАННЫЙ у преподавателя
@@ -54,6 +60,12 @@ public class LessonController {
     @RequestMapping(path = "{lessonId}", method = RequestMethod.GET)
     public ResponseEntity<LessonDetailsResponse> findLessonById(@PathVariable Long lessonId) {
         return new ResponseEntity<>(lessonService.findLessonDetailsById(lessonId), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Ищем расписание на три дня: сегодня, завтра и послезавтра")
+    @RequestMapping(path = "/schedule-short", method = RequestMethod.GET)
+    public ResponseEntity<List<ScheduleByDay>> findScheduleShort() {
+        return new ResponseEntity<>(scheduleService.findScheduleShort(), HttpStatus.OK);
     }
 
 //    @PostMapping("create")

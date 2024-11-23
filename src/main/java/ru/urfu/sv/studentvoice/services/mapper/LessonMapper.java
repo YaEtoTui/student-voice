@@ -10,32 +10,26 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Mapper по созданию PairResponse
- *
- * @author Egor Sazhin
- * @since 07.11.2024
- */
 @Component
 public class LessonMapper {
 
     /**
-     * Переделываем List<LessonWithCourse> в List<PairResponse>
+     * Переделываем List<LessonWithCourse> в List<LessonResponse>
      *
      * @param lessonWithCourseList Список пар
      */
-    public List<LessonResponse> createPairResponseListFromLessonWithCourseList(Collection<LessonWithCourse> lessonWithCourseList) {
+    public List<LessonResponse> createLessonResponseListFromLessonWithCourseList(Collection<LessonWithCourse> lessonWithCourseList) {
         return lessonWithCourseList.stream()
-                .map(this::createPairResponse)
+                .map(this::createLessonResponse)
                 .collect(Collectors.toList());
     }
 
     /**
-     * Переделываем LessonWithCourse в PairResponse
+     * Переделываем LessonWithCourse в LessonResponse
      *
      * @param lessonWithCourse Пара
      */
-    public LessonResponse createPairResponse(LessonWithCourse lessonWithCourse) {
+    public LessonResponse createLessonResponse(LessonWithCourse lessonWithCourse) {
         final LessonResponse lessonResponse = new LessonResponse();
         lessonResponse.setStatus(lessonWithCourse.getStatus());
         lessonResponse.setCourseName(lessonWithCourse.getCourseName());

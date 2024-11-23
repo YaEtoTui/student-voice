@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +18,6 @@ import ru.urfu.sv.studentvoice.services.user.ProfessorService;
 
 @RestController
 @RequestMapping(Links.BASE_API + Links.LESSONS)
-@PreAuthorize("@RolesAC.isAdminOrProfessor()")
 public class LessonController {
 
     @Autowired
@@ -33,9 +31,9 @@ public class LessonController {
      * Ищем список пар ПАГИНИРОВАННЫЙ у преподавателя
      */
     @Operation(summary = "Поиск пар у преподавателя")
-    @RequestMapping(path = "/list/pair", method = RequestMethod.GET)
+    @RequestMapping(path = "/list", method = RequestMethod.GET)
     public ResponseEntity<Page<LessonResponse>> findListPair(@PageableDefault(size = 10000) Pageable pageable) {
-        return new ResponseEntity<>(lessonService.findListPair(pageable), HttpStatus.OK);
+        return new ResponseEntity<>(lessonService.findLessonList(pageable), HttpStatus.OK);
     }
 
 //    @PostMapping("create")
@@ -47,6 +45,7 @@ public class LessonController {
 //            @Parameter(name = "roomName", in = ParameterIn.QUERY, required = true),
 //            @Parameter(name = "sessionName", in = ParameterIn.QUERY, required = true)
 //    })
+//    @PreAuthorize("@RolesAC.isAdminOrProfessor()")
 //    public ResponseEntity<Map<String, Object>> createSession(HttpServletRequest request) {
 //        ExtendedModelMap model = new ExtendedModelMap();
 //        sessionController.createSession(null, request, model);
@@ -59,6 +58,7 @@ public class LessonController {
 //    @Parameters(value = {
 //            @Parameter(name = "sessionId", in = ParameterIn.QUERY, required = true)
 //    })
+//    @PreAuthorize("@RolesAC.isAdminOrProfessor()")
 //    public ResponseEntity<Map<String, Object>> findSession(HttpServletRequest request) {
 //        ExtendedModelMap model = new ExtendedModelMap();
 //        sessionController.sessionPage(request.getParameter(CLASS_SESSION_ID), model);
@@ -94,6 +94,7 @@ public class LessonController {
 //            @Parameter(name = "sessionId", in = ParameterIn.QUERY, required = true),
 //            @Parameter(name = "time", in = ParameterIn.QUERY, required = true)
 //    })
+//    @PreAuthorize("@RolesAC.isAdminOrProfessor()")
 //    public ResponseEntity<Map<String, Object>> startTimer(HttpServletRequest request) {
 //        UUID sessionId = UUID.fromString(request.getParameter(CLASS_SESSION_ID));
 //        Optional<ClassSession> sessionOpt = sessionService.findSessionById(sessionId);
@@ -116,6 +117,7 @@ public class LessonController {
 //    @Parameters(value = {
 //            @Parameter(name = "sessionId", in = ParameterIn.QUERY, required = true)
 //    })
+//    @PreAuthorize("@RolesAC.isAdminOrProfessor()")
 //    public ResponseEntity<Map<String, Object>> getSessionStudents(HttpServletRequest request) {
 //        ExtendedModelMap model = new ExtendedModelMap();
 //        sessionController.sessionStudentsPage(request.getParameter(CLASS_SESSION_ID), model);
@@ -133,6 +135,7 @@ public class LessonController {
 //            @Parameter(name = "sessionId", in = ParameterIn.QUERY, required = true),
 //            @Parameter(name = "newProfessor", in = ParameterIn.QUERY, required = true)
 //    })
+//    @PreAuthorize("@RolesAC.isAdminOrProfessor()")
 //    public ResponseEntity<Map<String, Object>> changeProfessor(HttpServletRequest request) {
 //        ExtendedModelMap model = new ExtendedModelMap();
 //        sessionController.updateSession(request, model);

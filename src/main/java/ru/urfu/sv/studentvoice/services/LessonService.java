@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.Querydsl;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonWithCourse;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonResponse;
@@ -17,6 +18,7 @@ import ru.urfu.sv.studentvoice.model.domain.entity.QCourse;
 import ru.urfu.sv.studentvoice.model.domain.entity.QLesson;
 import ru.urfu.sv.studentvoice.model.domain.entity.User;
 import ru.urfu.sv.studentvoice.model.query.CourseQuery;
+import ru.urfu.sv.studentvoice.model.query.LessonQuery;
 import ru.urfu.sv.studentvoice.model.query.UserQuery;
 import ru.urfu.sv.studentvoice.services.jwt.JwtUserDetailsService;
 import ru.urfu.sv.studentvoice.services.mapper.LessonMapper;
@@ -41,6 +43,8 @@ public class LessonService {
     @Autowired
     private CourseQuery courseQuery;
     @Autowired
+    private LessonQuery lessonQuery;
+    @Autowired
     private LessonMapper lessonMapper;
     @Autowired
     protected EntityManager entityManager;
@@ -48,7 +52,8 @@ public class LessonService {
     /**
      * Ищем список пар для преподавателя
      */
-    public Page<LessonResponse> findListPair(Pageable pageable) {
+    @PreAuthorize("@RolesAC.isProfessor()")
+    public Page<LessonResponse> findLessonList(Pageable pageable) {
         final String username = jwtUserDetailsService.findUsername();
         final User professor = userQuery.findProfessorByUsername(username);
 
@@ -58,7 +63,7 @@ public class LessonService {
             final QCourse course = new QCourse("course");
             final QLesson lesson = new QLesson("lesson");
 
-            final JPQLQuery<?> query = courseQuery.findAllLessonsByProfessorUsername(professorName);
+            final JPQLQuery<?> query = lessonQuery.findAllLessonsByProfessorUsername(professorName);
             final long count = query.select(course.name).fetchCount();
 
             final JPQLQuery<?> queryPageable = new Querydsl(entityManager, new PathBuilderFactory().create(LessonWithCourse.class)).applyPagination(pageable, query);
@@ -72,7 +77,7 @@ public class LessonService {
                     )
                     .fetch();
 
-            final List<LessonResponse> lessonResponseList = lessonMapper.createPairResponseListFromLessonWithCourseList(lessonWithCourseList);
+            final List<LessonResponse> lessonResponseList = lessonMapper.createLessonResponseListFromLessonWithCourseList(lessonWithCourseList);
             return new PageImpl<>(lessonResponseList, pageable, count);
         } else {
             throw new IllegalArgumentException("Not found professor");

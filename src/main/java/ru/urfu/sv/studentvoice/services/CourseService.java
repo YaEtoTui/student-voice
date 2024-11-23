@@ -1,25 +1,51 @@
 package ru.urfu.sv.studentvoice.services;
 
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.PathBuilderFactory;
+import com.querydsl.jpa.JPQLQuery;
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.support.Querydsl;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.urfu.sv.studentvoice.model.domain.dto.course.CourseDto;
 import ru.urfu.sv.studentvoice.model.domain.dto.course.CourseInfo;
+import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonWithCourse;
+import ru.urfu.sv.studentvoice.model.domain.dto.response.CourseResponse;
+import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonResponse;
 import ru.urfu.sv.studentvoice.model.domain.entity.Course;
+import ru.urfu.sv.studentvoice.model.domain.entity.QCourse;
+import ru.urfu.sv.studentvoice.model.domain.entity.User;
 import ru.urfu.sv.studentvoice.model.query.CourseQuery;
+import ru.urfu.sv.studentvoice.model.query.UserQuery;
 import ru.urfu.sv.studentvoice.model.repository.CourseRepository;
+import ru.urfu.sv.studentvoice.services.jwt.JwtUserDetailsService;
+import ru.urfu.sv.studentvoice.services.mapper.CourseMapper;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
 public class CourseService {
 
     @Autowired
+    private JwtUserDetailsService jwtUserDetailsService;
+    @Autowired
     private CourseRepository courseRepository;
     @Autowired
+    private UserQuery userQuery;
+    @Autowired
     private CourseQuery courseQuery;
+    @Autowired
+    protected EntityManager entityManager;
+    @Autowired
+    private CourseMapper courseMapper;
 
     @Transactional
     @PreAuthorize("@CoursesAC.isCreateNewCourse(#courseInfo)")
@@ -31,6 +57,37 @@ public class CourseService {
 
         final Course courseResponse = courseRepository.save(course);
         courseQuery.insertUserCourse(courseInfo.getProfessorId(), courseResponse.getId());
+    }
+
+    @Transactional
+    @PreAuthorize("@RolesAC.isProfessor()")
+    public Page<CourseResponse> findCourseList(Pageable pageable) {
+        final String username = jwtUserDetailsService.findUsername();
+        final User professor = userQuery.findProfessorByUsername(username);
+
+        if (Objects.nonNull(professor)) {
+            final String professorName = professor.getUsername();
+
+            final QCourse course = new QCourse("course");
+
+            final JPQLQuery<?> query = courseQuery.findAllCourseByProfessorUsername(professorName);
+            final long count = query.select(course.name).fetchCount();
+
+            final JPQLQuery<?> queryPageable = new Querydsl(entityManager, new PathBuilderFactory().create(LessonWithCourse.class)).applyPagination(pageable, query);
+
+            final List<CourseDto> courseList = queryPageable.select(
+                            Projections.bean(CourseDto.class,
+                                    course.id.as("courseId"),
+                                    course.name.as("name")
+                            )
+                    )
+                    .fetch();
+
+            final List<CourseResponse> courseResponseList = courseMapper.createCourseResponseList(courseList);
+            return new PageImpl<>(courseResponseList, pageable, count);
+        } else {
+            throw new IllegalArgumentException("Not found professor");
+        }
     }
 
 //    @Transactional

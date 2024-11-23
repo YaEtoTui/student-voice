@@ -1,12 +1,17 @@
 package ru.urfu.sv.studentvoice.controllers.api;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.urfu.sv.studentvoice.controllers.links.Links;
 import ru.urfu.sv.studentvoice.model.domain.dto.course.CourseInfo;
+import ru.urfu.sv.studentvoice.model.domain.dto.response.CourseResponse;
 import ru.urfu.sv.studentvoice.services.CourseService;
 
 @RestController
@@ -21,6 +26,15 @@ public class CourseApiController {
     public ResponseEntity<Void> createCourse(@RequestBody CourseInfo courseInfo) {
         courseService.createCourse(courseInfo);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    /**
+     * Ищем список предметов ПАГИНИРОВАННЫЙ у преподавателя
+     */
+    @Operation(summary = "Поиск предметов у преподавателя")
+    @RequestMapping(path = "/list", method = RequestMethod.GET)
+    public ResponseEntity<Page<CourseResponse>> findListPair(@PageableDefault(size = 10000) Pageable pageable) {
+        return new ResponseEntity<>(courseService.findCourseList(pageable), HttpStatus.OK);
     }
 
 //    @GetMapping("find")

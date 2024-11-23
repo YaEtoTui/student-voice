@@ -12,23 +12,8 @@ import java.util.Collection;
 public class CourseQuery extends AbstractQuery {
 
     private final static QCourse course = new QCourse("course");
-    private final static QLesson lesson = new QLesson("lesson");
     private final static QUser user = new QUser("user");
     private final static QUserCourse userCourse = new QUserCourse("userCourse");
-
-    /**
-     * Ищем список пар для преподавателя
-     */
-    public JPQLQuery<?> findAllLessonsByProfessorUsername(String username) {
-
-        //To Do связоки нет с преподом
-        final BooleanExpression exp = null;
-
-        return query()
-                .from(lesson)
-                .join(course).on(lesson.courseId.eq(course.id))
-                .where(exp);
-    }
 
     /**
      * Проверяем, существует ли институт с courseInfo
@@ -64,5 +49,18 @@ public class CourseQuery extends AbstractQuery {
                 .columns(userCourse.userId, userCourse.courseId)
                 .values(userId, courseId)
                 .execute();
+    }
+
+    /**
+     * Ищем список предметов для преподавателя
+     */
+    public JPQLQuery<?> findAllCourseByProfessorUsername(String username) {
+
+        //To Do связоки нет с преподом
+        final BooleanExpression exp = null;
+
+        return query()
+                .from(course)
+                .where(exp);
     }
 }

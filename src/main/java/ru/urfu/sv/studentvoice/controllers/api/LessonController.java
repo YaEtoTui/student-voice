@@ -7,11 +7,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.urfu.sv.studentvoice.controllers.ClassSessionController;
 import ru.urfu.sv.studentvoice.controllers.links.Links;
+import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonByCourseResponse;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonResponse;
 import ru.urfu.sv.studentvoice.services.LessonService;
 import ru.urfu.sv.studentvoice.services.user.ProfessorService;
@@ -32,8 +34,17 @@ public class LessonController {
      */
     @Operation(summary = "Поиск пар у преподавателя")
     @RequestMapping(path = "/list", method = RequestMethod.GET)
-    public ResponseEntity<Page<LessonResponse>> findListPair(@PageableDefault(size = 10000) Pageable pageable) {
+    public ResponseEntity<Page<LessonResponse>> findLessonList(@PageableDefault(size = 10000) Pageable pageable) {
         return new ResponseEntity<>(lessonService.findLessonList(pageable), HttpStatus.OK);
+    }
+    /**
+     * Ищем список пар ПАГИНИРОВАННЫЙ у преподавателя по предмету
+     */
+    @Operation(summary = "Поиск пар у преподавателя по предмету")
+    @RequestMapping(path = "/list/by-course", method = RequestMethod.GET)
+    public ResponseEntity<Page<LessonByCourseResponse>> findLessonList(@PathVariable("course-id") Long courseId,
+                                                                       @PageableDefault(size = 10000) Pageable pageable) {
+        return new ResponseEntity<>(lessonService.findLessonListByCourseId(courseId, pageable), HttpStatus.OK);
     }
 
 //    @PostMapping("create")

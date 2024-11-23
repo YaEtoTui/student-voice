@@ -25,4 +25,18 @@ public class LessonQuery extends AbstractQuery {
                 .join(course).on(lesson.courseId.eq(course.id))
                 .where(exp);
     }
+
+    /**
+     * Ищем список пар для преподавателя по предмету
+     */
+    public JPQLQuery<?> findAllLessonsByProfNameAndCourseId(String username, Long courseId) {
+
+        //To Do связоки нет с преподом
+        final BooleanExpression exp = course.id.eq(courseId);
+
+        return query()
+                .from(lesson)
+                .join(course).on(lesson.courseId.eq(course.id))
+                .where(exp);
+    }
 }

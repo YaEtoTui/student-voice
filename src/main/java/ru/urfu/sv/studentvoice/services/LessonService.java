@@ -12,7 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.Querydsl;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonByCourse;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonWithCourse;
+import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonByCourseResponse;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonResponse;
 import ru.urfu.sv.studentvoice.model.domain.entity.QCourse;
 import ru.urfu.sv.studentvoice.model.domain.entity.QLesson;
@@ -71,13 +73,50 @@ public class LessonService {
             final List<LessonWithCourse> lessonWithCourseList = queryPageable.select(
                             Projections.bean(LessonWithCourse.class,
                                     /* Статус добавить */
+                                    course.id.as("courseId"),
                                     course.name.as("courseName"),
+                                    lesson.status.as("status"),
                                     lesson.startDateTime.as("dateStart"),
                                     lesson.endDateTime.as("dateEnd"))
                     )
                     .fetch();
 
             final List<LessonResponse> lessonResponseList = lessonMapper.createLessonResponseListFromLessonWithCourseList(lessonWithCourseList);
+            return new PageImpl<>(lessonResponseList, pageable, count);
+        } else {
+            throw new IllegalArgumentException("Not found professor");
+        }
+    }
+
+    /**
+     * Ищем список пар для преподавателя по предмету
+     */
+    @PreAuthorize("@RolesAC.isProfessor()")
+    public Page<LessonByCourseResponse> findLessonListByCourseId(Long courseId, Pageable pageable) {
+        final String username = jwtUserDetailsService.findUsername();
+        final User professor = userQuery.findProfessorByUsername(username);
+
+        if (Objects.nonNull(professor)) {
+            final String professorName = professor.getUsername();
+
+            final QCourse course = new QCourse("course");
+            final QLesson lesson = new QLesson("lesson");
+
+            final JPQLQuery<?> query = lessonQuery.findAllLessonsByProfNameAndCourseId(professorName, courseId);
+            final long count = query.select(course.name).fetchCount();
+
+            final JPQLQuery<?> queryPageable = new Querydsl(entityManager, new PathBuilderFactory().create(LessonWithCourse.class)).applyPagination(pageable, query);
+
+            final List<LessonByCourse> lessonList = queryPageable.select(
+                            Projections.bean(LessonByCourse.class,
+                                    course.name.as("courseName"),
+                                    lesson.status.as("status"),
+                                    lesson.startDateTime.as("dateStart"),
+                                    lesson.endDateTime.as("dateEnd"))
+                    )
+                    .fetch();
+
+            final List<LessonByCourseResponse> lessonResponseList = lessonMapper.createLessonResponseListFromLessonByCourseList(lessonList);
             return new PageImpl<>(lessonResponseList, pageable, count);
         } else {
             throw new IllegalArgumentException("Not found professor");

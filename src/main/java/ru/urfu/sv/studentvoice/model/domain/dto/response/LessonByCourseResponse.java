@@ -6,15 +6,9 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-/**
- * Пара, которую мы возвращаем в ответ
- */
 @Getter
 @Setter
-public class LessonResponse {
-
-    @JsonProperty("course_id")
-    private Long courseId;
+public class LessonByCourseResponse {
 
     private String status;
 

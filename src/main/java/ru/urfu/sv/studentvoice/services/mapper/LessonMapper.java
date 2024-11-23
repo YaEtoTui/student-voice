@@ -1,6 +1,8 @@
 package ru.urfu.sv.studentvoice.services.mapper;
 
 import org.springframework.stereotype.Component;
+import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonByCourse;
+import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonByCourseResponse;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonResponse;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonWithCourse;
 
@@ -36,6 +38,34 @@ public class LessonMapper {
         final LocalDateTime startDateTime = LocalDateTime.ofInstant(lessonWithCourse.getDateStart(), ZoneId.systemDefault());
         lessonResponse.setDateStart(startDateTime);
         final LocalDateTime endDateTime = LocalDateTime.ofInstant(lessonWithCourse.getDateEnd(), ZoneId.systemDefault());
+        lessonResponse.setDateEnd(endDateTime);
+
+        return lessonResponse;
+    }
+
+    /**
+     * Переделываем List<LessonByCourse> в List<LessonResponse>
+     *
+     * @param lessonByCourseList Список пар
+     */
+    public List<LessonByCourseResponse> createLessonResponseListFromLessonByCourseList(Collection<LessonByCourse> lessonByCourseList) {
+        return lessonByCourseList.stream()
+                .map(this::createLessonByCourseResponse)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Переделываем LessonWithCourse в LessonByCourseResponse
+     *
+     * @param lesson Пара
+     */
+    public LessonByCourseResponse createLessonByCourseResponse(LessonByCourse lesson) {
+        final LessonByCourseResponse lessonResponse = new LessonByCourseResponse();
+        lessonResponse.setStatus(lesson.getStatus());
+        lessonResponse.setCourseName(lesson.getCourseName());
+        final LocalDateTime startDateTime = LocalDateTime.ofInstant(lesson.getDateStart(), ZoneId.systemDefault());
+        lessonResponse.setDateStart(startDateTime);
+        final LocalDateTime endDateTime = LocalDateTime.ofInstant(lesson.getDateEnd(), ZoneId.systemDefault());
         lessonResponse.setDateEnd(endDateTime);
 
         return lessonResponse;

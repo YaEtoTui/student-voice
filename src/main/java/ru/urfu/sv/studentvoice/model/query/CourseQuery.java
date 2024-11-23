@@ -7,6 +7,7 @@ import ru.urfu.sv.studentvoice.model.domain.dto.course.CourseInfo;
 import ru.urfu.sv.studentvoice.model.domain.entity.*;
 
 import java.util.Collection;
+import java.util.Objects;
 
 @Repository
 public class CourseQuery extends AbstractQuery {
@@ -55,10 +56,14 @@ public class CourseQuery extends AbstractQuery {
     /**
      * Ищем список предметов для преподавателя
      */
-    public JPQLQuery<?> findAllCourseByProfessorUsername(String username) {
+    public JPQLQuery<?> findAllCourseBySearchTextAndProfName(String searchText, String username) {
 
         //To Do связоки нет с преподом
-        final BooleanExpression exp = null;
+        BooleanExpression exp = null;
+
+        if (Objects.nonNull(searchText)) {
+            exp = course.name.likeIgnoreCase("%" + searchText + "%");
+        }
 
         return query()
                 .from(course)

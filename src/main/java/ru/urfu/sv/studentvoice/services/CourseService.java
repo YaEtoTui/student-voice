@@ -58,7 +58,7 @@ public class CourseService {
 
     @Transactional
     @PreAuthorize("@RolesAC.isProfessor()")
-    public Page<CourseResponse> findCourseList(Pageable pageable) {
+    public Page<CourseResponse> findCourseList(String searchText, Pageable pageable) {
         final String username = jwtUserDetailsService.findUsername();
         final User professor = userQuery.findProfessorByUsername(username);
 
@@ -68,7 +68,7 @@ public class CourseService {
             final QCourse course = new QCourse("course");
             final QInstitute institute = new QInstitute("institute");
 
-            final JPQLQuery<?> query = courseQuery.findAllCourseByProfessorUsername(professorName);
+            final JPQLQuery<?> query = courseQuery.findAllCourseBySearchTextAndProfName(searchText, professorName);
             final long count = query.select(course.name).fetchCount();
 
             final JPQLQuery<?> queryPageable = new Querydsl(entityManager, new PathBuilderFactory().create(LessonWithCourse.class)).applyPagination(pageable, query);

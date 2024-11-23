@@ -34,8 +34,9 @@ public class CourseApiController {
      */
     @Operation(summary = "Поиск предметов у преподавателя")
     @RequestMapping(path = "/list", method = RequestMethod.GET)
-    public ResponseEntity<Page<CourseResponse>> findCourseList(@PageableDefault(size = 10000) Pageable pageable) {
-        return new ResponseEntity<>(courseService.findCourseList(pageable), HttpStatus.OK);
+    public ResponseEntity<Page<CourseResponse>> findCourseList(@RequestParam(required = false, name = "search-text") String searchText,
+                                                               @PageableDefault(size = 10000) Pageable pageable) {
+        return new ResponseEntity<>(courseService.findCourseList(searchText, pageable), HttpStatus.OK);
     }
 
 //    @GetMapping("find")

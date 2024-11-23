@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -26,13 +26,13 @@ public class LessonsReview extends AbstractEntity {
     private String value;
 
     @Column(name = "create_timestamp", nullable = false)
-    private Instant createTimestamp;
+    private LocalDateTime createTimestamp;
 
     @Column(name = "student_full_name", nullable = false)
     private String studentFullName;
 
     @PrePersist
     protected void onCreate() {
-        createTimestamp = Instant.now();
+        createTimestamp = LocalDateTime.now();
     }
 }

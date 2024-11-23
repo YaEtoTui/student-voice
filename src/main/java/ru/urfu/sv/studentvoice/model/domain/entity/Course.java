@@ -3,7 +3,7 @@ package ru.urfu.sv.studentvoice.model.domain.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -21,10 +21,10 @@ public class Course extends AbstractEntity {
 
 
     @Column(name = "create_timestamp", nullable = false)
-    private Instant createTimestamp;
+    private LocalDateTime createTimestamp;
 
     @PrePersist
     protected void onCreate() {
-        createTimestamp = Instant.now();
+        createTimestamp = LocalDateTime.now();
     }
 }

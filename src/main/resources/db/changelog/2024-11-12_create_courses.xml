@@ -15,7 +15,7 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="create_timestamp" type="TIMESTAMP">
+            <column name="create_timestamp" type="TIMESTAMP WITHOUT TIME ZONE">
                 <constraints nullable="false"/>
             </column>
 

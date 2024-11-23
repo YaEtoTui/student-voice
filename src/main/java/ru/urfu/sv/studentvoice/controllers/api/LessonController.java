@@ -7,10 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.urfu.sv.studentvoice.controllers.ClassSessionController;
 import ru.urfu.sv.studentvoice.controllers.links.Links;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonByCourseResponse;
@@ -35,8 +32,9 @@ public class LessonController {
      */
     @Operation(summary = "Поиск пар у преподавателя")
     @RequestMapping(path = "/list", method = RequestMethod.GET)
-    public ResponseEntity<Page<LessonResponse>> findLessonList(@PageableDefault(size = 10000) Pageable pageable) {
-        return new ResponseEntity<>(lessonService.findLessonList(pageable), HttpStatus.OK);
+    public ResponseEntity<Page<LessonResponse>> findLessonList(@RequestParam(required = false, name = "search-text") String searchText,
+                                                               @PageableDefault(size = 10000) Pageable pageable) {
+        return new ResponseEntity<>(lessonService.findLessonList(searchText,pageable), HttpStatus.OK);
     }
 
     /**

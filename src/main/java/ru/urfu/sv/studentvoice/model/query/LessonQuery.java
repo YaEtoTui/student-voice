@@ -8,6 +8,8 @@ import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonDetailsDto;
 import ru.urfu.sv.studentvoice.model.domain.entity.QCourse;
 import ru.urfu.sv.studentvoice.model.domain.entity.QLesson;
 
+import java.util.Objects;
+
 @Repository
 public class LessonQuery extends AbstractQuery {
 
@@ -17,10 +19,14 @@ public class LessonQuery extends AbstractQuery {
     /**
      * Ищем список пар для преподавателя
      */
-    public JPQLQuery<?> findAllLessonsByProfessorUsername(String username) {
+    public JPQLQuery<?> findAllLessonsBySearchTextAndProfName(String searchText, String professorName) {
 
         //To Do связоки нет с преподом
-        final BooleanExpression exp = null;
+        BooleanExpression exp = null;
+
+        if (Objects.nonNull(searchText)) {
+            exp = course.name.likeIgnoreCase("%" + searchText + "%");
+        }
 
         return query()
                 .from(lesson)

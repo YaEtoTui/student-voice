@@ -12,6 +12,7 @@ import java.util.Collection;
 public class CourseQuery extends AbstractQuery {
 
     private final static QCourse course = new QCourse("course");
+    private final static QInstitute institute = new QInstitute("institute");
     private final static QUser user = new QUser("user");
     private final static QUserCourse userCourse = new QUserCourse("userCourse");
 
@@ -61,6 +62,7 @@ public class CourseQuery extends AbstractQuery {
 
         return query()
                 .from(course)
+                .join(institute).on(course.instituteId.eq(institute.id))
                 .where(exp);
     }
 }

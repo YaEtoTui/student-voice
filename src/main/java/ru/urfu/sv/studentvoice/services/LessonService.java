@@ -57,7 +57,7 @@ public class LessonService {
      * Ищем список пар для преподавателя
      */
     @PreAuthorize("@RolesAC.isProfessor()")
-    public Page<LessonResponse> findLessonList(Pageable pageable) {
+    public Page<LessonResponse> findLessonList(String searchText, Pageable pageable) {
         final String username = jwtUserDetailsService.findUsername();
         final User professor = userQuery.findProfessorByUsername(username);
 
@@ -67,7 +67,7 @@ public class LessonService {
             final QCourse course = new QCourse("course");
             final QLesson lesson = new QLesson("lesson");
 
-            final JPQLQuery<?> query = lessonQuery.findAllLessonsByProfessorUsername(professorName);
+            final JPQLQuery<?> query = lessonQuery.findAllLessonsBySearchTextAndProfName(searchText, professorName);
             final long count = query.select(course.name).fetchCount();
 
             final JPQLQuery<?> queryPageable = new Querydsl(entityManager, new PathBuilderFactory().create(LessonWithCourse.class)).applyPagination(pageable, query);

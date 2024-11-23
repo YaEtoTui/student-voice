@@ -34,6 +34,7 @@ public class LessonMapper {
     public LessonResponse createLessonResponse(LessonWithCourse lessonWithCourse) {
         final LessonResponse lessonResponse = new LessonResponse();
         lessonResponse.setStatus(lessonWithCourse.getStatus());
+        lessonResponse.setCourseId(lessonWithCourse.getCourseId());
         lessonResponse.setCourseName(lessonWithCourse.getCourseName());
         lessonResponse.setDateStart(lessonWithCourse.getDateStart());
         lessonResponse.setDateEnd(lessonWithCourse.getDateEnd());

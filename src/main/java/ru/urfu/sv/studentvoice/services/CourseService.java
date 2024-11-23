@@ -17,10 +17,7 @@ import ru.urfu.sv.studentvoice.model.domain.dto.course.CourseDto;
 import ru.urfu.sv.studentvoice.model.domain.dto.course.CourseInfo;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonWithCourse;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.CourseResponse;
-import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonResponse;
-import ru.urfu.sv.studentvoice.model.domain.entity.Course;
-import ru.urfu.sv.studentvoice.model.domain.entity.QCourse;
-import ru.urfu.sv.studentvoice.model.domain.entity.User;
+import ru.urfu.sv.studentvoice.model.domain.entity.*;
 import ru.urfu.sv.studentvoice.model.query.CourseQuery;
 import ru.urfu.sv.studentvoice.model.query.UserQuery;
 import ru.urfu.sv.studentvoice.model.repository.CourseRepository;
@@ -69,6 +66,7 @@ public class CourseService {
             final String professorName = professor.getUsername();
 
             final QCourse course = new QCourse("course");
+            final QInstitute institute = new QInstitute("institute");
 
             final JPQLQuery<?> query = courseQuery.findAllCourseByProfessorUsername(professorName);
             final long count = query.select(course.name).fetchCount();
@@ -78,7 +76,8 @@ public class CourseService {
             final List<CourseDto> courseList = queryPageable.select(
                             Projections.bean(CourseDto.class,
                                     course.id.as("courseId"),
-                                    course.name.as("name")
+                                    course.name.as("name"),
+                                    institute.address.as("address")
                             )
                     )
                     .fetch();

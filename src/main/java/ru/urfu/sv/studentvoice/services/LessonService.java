@@ -93,34 +93,30 @@ public class LessonService {
      */
     @PreAuthorize("@RolesAC.isProfessor()")
     public Page<LessonByCourseResponse> findLessonListByCourseId(Long courseId, Pageable pageable) {
-        final String username = jwtUserDetailsService.findUsername();
-        final User professor = userQuery.findProfessorByUsername(username);
+        final QCourse course = new QCourse("course");
+        final QLesson lesson = new QLesson("lesson");
 
-        if (Objects.nonNull(professor)) {
-            final String professorName = professor.getUsername();
+        final JPQLQuery<?> query = lessonQuery.findAllLessonsByCourseId(courseId);
+        final long count = query.select(course.name).fetchCount();
 
-            final QCourse course = new QCourse("course");
-            final QLesson lesson = new QLesson("lesson");
+        final JPQLQuery<?> queryPageable = new Querydsl(entityManager, new PathBuilderFactory().create(LessonWithCourse.class)).applyPagination(pageable, query);
 
-            final JPQLQuery<?> query = lessonQuery.findAllLessonsByProfNameAndCourseId(professorName, courseId);
-            final long count = query.select(course.name).fetchCount();
+        final List<LessonByCourse> lessonList = queryPageable.select(
+                        Projections.bean(LessonByCourse.class,
+                                course.name.as("courseName"),
+                                lesson.status.as("status"),
+                                lesson.startDateTime.as("dateStart"),
+                                lesson.endDateTime.as("dateEnd"))
+                )
+                .fetch();
 
-            final JPQLQuery<?> queryPageable = new Querydsl(entityManager, new PathBuilderFactory().create(LessonWithCourse.class)).applyPagination(pageable, query);
+        final List<LessonByCourseResponse> lessonResponseList = lessonMapper.createLessonResponseListFromLessonByCourseList(lessonList);
+        return new PageImpl<>(lessonResponseList, pageable, count);
+    }
 
-            final List<LessonByCourse> lessonList = queryPageable.select(
-                            Projections.bean(LessonByCourse.class,
-                                    course.name.as("courseName"),
-                                    lesson.status.as("status"),
-                                    lesson.startDateTime.as("dateStart"),
-                                    lesson.endDateTime.as("dateEnd"))
-                    )
-                    .fetch();
+    @PreAuthorize("@RolesAC.isProfessor()")
+    public void findLessonInfo(Long lessonId) {
 
-            final List<LessonByCourseResponse> lessonResponseList = lessonMapper.createLessonResponseListFromLessonByCourseList(lessonList);
-            return new PageImpl<>(lessonResponseList, pageable, count);
-        } else {
-            throw new IllegalArgumentException("Not found professor");
-        }
     }
 
 //    @Transactional

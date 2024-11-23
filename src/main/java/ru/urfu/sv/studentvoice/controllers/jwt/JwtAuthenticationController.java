@@ -1,5 +1,6 @@
 package ru.urfu.sv.studentvoice.controllers.jwt;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,7 +39,7 @@ public class JwtAuthenticationController {
     @Autowired
     private JwtUtil jwtUtil;
 
-
+    @Operation(summary = "Авторизация")
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     @SneakyThrows
     public ResponseEntity<Map<String, String>> login(@RequestBody UserClient user) {

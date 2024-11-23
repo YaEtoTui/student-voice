@@ -37,14 +37,25 @@ public class LessonController {
     public ResponseEntity<Page<LessonResponse>> findLessonList(@PageableDefault(size = 10000) Pageable pageable) {
         return new ResponseEntity<>(lessonService.findLessonList(pageable), HttpStatus.OK);
     }
+
     /**
      * Ищем список пар ПАГИНИРОВАННЫЙ у преподавателя по предмету
      */
     @Operation(summary = "Поиск пар у преподавателя по предмету")
-    @RequestMapping(path = "/list/by-course", method = RequestMethod.GET)
-    public ResponseEntity<Page<LessonByCourseResponse>> findLessonList(@PathVariable("course-id") Long courseId,
+    @RequestMapping(path = "/list/by-course/{courseId}", method = RequestMethod.GET)
+    public ResponseEntity<Page<LessonByCourseResponse>> findLessonListByCourse(@PathVariable Long courseId,
                                                                        @PageableDefault(size = 10000) Pageable pageable) {
         return new ResponseEntity<>(lessonService.findLessonListByCourseId(courseId, pageable), HttpStatus.OK);
+    }
+
+    /**
+     * Подробнее отдаем информацию по паре
+     */
+    @Operation(summary = "Подробнее отдаем информацию по паре")
+    @RequestMapping(path = "/{lessonId}", method = RequestMethod.GET)
+    public ResponseEntity<Page<LessonByCourseResponse>> findLessonById(@PathVariable Long lessonId) {
+        lessonService.findLessonInfo(lessonId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 //    @PostMapping("create")

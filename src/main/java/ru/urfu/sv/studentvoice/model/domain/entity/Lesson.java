@@ -43,7 +43,7 @@ public class Lesson extends AbstractEntity {
     @Column(name = "disable_timestamp")
     private Instant disableTimestamp;
 
-    @Column(name = "create_timestamp", nullable = false)
+    @Column(name = "create_timestamp")
     private Instant createTimestamp;
 
     @Column(name = "address", nullable = false)
@@ -51,9 +51,4 @@ public class Lesson extends AbstractEntity {
 
     @Column(name = "created_qr", nullable = false)
     private boolean createdQR;
-
-    @PrePersist
-    protected void onCreate() {
-        createTimestamp = Instant.now();
-    }
 }

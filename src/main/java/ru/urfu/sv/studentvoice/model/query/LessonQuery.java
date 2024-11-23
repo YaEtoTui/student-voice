@@ -27,9 +27,9 @@ public class LessonQuery extends AbstractQuery {
     }
 
     /**
-     * Ищем список пар для преподавателя по предмету
+     * Ищем список пар по предмету
      */
-    public JPQLQuery<?> findAllLessonsByProfNameAndCourseId(String username, Long courseId) {
+    public JPQLQuery<?> findAllLessonsByCourseId(Long courseId) {
 
         //To Do связоки нет с преподом
         final BooleanExpression exp = course.id.eq(courseId);

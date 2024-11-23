@@ -1,5 +1,6 @@
 package ru.urfu.sv.studentvoice.controllers.user;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,7 @@ public class UsersApiController {
 //        return ResponseEntity.ok().body(Map.of(RESULT, result, "createdUsersFile", orNull(encodedFile)));
 //    }
 
+    @Operation(summary = "Создание пользователя с ролью")
     @RequestMapping(path = "create", method = RequestMethod.POST)
     public ResponseEntity<Void> createUser(@RequestBody UserInfoDto userInfoDto) {
         userService.createUser(userInfoDto);

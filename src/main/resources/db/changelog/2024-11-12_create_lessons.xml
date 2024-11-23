@@ -33,9 +33,7 @@
 
             <column name="disable_timestamp" type="TIMESTAMP"/>
 
-            <column name="create_timestamp" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
+            <column name="create_timestamp" type="TIMESTAMP"/>
 
             <column name="address" type="VARCHAR">
                 <constraints nullable="false"/>

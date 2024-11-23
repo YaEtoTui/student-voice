@@ -10,4 +10,5 @@ public class UserInfoResponse {
     private String username;
     @JsonProperty("user_role")
     private String userRole;
+    private String fio;
 }

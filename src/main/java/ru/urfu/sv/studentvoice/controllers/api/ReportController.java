@@ -1,5 +1,6 @@
 package ru.urfu.sv.studentvoice.controllers.api;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -29,6 +30,7 @@ public class ReportController {
     @Autowired
     private ReportService reportService;
 
+    @Operation(summary = "Выгрузка отчета типа .csv")
     @RequestMapping(path = "/download-report", method = RequestMethod.GET)
     public ResponseEntity<StreamingResponseBody> downloadReport() {
         final String content = reportService.getCvsReport();
@@ -49,6 +51,7 @@ public class ReportController {
         return new ResponseEntity<>(responseBody, headers, HttpStatus.OK);
     }
 
+    @Operation(summary = "Выгрузка отчета типа .xslx")
     @RequestMapping(path = "/download-report-xslx", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<byte[]> downloadReportXSLX(HttpServletResponse response) throws IOException {
 

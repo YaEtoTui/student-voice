@@ -1,5 +1,6 @@
 package ru.urfu.sv.studentvoice.controllers.api;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ public class InstituteController {
     @Autowired
     private InstituteService instituteService;
 
+    @Operation(summary = "Создание института")
     @RequestMapping(path = "/create", method = RequestMethod.POST)
     public ResponseEntity<Void> createInstitute(@RequestBody InstituteInfo instituteInfo) {
 
@@ -32,6 +34,7 @@ public class InstituteController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Вывод списка институтов (всех в БД)")
     @RequestMapping(path = "/list", method = RequestMethod.GET)
     public ResponseEntity<List<InstituteResponse>> getInstituteList() {
         final List<InstituteResponse> institutes = instituteService.findAllInstituteResponse();

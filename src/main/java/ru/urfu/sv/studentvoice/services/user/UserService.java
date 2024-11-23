@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.urfu.sv.studentvoice.model.domain.dto.user.Roles;
+import ru.urfu.sv.studentvoice.model.domain.dto.user.UserDto;
 import ru.urfu.sv.studentvoice.model.domain.dto.user.UserInfoDto;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.UserInfoResponse;
-import ru.urfu.sv.studentvoice.model.domain.dto.user.UsernameAndRole;
 import ru.urfu.sv.studentvoice.model.domain.entity.User;
 import ru.urfu.sv.studentvoice.model.query.UserQuery;
 import ru.urfu.sv.studentvoice.model.repository.UserRepository;
@@ -93,11 +93,14 @@ public class UserService {
      * Нужно фронту для понимания вывода на UI
      */
     public UserInfoResponse getInfoForUser() {
-        final UsernameAndRole usernameAndRole = roleService.findRoleForCheck();
+        final UserDto userDto = roleService.findUserDto();
 
         final UserInfoResponse userInfoResponse = new UserInfoResponse();
-        userInfoResponse.setUsername(usernameAndRole.getUsername());
-        userInfoResponse.setUserRole(usernameAndRole.getRole());
+        userInfoResponse.setUsername(userDto.getUsername());
+        userInfoResponse.setUserRole(userDto.getRole());
+
+        final String fio = String.format("%s %s %s", userDto.getSurname(), userDto.getName(), userDto.getPatronymic());
+        userInfoResponse.setFio(fio);
         return userInfoResponse;
     }
 }

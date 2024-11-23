@@ -1,5 +1,6 @@
 package ru.urfu.sv.studentvoice.controllers.user;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ public class UserInfoController {
     /**
      * Получаем информацию о пользователе
      */
+    @Operation(summary = "Информация о текущем пользователе")
     @RequestMapping(path = "/info", method = RequestMethod.GET)
     public ResponseEntity<UserInfoResponse> getInfoForUser() {
 

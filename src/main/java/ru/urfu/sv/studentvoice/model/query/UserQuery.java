@@ -6,6 +6,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPQLQuery;
 import org.springframework.stereotype.Repository;
 import ru.urfu.sv.studentvoice.model.domain.dto.user.Roles;
+import ru.urfu.sv.studentvoice.model.domain.dto.user.UserDto;
 import ru.urfu.sv.studentvoice.model.domain.dto.user.UsernameAndRole;
 import ru.urfu.sv.studentvoice.model.domain.entity.QRole;
 import ru.urfu.sv.studentvoice.model.domain.entity.QUser;
@@ -60,6 +61,25 @@ public class UserQuery extends AbstractQuery {
                 .select(Projections.bean(UsernameAndRole.class,
                         user.username.as("username"),
                         role.name.as("role")
+                ))
+                .fetchFirst();
+    }
+
+    public UserDto findUserDto(String username) {
+
+        final BooleanExpression exp = user.username.eq(username);
+
+        return query()
+                .from(user)
+                .join(userRole).on(userRole.userId.eq(user.id))
+                .join(role).on(userRole.roleId.eq(role.id))
+                .where(exp)
+                .select(Projections.bean(UserDto.class,
+                        user.username.as("username"),
+                        role.name.as("role"),
+                        user.name.as("name"),
+                        user.surname.as("surname"),
+                        user.patronymic.as("patronymic")
                 ))
                 .fetchFirst();
     }

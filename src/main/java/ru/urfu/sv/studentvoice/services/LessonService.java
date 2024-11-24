@@ -12,23 +12,28 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.Querydsl;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonByCourse;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonDetailsDto;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonWithCourse;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonByCourseResponse;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonDetailsResponse;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonResponse;
+import ru.urfu.sv.studentvoice.model.domain.entity.Lesson;
 import ru.urfu.sv.studentvoice.model.domain.entity.QCourse;
 import ru.urfu.sv.studentvoice.model.domain.entity.QLesson;
 import ru.urfu.sv.studentvoice.model.domain.entity.User;
-import ru.urfu.sv.studentvoice.model.query.CourseQuery;
 import ru.urfu.sv.studentvoice.model.query.LessonQuery;
 import ru.urfu.sv.studentvoice.model.query.UserQuery;
 import ru.urfu.sv.studentvoice.services.jwt.JwtUserDetailsService;
 import ru.urfu.sv.studentvoice.services.mapper.LessonMapper;
+import ru.urfu.sv.studentvoice.services.user.ProfessorService;
+import ru.urfu.sv.studentvoice.utils.exceptions.ModeusException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -43,9 +48,9 @@ public class LessonService {
     @Autowired
     private JwtUserDetailsService jwtUserDetailsService;
     @Autowired
-    private UserQuery userQuery;
+    private ProfessorService professorService;
     @Autowired
-    private CourseQuery courseQuery;
+    private UserQuery userQuery;
     @Autowired
     private LessonQuery lessonQuery;
     @Autowired
@@ -192,24 +197,39 @@ public class LessonService {
 //        return new ActionResult(true, "Пара успешно изменена");
 //    }
 
-//    @Transactional
-//    public List<ClassSession> findAllClassSessionsByProfessorName(String professorName, LocalDate dateFrom, LocalDate dateTo) throws ModeusException {
-//        final List<UUID> savedClassSessions = repository.findAllByProfessorNameIgnoreCase(professorName).stream().map(ClassSession::getSessionId).toList();
-//        List<ClassSession> modeusClassSessions = modeusService.getSessionsOfProfessor(professorName, dateFrom, dateTo);
-//        List<ClassSession> unsaved = modeusClassSessions.stream().filter(session -> !savedClassSessions.contains(session.getSessionId())).toList();
-//        if (!unsaved.isEmpty()) {
-//            String newClassSessionStr = String.join("\n", unsaved.stream().map(ClassSession::toString).toList());
-//            log.info("Для преподавателя найдены новые пары {}", newClassSessionStr);
-//            instituteService.createInstitutesByClassSessions(unsaved);
-//            courseService.createCoursesByClassSessions(unsaved);
-//            saveAll(unsaved);
-//        }
-//
-//        List<ClassSession> allClassSessions = repository.findAllByProfessorNameIgnoreCase(professorName);
-//        String classSessionsStr = String.join("\n", allClassSessions.stream().map(ClassSession::toString).toList());
-//        log.info("Для преподавателя {} найдены следующие пары: {}", professorName, classSessionsStr);
-//        return allClassSessions;
-//    }
+    /**
+     * Подгружаем пары из Модеуса
+     * @param professorName
+     * @param dateFrom
+     * @param dateTo
+     * @return
+     * @throws ModeusException
+     */
+    @Transactional
+    public List<Lesson> findAllLessonsForModeus(String professorName, LocalDate dateFrom, LocalDate dateTo) throws ModeusException {
+        final List<Long> savedLessonIds = lessonQuery.findAllByProfessorNameIgnoreCase(professorName)
+                .stream()
+                .map(Lesson::getId)
+                .collectors(Collectors.toList());
+
+        final User professor = professorService.findProfessor();
+        final String fio = String.format("%s %s %s", professor.getSurname(), professor.getName(), professor.getPatronymic());
+
+        List<Lesson> modeusLessons = modeusService.findLessonListOfProfessor(fio, dateFrom, dateTo);
+        List<ClassSession> unsaved = modeusClassSessions.stream().filter(session -> !savedClassSessions.contains(session.getSessionId())).toList();
+        if (!unsaved.isEmpty()) {
+            String newClassSessionStr = String.join("\n", unsaved.stream().map(ClassSession::toString).toList());
+            log.info("Для преподавателя найдены новые пары {}", newClassSessionStr);
+            instituteService.createInstitutesByClassSessions(unsaved);
+            courseService.createCoursesByClassSessions(unsaved);
+            saveAll(unsaved);
+        }
+
+        List<ClassSession> allClassSessions = repository.findAllByProfessorNameIgnoreCase(professorName);
+        String classSessionsStr = String.join("\n", allClassSessions.stream().map(ClassSession::toString).toList());
+        log.info("Для преподавателя {} найдены следующие пары: {}", professorName, classSessionsStr);
+        return allClassSessions;
+    }
 
 //    private ActionResult saveAll(List<ClassSession> sessions) {
 //        sessions.forEach(session -> session.setDisableAfterTimestamp(session.getEndDateTime().toInstant(ZoneOffset.ofHours(5))));

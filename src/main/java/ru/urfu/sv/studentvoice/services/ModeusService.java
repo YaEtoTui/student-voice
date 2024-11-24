@@ -37,14 +37,23 @@ public class ModeusService {
     @Autowired
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public List<ClassSession> getSessionsOfProfessor(String professorFullName, LocalDate dateFrom, LocalDate dateTo) throws ModeusException {
-        Optional<String> modeusAuthToken = webDriverService.getModeusAuthToken();
+    /**
+     * Ищем пары на определенный промежуток, подгружая из Модеуса
+     *
+     * @param professorFullName ФИО преподавателя
+     * @param dateFrom          Дата начала подгрузки пар
+     * @param dateTo            Дата окончания подгрузки пар
+     * @return Возвращаем список пар для преподаваталея
+     */
+    public List<ClassSession> findLessonListOfProfessor(String professorFullName, LocalDate dateFrom, LocalDate dateTo) throws ModeusException {
+
+        final Optional<String> modeusAuthToken = webDriverService.getModeusAuthToken();
         if (modeusAuthToken.isEmpty()) {
             log.error("Не получилось получить код авторизации Модеус");
             return Collections.emptyList();
         }
 
-        Optional<String> professorModeusId = getProfessorModeusId(professorFullName, modeusAuthToken.get());
+        final Optional<String> professorModeusId = getProfessorModeusId(professorFullName, modeusAuthToken.get());
         if (professorModeusId.isEmpty()) {
             log.warn("Не получилось найти преподавателя {}", professorFullName);
             return Collections.emptyList();

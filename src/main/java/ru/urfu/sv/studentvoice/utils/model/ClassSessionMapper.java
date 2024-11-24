@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import ru.urfu.sv.studentvoice.model.domain.dto.FullAddress;
 import ru.urfu.sv.studentvoice.model.domain.entity.ClassSession;
 import ru.urfu.sv.studentvoice.model.domain.dto.CourseDetails;
+import ru.urfu.sv.studentvoice.model.domain.entity.Lesson;
 import ru.urfu.sv.studentvoice.utils.exceptions.ModeusException;
 import ru.urfu.sv.studentvoice.utils.formatters.TemporalFormatter;
 
@@ -16,6 +18,7 @@ import java.util.*;
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ClassSessionMapper {
+
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final String DISTANT_SESSION = "Дистант";
 
@@ -39,85 +42,92 @@ public class ClassSessionMapper {
         }
     }
 
-    private static List<ClassSession> getSessions(JsonNode root, String professorFullName, Map<String, String> instituteAddressNameMap) {
-        Map<UUID, String> coursesNameMap = getCoursesMap(root);
-        Map<UUID, FullAddress> addressMap = getAddressMap(root);
-        Iterator<JsonNode> eventNodes = root.get("events").elements();
-        List<ClassSession> result = new ArrayList<>();
+    private static List<Lesson> getSessions(JsonNode root, String professorFullName, Map<String, String> instituteAddressNameMap) {
+        final Map<UUID, String> coursesNameMap = findCourseMap(root);
+        final Map<UUID, FullAddress> addressMap = findAddressMap(root);
+        final Iterator<JsonNode> eventNodes = root.get("events").elements();
+        final List<Lesson> result = new ArrayList<>();
         while (eventNodes.hasNext()) {
-            JsonNode eventNode = eventNodes.next();
+            final JsonNode eventNode = eventNodes.next();
+            final Lesson currentLesson = new Lesson();
+
             ClassSession current = new ClassSession();
-            current.setSessionId(UUID.fromString(eventNode.get("id").asText()));
-            current.setSessionName(eventNode.get("name").asText());
-            current.setStartDateTime(TemporalFormatter.fromLocalDateTimeString(eventNode.get("startsAtLocal").asText()));
-            current.setEndDateTime(TemporalFormatter.fromLocalDateTimeString(eventNode.get("endsAtLocal").asText()));
-            String status = eventNode.get("holdingStatus").get("name").asText();
-            current.setStatus("Неизвестно".equals(status) ? "Запланировано" : status);
+//            current.setSessionId(UUID.fromString(eventNode.get("id").asText()));
+
+            currentLesson.setName(eventNode.get("name").asText());
+            currentLesson.setStartDateTime(TemporalFormatter.fromLocalDateTimeString(eventNode.get("startsAtLocal").asText()));
+            currentLesson.setEndDateTime(TemporalFormatter.fromLocalDateTimeString(eventNode.get("endsAtLocal").asText()));
+
+            final String status = eventNode.get("holdingStatus").get("name").asText();
+            currentLesson.setStatus("Неизвестно".equals(status) ? "Запланировано" : status);
+
             if (eventNode.get("_links").get("course-unit-realization") == null) {
                 continue;
             }
+
             current.setCourseId(UUID.fromString(eventNode.get("_links").get("course-unit-realization").get("href").asText().substring(1)));
-            FullAddress address = addressMap.get(current.getSessionId());
+
+            final FullAddress address = addressMap.get(current.getSessionId());
             CourseDetails currentCourseDetails = CourseDetails
                     .builder()
                     .courseName(coursesNameMap.get(current.getCourseId()))
-                    .instituteName(instituteAddressNameMap.get(address.building()))
-                    .instituteAddress(address.building())
+                    .instituteName(instituteAddressNameMap.get(address.getBuilding()))
+                    .instituteAddress(address.getBuilding())
                     .professorsNames(professorFullName)
                     .build();
-            current.setRoomName(address.room());
+            current.setRoomName(address.getRoom());
             current.setCourseDetails(currentCourseDetails);
             current.setProfessorName(professorFullName);
             current.setCreateTimestamp(Instant.now());
-            result.add(current);
+
+            result.add(currentLesson);
         }
 
         return result;
     }
 
-    private static Map<UUID, String> getCoursesMap(JsonNode root) {
-        Map<UUID, String> result = new HashMap<>();
-        Iterator<JsonNode> coursesNode = root.get("course-unit-realizations").elements();
+    private static Map<UUID, String> findCourseMap(JsonNode root) {
+        final Map<UUID, String> result = new HashMap<>();
+        final Iterator<JsonNode> coursesNode = root.get("course-unit-realizations").elements();
         while (coursesNode.hasNext()) {
-            JsonNode courseNode = coursesNode.next();
+            final JsonNode courseNode = coursesNode.next();
             result.put(UUID.fromString(courseNode.get("id").asText()), courseNode.get("nameShort").asText());
         }
+
         return result;
     }
 
-    private static Map<UUID, FullAddress> getAddressMap(JsonNode root) {
-        Map<String, String> eventRoomsMap = new HashMap<>();
-        Iterator<JsonNode> eventRoomsNode = root.get("event-rooms").elements();
+    private static Map<UUID, FullAddress> findAddressMap(JsonNode root) {
+        final Map<String, String> eventRoomsMap = new HashMap<>();
+        final Iterator<JsonNode> eventRoomsNode = root.get("event-rooms").elements();
         while (eventRoomsNode.hasNext()) {
-            JsonNode eventRoomNode = eventRoomsNode.next();
+            final JsonNode eventRoomNode = eventRoomsNode.next();
             eventRoomsMap.put(eventRoomNode.get("_links").get("self").get("href").asText(), eventRoomNode.get("_links").get("room").get("href").asText());
         }
 
-        Map<String, FullAddress> roomsMap = new HashMap<>();
-        Iterator<JsonNode> roomsNode = root.get("rooms").elements();
+        final Map<String, FullAddress> roomsMap = new HashMap<>();
+        final Iterator<JsonNode> roomsNode = root.get("rooms").elements();
         while (roomsNode.hasNext()) {
-            JsonNode roomNode = roomsNode.next();
-            String room = roomNode.get("name").asText();
-            String buildingAddress = roomNode.get("building").get("name").asText();
+            final JsonNode roomNode = roomsNode.next();
+            final String room = roomNode.get("name").asText();
+            final String buildingAddress = roomNode.get("building").get("name").asText();
             roomsMap.put(roomNode.get("_links").get("self").get("href").asText(), new FullAddress(buildingAddress, room));
         }
 
-        Map<UUID, FullAddress> result = new HashMap<>();
-        Iterator<JsonNode> locationsNode = root.get("event-locations").elements();
+        final Map<UUID, FullAddress> result = new HashMap<>();
+        final Iterator<JsonNode> locationsNode = root.get("event-locations").elements();
         while (locationsNode.hasNext()) {
-            JsonNode locationNode = locationsNode.next();
-            FullAddress address;
+            final JsonNode locationNode = locationsNode.next();
+            final FullAddress address;
             if (locationNode.get("_links").get("event-rooms") == null) {
                 address = new FullAddress(DISTANT_SESSION, DISTANT_SESSION);
             } else {
                 address = roomsMap.get(eventRoomsMap.get(locationNode.get("_links").get("event-rooms").get("href").asText()));
             }
+
             result.put(UUID.fromString(locationNode.get("eventId").asText()), address);
         }
 
         return result;
-    }
-
-    private record FullAddress(String building, String room) {
     }
 }

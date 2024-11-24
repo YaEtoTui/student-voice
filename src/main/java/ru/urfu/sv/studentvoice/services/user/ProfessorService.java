@@ -1,10 +1,14 @@
 package ru.urfu.sv.studentvoice.services.user;
 
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.urfu.sv.studentvoice.model.domain.entity.User;
+import ru.urfu.sv.studentvoice.model.query.UserQuery;
 import ru.urfu.sv.studentvoice.services.LessonService;
 import ru.urfu.sv.studentvoice.services.CourseService;
+import ru.urfu.sv.studentvoice.services.jwt.JwtUserDetailsService;
 
 /**
  * Сервис предназначен для обработки данных для преподаваталя,
@@ -21,6 +25,10 @@ public class ProfessorService {
     private CourseService courseService;
     @Autowired
     private LessonService sessionService;
+    @Autowired
+    private UserQuery userQuery;
+    @Autowired
+    private JwtUserDetailsService jwtUserDetailsService;
 
 //    public List<Professor> getAllProfessors() {
 //        return repository.findAllByOrderByFullNameAsc();
@@ -62,7 +70,9 @@ public class ProfessorService {
 ////        return ActionResultFactory.professorCreated();
 ////    }
 //
-//    public Optional<Professor> findProfessorByUsername(String username) {
-//        return repository.findByUsername(username);
-//    }
+
+    public User findProfessor() {
+        final String username = jwtUserDetailsService.findUsername();
+        return userQuery.findProfessorByUsername(username);
+    }
 }

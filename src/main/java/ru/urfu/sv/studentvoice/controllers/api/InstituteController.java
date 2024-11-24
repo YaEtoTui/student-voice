@@ -1,6 +1,7 @@
 package ru.urfu.sv.studentvoice.controllers.api;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@SecurityRequirement(name = "Bearer Authentication")
 @RequestMapping(Links.BASE_API + Links.INSTITUTES)
 @PreAuthorize("@RolesAC.isAdmin")
 public class InstituteController {

@@ -1,6 +1,7 @@
 package ru.urfu.sv.studentvoice.controllers.user;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import ru.urfu.sv.studentvoice.services.user.UserService;
  * @since 05.11.2024
  */
 @RestController
+@SecurityRequirement(name = "Bearer Authentication")
 @RequestMapping(Links.BASE_API + Links.USER)
 public class UserInfoController {
 

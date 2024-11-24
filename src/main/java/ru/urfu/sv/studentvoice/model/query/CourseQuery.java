@@ -58,16 +58,17 @@ public class CourseQuery extends AbstractQuery {
      */
     public JPQLQuery<?> findAllCourseBySearchTextAndProfName(String searchText, String username) {
 
-        //To Do связоки нет с преподом
-        BooleanExpression exp = null;
+        BooleanExpression exp = user.username.eq(username);
 
         if (Objects.nonNull(searchText)) {
-            exp = course.name.likeIgnoreCase("%" + searchText + "%");
+            exp = exp.and(course.name.likeIgnoreCase("%" + searchText + "%"));
         }
 
         return query()
                 .from(course)
                 .join(institute).on(course.instituteId.eq(institute.id))
+                .join(userCourse).on(userCourse.courseId.eq(course.id))
+                .join(user).on(userCourse.userId.eq(user.id))
                 .where(exp);
     }
 }

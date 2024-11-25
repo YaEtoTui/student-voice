@@ -10,4 +10,5 @@ public interface Links {
     String INSTITUTES = "/institutes";
     String COURSES = "/courses";
     String LESSONS = "/lessons";
+    String REVIEWS = "/reviews";
 }

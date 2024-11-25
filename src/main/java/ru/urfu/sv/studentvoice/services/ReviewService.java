@@ -1,20 +1,43 @@
 package ru.urfu.sv.studentvoice.services;
 
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.PathBuilderFactory;
+import com.querydsl.jpa.JPQLQuery;
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.support.Querydsl;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import ru.urfu.sv.studentvoice.model.domain.dto.CategoryReviews;
+import ru.urfu.sv.studentvoice.model.domain.dto.response.ReviewResponse;
+import ru.urfu.sv.studentvoice.model.domain.dto.review.ReviewDto;
+import ru.urfu.sv.studentvoice.model.domain.entity.*;
+import ru.urfu.sv.studentvoice.model.query.ReviewQuery;
 import ru.urfu.sv.studentvoice.model.repository.ReviewRepository;
+import ru.urfu.sv.studentvoice.services.mapper.ReviewMapper;
 
-@Service
+import java.util.List;
+
 @Slf4j
+@Service
 public class ReviewService {
 
-    @Autowired
-    private ReviewRepository repository;
     @Autowired
     private LessonService sessionService;
     @Autowired
     private ReportService reportService;
+    @Autowired
+    private ReviewRepository repository;
+    @Autowired
+    private ReviewQuery reviewQuery;
+    @Autowired
+    private ReviewMapper reviewMapper;
+    @Autowired
+    protected EntityManager entityManager;
 
 //    @Transactional
 //    public ActionResult saveReview(Review review) {
@@ -51,4 +74,32 @@ public class ReviewService {
 //    public List<Review> findReviewsBySessionId(UUID sessionId) {
 //        return repository.findAllBySessionId(sessionId);
 //    }
+
+    /**
+     * Ищем отзывы студентов по паре
+     */
+    @PreAuthorize("@RolesAC.isProfessor()")
+    public Page<ReviewResponse> findReviewsByLessonId(Long lessonId, Pageable pageable) {
+
+        final QReview review = new QReview("review");
+        final QLessonsReview lessonsReview = new QLessonsReview("lessonsReview");
+        final QComment comment = new QComment("comment");
+
+        final JPQLQuery<?> query = reviewQuery.findReviewsByLessonId(lessonId, CategoryReviews.REVIEW_STUDENT);
+        final long count = query.select(review.value).fetchCount();
+
+        final JPQLQuery<?> queryPageable = new Querydsl(entityManager, new PathBuilderFactory().create(ReviewDto.class)).applyPagination(pageable, query);
+
+        final List<ReviewDto> reviewList = queryPageable.select(
+                        Projections.bean(ReviewDto.class,
+                                lessonsReview.studentFullName.as("fio"),
+                                review.value.as("value"),
+                                review.createTimestamp.as("createTime"),
+                                comment.value.as("review")
+                        ))
+                .fetch();
+
+        final List<ReviewResponse> reviewResponseList = reviewMapper.createReviewResponseListFromReviewDtoList(reviewList);
+        return new PageImpl<>(reviewResponseList, pageable, count);
+    }
 }

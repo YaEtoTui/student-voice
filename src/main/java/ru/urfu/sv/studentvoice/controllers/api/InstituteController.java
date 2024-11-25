@@ -36,10 +36,10 @@ public class InstituteController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-//    @Operation(summary = "Вывод списка институтов (всех в БД)")
-//    @RequestMapping(path = "/list", method = RequestMethod.GET)
-//    public ResponseEntity<List<InstituteResponse>> getInstituteList() {
-//        final List<InstituteResponse> institutes = instituteService.findAllInstituteResponse();
-//        return new ResponseEntity<>(institutes, HttpStatus.OK);
-//    }
+    @Operation(summary = "Вывод списка институтов (всех в БД)")
+    @RequestMapping(path = "/list", method = RequestMethod.GET)
+    public ResponseEntity<List<InstituteResponse>> getInstituteList() {
+        final List<InstituteResponse> institutes = instituteService.findAllInstituteResponse();
+        return new ResponseEntity<>(institutes, HttpStatus.OK);
+    }
 }

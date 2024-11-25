@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.urfu.sv.studentvoice.controllers.ReviewController;
 import ru.urfu.sv.studentvoice.controllers.links.Links;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.ReviewResponse;
+import ru.urfu.sv.studentvoice.model.domain.dto.response.StudentResponse;
 import ru.urfu.sv.studentvoice.services.ReviewService;
 
 @RestController
@@ -47,6 +48,14 @@ public class ReviewApiController {
     public ResponseEntity<Page<ReviewResponse>> findReviewsByLesson(@PathVariable Long lessonId,
                                                                     @PageableDefault(size = 10000) Pageable pageable) {
         final Page<ReviewResponse> response = reviewService.findReviewsByLessonId(lessonId, pageable);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Поиск студентов по паре(отмеченный или нет)")
+    @RequestMapping(path = "/list/students/by-lesson/{lessonId}", method = RequestMethod.GET)
+    public ResponseEntity<Page<StudentResponse>> findStudentsByLesson(@PathVariable Long lessonId,
+                                                                      @PageableDefault(size = 10000) Pageable pageable) {
+        final Page<StudentResponse> response = reviewService.findStudentsByLessonId(lessonId, pageable);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

@@ -33,6 +33,7 @@ public class LessonMapper {
      */
     public LessonResponse createLessonResponse(LessonWithCourse lessonWithCourse) {
         final LessonResponse lessonResponse = new LessonResponse();
+        lessonResponse.setLessonId(lessonWithCourse.getLessonId());
         lessonResponse.setStatus(lessonWithCourse.getStatus());
         lessonResponse.setCourseId(lessonWithCourse.getCourseId());
         lessonResponse.setCourseName(lessonWithCourse.getCourseName());
@@ -54,12 +55,13 @@ public class LessonMapper {
     }
 
     /**
-     * Переделываем LessonWithCourse в LessonByCourseResponse
+     * Переделываем LessonByCourse в LessonByCourseResponse
      *
      * @param lesson Пара
      */
     public LessonByCourseResponse createLessonByCourseResponse(LessonByCourse lesson) {
         final LessonByCourseResponse lessonResponse = new LessonByCourseResponse();
+        lessonResponse.setLessonId(lesson.getLessonId());
         lessonResponse.setStatus(lesson.getStatus());
         lessonResponse.setCourseName(lesson.getCourseName());
         lessonResponse.setDateStart(lesson.getDateStart());

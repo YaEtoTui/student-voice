@@ -74,9 +74,9 @@ public class LessonService {
 
             final List<LessonWithCourse> lessonWithCourseList = queryPageable.select(
                             Projections.bean(LessonWithCourse.class,
-                                    /* Статус добавить */
                                     course.id.as("courseId"),
                                     course.name.as("courseName"),
+                                    lesson.id.as("lessonId"),
                                     lesson.status.as("status"),
                                     lesson.startDateTime.as("dateStart"),
                                     lesson.endDateTime.as("dateEnd"))
@@ -106,6 +106,7 @@ public class LessonService {
         final List<LessonByCourse> lessonList = queryPageable.select(
                         Projections.bean(LessonByCourse.class,
                                 course.name.as("courseName"),
+                                lesson.id.as("lessonId"),
                                 lesson.status.as("status"),
                                 lesson.startDateTime.as("dateStart"),
                                 lesson.endDateTime.as("dateEnd"))

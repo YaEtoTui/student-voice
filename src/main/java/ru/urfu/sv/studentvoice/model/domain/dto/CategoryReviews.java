@@ -4,6 +4,7 @@ import lombok.Getter;
 
 /**
  * Категория отзыва
+ * //ToDo переделать
  *
  * @author Egor Sazhin
  * @since 25.11.2024

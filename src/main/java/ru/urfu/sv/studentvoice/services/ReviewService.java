@@ -85,7 +85,7 @@ public class ReviewService {
         final QLessonsReview lessonsReview = new QLessonsReview("lessonsReview");
         final QComment comment = new QComment("comment");
 
-        final JPQLQuery<?> query = reviewQuery.findReviewsByLessonId(lessonId, CategoryReviews.REVIEW_STUDENT);
+        final JPQLQuery<?> query = reviewQuery.findReviewsByLessonId(lessonId);
         final long count = query.select(lessonsReview.id).fetchCount();
 
         final JPQLQuery<?> queryPageable = new Querydsl(entityManager, new PathBuilderFactory().create(ReviewDto.class)).applyPagination(pageable, query);

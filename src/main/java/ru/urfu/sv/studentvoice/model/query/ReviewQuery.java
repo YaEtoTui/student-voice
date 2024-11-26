@@ -3,7 +3,6 @@ package ru.urfu.sv.studentvoice.model.query;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 import org.springframework.stereotype.Repository;
-import ru.urfu.sv.studentvoice.model.domain.dto.CategoryReviews;
 import ru.urfu.sv.studentvoice.model.domain.entity.*;
 
 @Repository
@@ -16,10 +15,9 @@ public class ReviewQuery extends AbstractQuery {
     private final static QComment comment = new QComment("comment");
 
 
-    public JPQLQuery<?> findReviewsByLessonId(Long lessonId, CategoryReviews categoryReviews) {
+    public JPQLQuery<?> findReviewsByLessonId(Long lessonId) {
 
-        final BooleanExpression exp = lesson.id.eq(lessonId)
-                .and(categoryReview.name.eq(categoryReviews.getName()));
+        final BooleanExpression exp = lesson.id.eq(lessonId);
 
         return query()
                 .from(lessonsReview)

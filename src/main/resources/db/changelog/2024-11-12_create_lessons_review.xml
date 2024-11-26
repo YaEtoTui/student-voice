@@ -11,9 +11,7 @@
                 <constraints primaryKey="true"/>
             </column>
 
-            <column name="value" type="VARCHAR">
-                <constraints nullable="false"/>
-            </column>
+            <column name="value" type="VARCHAR"/>
 
             <column name="create_timestamp" type="TIMESTAMP WITHOUT TIME ZONE">
                 <constraints nullable="false"/>

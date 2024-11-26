@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="2024_11_26_20_50" author="Egor Sazhin">
+
+        <createTable tableName="links">
+
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="course_id" type="BIGINT">
+                <constraints unique="true" nullable="false"/>
+            </column>
+
+            <column name="path_link" type="VARCHAR">
+                <constraints unique="true" nullable="false"/>
+            </column>
+
+            <column name="is_constantly" type="BOOLEAN"/>
+
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="links"
+                                 baseColumnNames="course_id"
+                                 referencedTableName="courses"
+                                 referencedColumnNames="id"
+                                 constraintName="links_courses_link"/>
+
+    </changeSet>
+
+</databaseChangeLog>

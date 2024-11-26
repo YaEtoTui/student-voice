@@ -11,7 +11,7 @@ import lombok.Getter;
 public enum Status {
 
     PLANNED("Запланировано"),
-    CONDUCTED("Проведено");
+    CONDUCTED("Завершено");
 
     @Getter
     private String titleStatus;

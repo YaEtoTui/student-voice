@@ -23,4 +23,33 @@
 
     </changeSet>
 
+    <changeSet id="2024_11_26_21_10" author="Egor Sazhin">
+
+        <insert tableName="category_reviews">
+            <column name="name" value="1"/>
+            <column name="description" value="Оценка подачи материала"/>
+        </insert>
+
+        <insert tableName="category_reviews">
+            <column name="name" value="2"/>
+            <column name="description" value="Оценка полезности материала"/>
+        </insert>
+
+        <insert tableName="category_reviews">
+            <column name="name" value="3"/>
+            <column name="description" value="Оценка взаимодействия со студентами"/>
+        </insert>
+
+        <insert tableName="category_reviews">
+            <column name="name" value="4"/>
+            <column name="description" value="Оценка аудитории и оборудования"/>
+        </insert>
+
+        <insert tableName="category_reviews">
+            <column name="name" value="5"/>
+            <column name="description" value="Оценка атмосферы на паре"/>
+        </insert>
+
+    </changeSet>
+
 </databaseChangeLog>

@@ -16,11 +16,11 @@ public class Review extends AbstractEntity {
     @Column(name = "lesson_review_id", nullable = false)
     private Long lessonReviewId;
 
-    @Column(name = "category_id", nullable = false, unique = true)
+    @Column(name = "category_id", unique = true, nullable = false)
     private Long categoryId;
 
     @Column(name = "value", nullable = false)
-    private String value;
+    private Long value;
 
     @Column(name = "create_timestamp", nullable = false)
     private LocalDateTime createTimestamp;

@@ -3,6 +3,8 @@ package ru.urfu.sv.studentvoice.model.domain.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @Setter
@@ -14,7 +16,7 @@ public class User extends AbstractEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
 
     @Column(name = "active", nullable = false)
@@ -28,4 +30,7 @@ public class User extends AbstractEntity {
 
     @Column(name = "patronymic")
     private String patronymic;
+
+    @Column(name = "rating")
+    private BigDecimal rating;
 }

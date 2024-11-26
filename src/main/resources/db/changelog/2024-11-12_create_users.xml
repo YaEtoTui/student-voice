@@ -15,7 +15,7 @@
             </column>
 
             <column name="username" type="VARCHAR">
-                <constraints nullable="false"/>
+                <constraints unique="true" nullable="false"/>
             </column>
 
             <column name="active" type="BOOLEAN" defaultValueBoolean="true">
@@ -33,6 +33,11 @@
             <column name="patronymic" type="VARCHAR">
                 <constraints nullable="true"/>
             </column>
+
+            <column name="rating" type="DECIMAL(10, 2)">
+                <constraints nullable="true"/>
+            </column>
+
         </createTable>
     </changeSet>
 

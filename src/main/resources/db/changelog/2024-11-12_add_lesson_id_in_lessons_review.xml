@@ -7,7 +7,7 @@
 
         <addColumn tableName="lessons_review">
             <column name="lesson_id" type="BIGINT">
-                <constraints nullable="false" unique="true"/>
+                <constraints nullable="false"/>
             </column>
         </addColumn>
 

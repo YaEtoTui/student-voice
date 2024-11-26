@@ -14,7 +14,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import ru.urfu.sv.studentvoice.model.domain.dto.CategoryReviews;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.ReviewResponse;
-import ru.urfu.sv.studentvoice.model.domain.dto.response.StudentResponse;
 import ru.urfu.sv.studentvoice.model.domain.dto.review.ReviewDto;
 import ru.urfu.sv.studentvoice.model.domain.entity.*;
 import ru.urfu.sv.studentvoice.model.query.ReviewQuery;
@@ -102,28 +101,5 @@ public class ReviewService {
 
         final List<ReviewResponse> reviewResponseList = reviewMapper.createReviewResponseListFromReviewDtoList(reviewList);
         return new PageImpl<>(reviewResponseList, pageable, count);
-    }
-
-    /**
-     * Ищем отзывы студентов по паре
-     */
-    @PreAuthorize("@RolesAC.isProfessor()")
-    public Page<StudentResponse> findStudentsByLessonId(Long lessonId, Pageable pageable) {
-
-        final QLessonsReview lessonsReview = new QLessonsReview("lessonsReview");
-
-        final JPQLQuery<?> query = reviewQuery.findReviewsByLessonId(lessonId, CategoryReviews.REVIEW_STUDENT);
-        final long count = query.select(lessonsReview.id).fetchCount();
-
-        final JPQLQuery<?> queryPageable = new Querydsl(entityManager, new PathBuilderFactory().create(ReviewDto.class)).applyPagination(pageable, query);
-
-        final List<StudentResponse> reviewList = queryPageable.select(
-                        Projections.bean(StudentResponse.class,
-                                lessonsReview.studentFullName.as("fio")
-                        ))
-                .fetch();
-        /* ToDo не понятно как искать всех и отмечать */
-        reviewList.forEach(review -> review.setVisitedLesson(true));
-        return new PageImpl<>(reviewList, pageable, count);
     }
 }

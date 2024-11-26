@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -50,4 +51,7 @@ public class Lesson extends AbstractEntity {
 
     @Column(name = "created_qr", nullable = false)
     private boolean createdQR;
+
+    @Column(name = "rating")
+    private BigDecimal rating;
 }

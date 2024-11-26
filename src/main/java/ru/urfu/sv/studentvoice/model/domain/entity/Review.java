@@ -20,7 +20,7 @@ public class Review extends AbstractEntity {
     private Long categoryId;
 
     @Column(name = "value", nullable = false)
-    private String value;
+    private Long value;
 
     @Column(name = "create_timestamp", nullable = false)
     private LocalDateTime createTimestamp;

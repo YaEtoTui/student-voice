@@ -12,10 +12,10 @@ public class ReviewResponse {
 
     private String fio;
 
-    private String rating;
+    private Long rating;
 
     @JsonProperty("create_time")
     private LocalDateTime createTime;
 
-    private String review;
+    private String comment;
 }

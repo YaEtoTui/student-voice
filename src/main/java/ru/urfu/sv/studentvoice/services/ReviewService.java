@@ -93,9 +93,9 @@ public class ReviewService {
         final List<ReviewDto> reviewList = queryPageable.select(
                         Projections.bean(ReviewDto.class,
                                 lessonsReview.studentFullName.as("fio"),
-                                review.value.as("value"),
-                                review.createTimestamp.as("createTime"),
-                                comment.value.as("review")
+                                review.value.as("rating"),
+                                lessonsReview.createTimestamp.as("createTime"),
+                                comment.value.as("comment")
                         ))
                 .fetch();
 

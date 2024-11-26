@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class ReviewDto {
 
     private String fio;
-    private String rating;
+    private Long rating;
     private LocalDateTime createTime;
-    private String review;
+    private String comment;
 }

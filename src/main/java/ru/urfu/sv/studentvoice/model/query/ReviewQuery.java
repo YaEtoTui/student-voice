@@ -21,10 +21,9 @@ public class ReviewQuery extends AbstractQuery {
 
         return query()
                 .from(lessonsReview)
-                .join(lesson).on(lessonsReview.lessonId.eq(lesson.id))
-                .join(review).on(review.lessonReviewId.eq(lessonsReview.id))
-                .join(categoryReview).on(review.categoryId.eq(categoryReview.id))
-                .join(comment).on(comment.lessonReviewId.eq(lessonsReview.id))
+                .leftJoin(lesson).on(lessonsReview.lessonId.eq(lesson.id))
+                .leftJoin(review).on(review.lessonReviewId.eq(lessonsReview.id))
+                .leftJoin(comment).on(comment.lessonReviewId.eq(lessonsReview.id))
                 .where(exp);
     }
 }

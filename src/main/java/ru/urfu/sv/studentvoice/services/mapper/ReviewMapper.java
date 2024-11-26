@@ -32,7 +32,7 @@ public class ReviewMapper {
         reviewResponse.setFio(reviewDto.getFio());
         reviewResponse.setRating(reviewDto.getRating());
         reviewResponse.setCreateTime(reviewDto.getCreateTime());
-        reviewResponse.setReview(reviewDto.getReview());
+        reviewResponse.setComment(reviewDto.getComment());
 
         return reviewResponse;
     }

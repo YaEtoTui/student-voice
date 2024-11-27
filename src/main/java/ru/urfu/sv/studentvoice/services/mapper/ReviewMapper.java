@@ -1,39 +1,69 @@
 package ru.urfu.sv.studentvoice.services.mapper;
 
 import org.springframework.stereotype.Component;
+import ru.urfu.sv.studentvoice.model.domain.dto.StatisticRating;
+import ru.urfu.sv.studentvoice.model.domain.dto.StudentRating;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.ReviewResponse;
-import ru.urfu.sv.studentvoice.model.domain.dto.review.ReviewDto;
 
-import java.util.Collection;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
 public class ReviewMapper {
 
-    /**
-     * Переделываем List<ReviewDto> в List<ReviewResponse>
-     *
-     * @param reviewDtoList Список Отзывов
-     */
-    public List<ReviewResponse> createReviewResponseListFromReviewDtoList(Collection<ReviewDto> reviewDtoList) {
-        return reviewDtoList.stream()
-                .map(this::createReviewResponse)
-                .collect(Collectors.toList());
+    public List<ReviewResponse> createReviewResponse(Map<Long, StudentRating> studentRatingMap) {
+
+        final List<ReviewResponse> reviewResponseList = new ArrayList<>();
+
+        for (final Long key : studentRatingMap.keySet()) {
+            final StudentRating studentRating = studentRatingMap.getOrDefault(key, new StudentRating());
+
+            final ReviewResponse reviewResponse = new ReviewResponse();
+            reviewResponse.setLessonReviewId(studentRating.getLessonReviewId());
+            reviewResponse.setFio(studentRating.getFio());
+            reviewResponse.setCreateTime(studentRating.getCreateTime());
+            reviewResponse.setComment(studentRating.getComment());
+
+
+            final List<StatisticRating> statisticRatingList = studentRating.getReviewCategoryList()
+                    .stream()
+                    .filter(val -> Objects.nonNull(val.getRating()) && Objects.nonNull(val.getCategoryName()))
+                    .collect(Collectors.toList());
+
+            reviewResponse.setStatisticRatingList(statisticRatingList);
+            reviewResponse.setRatingResult(calculateRating(studentRating));
+
+            reviewResponseList.add(reviewResponse);
+        }
+
+        return reviewResponseList;
     }
 
-    /**
-     * Переделываем ReviewDto в ReviewResponse
-     *
-     * @param reviewDto Отзыв
-     */
-    public ReviewResponse createReviewResponse(ReviewDto reviewDto) {
-        final ReviewResponse reviewResponse = new ReviewResponse();
-        reviewResponse.setFio(reviewDto.getFio());
-        reviewResponse.setRating(reviewDto.getRating());
-        reviewResponse.setCreateTime(reviewDto.getCreateTime());
-        reviewResponse.setComment(reviewDto.getComment());
+    private BigDecimal calculateRating(StudentRating studentRating) {
 
-        return reviewResponse;
+        final List<StatisticRating> reviewCategoryList = studentRating.getReviewCategoryList();
+
+        if (reviewCategoryList == null || reviewCategoryList.isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+
+        final List<StatisticRating> nonNullRatings = reviewCategoryList.stream()
+                .filter(Objects::nonNull)
+                .filter(rating -> rating.getRating() != null)
+                .collect(Collectors.toList());
+
+        if (nonNullRatings.isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+
+        final long sum = nonNullRatings.stream()
+                .mapToLong(StatisticRating::getRating)
+                .sum();
+
+        return BigDecimal.valueOf(sum).divide(BigDecimal.valueOf(nonNullRatings.size()));
     }
 }

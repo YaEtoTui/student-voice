@@ -1,18 +1,18 @@
-package ru.urfu.sv.studentvoice.model.domain.dto.review;
+package ru.urfu.sv.studentvoice.model.domain.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
-public class ReviewDto {
+public class StudentRating {
 
     private Long lessonReviewId;
     private String fio;
-    private Long rating;
     private LocalDateTime createTime;
     private String comment;
-    private String categoryName;
+    private List<StatisticRating> reviewCategoryList;
 }

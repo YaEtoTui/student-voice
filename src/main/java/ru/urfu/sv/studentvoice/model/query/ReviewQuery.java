@@ -11,8 +11,8 @@ public class ReviewQuery extends AbstractQuery {
     private final static QReview review = new QReview("review");
     private final static QLessonsReview lessonsReview = new QLessonsReview("lessonsReview");
     private final static QLesson lesson = new QLesson("lesson");
-    private final static QCategoryReview categoryReview = new QCategoryReview("categoryReview");
     private final static QComment comment = new QComment("comment");
+    private final static QCategoryReview categoryReview = new QCategoryReview("categoryReview");
 
 
     public JPQLQuery<?> findReviewsByLessonId(Long lessonId) {
@@ -24,6 +24,7 @@ public class ReviewQuery extends AbstractQuery {
                 .leftJoin(lesson).on(lessonsReview.lessonId.eq(lesson.id))
                 .leftJoin(review).on(review.lessonReviewId.eq(lessonsReview.id))
                 .leftJoin(comment).on(comment.lessonReviewId.eq(lessonsReview.id))
+                .leftJoin(categoryReview).on(review.categoryId.eq(categoryReview.id))
                 .where(exp);
     }
 }

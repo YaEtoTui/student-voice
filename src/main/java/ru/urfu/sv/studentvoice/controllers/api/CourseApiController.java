@@ -41,6 +41,15 @@ public class CourseApiController {
         return new ResponseEntity<>(courseService.findCourseList(searchText, pageable), HttpStatus.OK);
     }
 
+    /**
+     * Подробнее отдаем информацию по предмету
+     */
+    @Operation(summary = "Подробнее отдаем информацию по предмету")
+    @RequestMapping(path = "{courseId}", method = RequestMethod.GET)
+    public ResponseEntity<CourseResponse> findCourseDetailsById(@PathVariable Long courseId) {
+        return new ResponseEntity<>(courseService.findCourseDetailsById(courseId), HttpStatus.OK);
+    }
+
 //    @GetMapping("find")
 //    @Parameters(value = {
 //            @Parameter(name = "courseId", in = ParameterIn.QUERY, required = true)

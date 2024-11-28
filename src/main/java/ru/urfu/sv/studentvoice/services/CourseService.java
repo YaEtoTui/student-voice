@@ -89,6 +89,11 @@ public class CourseService {
         }
     }
 
+    @PreAuthorize("@RolesAC.isProfessor()")
+    public CourseResponse findCourseDetailsById(Long courseId) {
+        return courseQuery.findCourseDetailsById(courseId);
+    }
+
 //    @Transactional
 //    public void createCoursesByClassSessions(List<ClassSession> sessions) {
 //        for (ClassSession session : sessions) {

@@ -26,6 +26,9 @@ public class Course extends AbstractEntity {
     @Column(name = "rating")
     private BigDecimal rating;
 
+    @Column(name = "address")
+    private String address;
+
     @PrePersist
     protected void onCreate() {
         createTimestamp = LocalDateTime.now();

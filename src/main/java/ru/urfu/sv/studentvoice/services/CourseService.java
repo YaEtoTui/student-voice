@@ -50,7 +50,10 @@ public class CourseService {
 
         final Course course = new Course();
         course.setName(courseInfo.getCourseName());
+        course.setAddress(courseInfo.getAddress());
         course.setInstituteId(courseInfo.getInstituteId());
+
+        /* Тут проверить постоянную ссылку */
 
         final Course courseResponse = courseRepository.save(course);
         courseQuery.insertUserCourse(courseInfo.getProfessorId(), courseResponse.getId());

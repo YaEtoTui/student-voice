@@ -24,7 +24,7 @@ public class CourseApiController {
     @Autowired
     private CourseService courseService;
 
-    @Operation(summary = "Создание курса")
+    @Operation(summary = "Создание предмета")
     @RequestMapping(path = "/create", method = RequestMethod.POST)
     public ResponseEntity<Void> createCourse(@RequestBody CourseInfo courseInfo) {
         courseService.createCourse(courseInfo);

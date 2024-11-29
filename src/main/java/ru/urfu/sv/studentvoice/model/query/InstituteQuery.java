@@ -37,4 +37,12 @@ public class InstituteQuery extends AbstractQuery {
 
         return !institutes.isEmpty();
     }
+
+    public List<String> findAllAddress() {
+        return query()
+                .from(institute)
+                .select(institute.address)
+                .distinct()
+                .fetch();
+    }
 }

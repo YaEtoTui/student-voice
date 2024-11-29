@@ -57,9 +57,14 @@ public class InstituteService {
         return instituteMapper.createInstituteDtoListFromInstituteList(instituteList);
     }
 
-    @PreAuthorize("@RolesAC.isProfessor()")
+    @PreAuthorize("@RolesAC.isAdminOrProfessor()")
     public List<InstituteResponse> findAllInstituteResponse() {
         final List<InstituteDto> instituteDtoList = findAllInstitutes();
         return instituteMapper.createInstituteResponseListFromInstituteDtoList(instituteDtoList);
+    }
+
+    @PreAuthorize("@RolesAC.isAdminOrProfessor()")
+    public List<String> findAllAddress() {
+        return instituteQuery.findAllAddress();
     }
 }

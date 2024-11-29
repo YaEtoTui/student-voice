@@ -7,6 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.urfu.sv.studentvoice.model.domain.dto.response.ProfessorResponse;
+import ru.urfu.sv.studentvoice.model.domain.dto.user.Professor;
 import ru.urfu.sv.studentvoice.model.domain.dto.user.Roles;
 import ru.urfu.sv.studentvoice.model.domain.dto.user.UserDto;
 import ru.urfu.sv.studentvoice.model.domain.dto.user.UserInfoDto;
@@ -14,6 +16,9 @@ import ru.urfu.sv.studentvoice.model.domain.dto.response.UserInfoResponse;
 import ru.urfu.sv.studentvoice.model.domain.entity.User;
 import ru.urfu.sv.studentvoice.model.query.UserQuery;
 import ru.urfu.sv.studentvoice.model.repository.UserRepository;
+import ru.urfu.sv.studentvoice.services.mapper.ProfessorMapper;
+
+import java.util.List;
 
 @Service
 @Slf4j
@@ -27,6 +32,8 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private UserQuery userQuery;
+    @Autowired
+    private ProfessorMapper professorMapper;
 
     /**
      * Создаем нового пользователя
@@ -102,5 +109,11 @@ public class UserService {
         final String fio = String.format("%s %s %s", userDto.getSurname(), userDto.getName(), userDto.getPatronymic());
         userInfoResponse.setFio(fio);
         return userInfoResponse;
+    }
+
+    @PreAuthorize("@RolesAC.isAdminOrProfessor()")
+    public List<ProfessorResponse> findProfessorList() {
+        final List<Professor> professorList = userQuery.findProfessorList();
+        return professorMapper.createListProfessorResponse(professorList);
     }
 }

@@ -5,6 +5,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPQLQuery;
 import org.springframework.stereotype.Repository;
+import ru.urfu.sv.studentvoice.model.domain.dto.user.Professor;
 import ru.urfu.sv.studentvoice.model.domain.dto.user.Roles;
 import ru.urfu.sv.studentvoice.model.domain.dto.user.UserDto;
 import ru.urfu.sv.studentvoice.model.domain.dto.user.UsernameAndRole;
@@ -14,6 +15,7 @@ import ru.urfu.sv.studentvoice.model.domain.entity.QUserRole;
 import ru.urfu.sv.studentvoice.model.domain.entity.User;
 
 import java.util.Collection;
+import java.util.List;
 
 @Repository
 public class UserQuery extends AbstractQuery {
@@ -119,5 +121,24 @@ public class UserQuery extends AbstractQuery {
                 .columns(userRole.userId, userRole.roleId)
                 .select(query)
                 .execute();
+    }
+
+    public List<Professor> findProfessorList() {
+
+        final BooleanExpression exp = user.active.isTrue()
+                .and(role.name.eq(Roles.ROLE_PROFESSOR.getName()));
+
+        return query()
+                .from(user)
+                .join(userRole).on(userRole.userId.eq(user.id))
+                .join(role).on(userRole.roleId.eq(role.id))
+                .where(exp)
+                .select(Projections.bean(Professor.class,
+                        user.id.as("professorId"),
+                        user.name.as("professorName"),
+                        user.surname.as("professorSurname"),
+                        user.patronymic.as("professorPatronymic")
+                ))
+                .fetch();
     }
 }

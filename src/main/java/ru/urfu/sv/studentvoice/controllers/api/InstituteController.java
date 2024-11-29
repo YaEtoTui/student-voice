@@ -39,4 +39,10 @@ public class InstituteController {
         final List<InstituteResponse> institutes = instituteService.findAllInstituteResponse();
         return new ResponseEntity<>(institutes, HttpStatus.OK);
     }
+
+    @Operation(summary = "Вывод адресов институтов")
+    @RequestMapping(path = "/address/list", method = RequestMethod.GET)
+    public ResponseEntity<List<String>> getAddressList() {
+        return new ResponseEntity<>(instituteService.findAllAddress(), HttpStatus.OK);
+    }
 }

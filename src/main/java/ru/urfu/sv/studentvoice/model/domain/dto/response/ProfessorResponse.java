@@ -6,11 +6,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class InstituteResponse {
+public class ProfessorResponse {
 
-    @JsonProperty("institute_id")
-    private Long instituteId;
+    @JsonProperty("professor_id")
+    private Long professorId;
 
-    @JsonProperty("institute_full_name")
-    private String instituteFullName;
+    @JsonProperty("professor_fio")
+    private String professorFio;
 }

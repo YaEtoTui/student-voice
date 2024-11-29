@@ -9,6 +9,8 @@ public class InstitutesAccessChecker {
 
     @Autowired
     private InstituteQuery instituteQuery;
+    @Autowired
+    private RolesAccessChecker rolesAccessChecker;
 
     public boolean isExistInstitute(String fullNameInstitute) {
         return instituteQuery.isExistInstitute(fullNameInstitute);
@@ -18,6 +20,11 @@ public class InstitutesAccessChecker {
      * Можно ли создавать нового пользователя с таким username
      */
     public boolean isCreateNewInstitute(String fullNameInstitute) {
+
+        if (!rolesAccessChecker.isAdmin()) {
+            return false;
+        }
+
         return !isExistInstitute(fullNameInstitute);
     }
 }

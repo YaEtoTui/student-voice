@@ -72,7 +72,10 @@ public class LessonQuery extends AbstractQuery {
                 .fetchFirst();
     }
 
-    public List<LessonDetailsDto> findScheduleShort(String professorName) {
+    /**
+     * Ищем расписание по name преподавателю
+     */
+    public List<LessonDetailsDto> findSchedule(String professorName) {
 
         final BooleanExpression exp = user.username.eq(professorName);
 

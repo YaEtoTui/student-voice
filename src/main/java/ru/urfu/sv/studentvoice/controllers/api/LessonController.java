@@ -70,6 +70,12 @@ public class LessonController {
         return new ResponseEntity<>(scheduleService.findScheduleShort(), HttpStatus.OK);
     }
 
+    @Operation(summary = "Ищем расписание на текущую неделю")
+    @RequestMapping(path = "/schedule", method = RequestMethod.GET)
+    public ResponseEntity<List<ScheduleByDay>> findSchedule() {
+        return new ResponseEntity<>(scheduleService.findSchedule(), HttpStatus.OK);
+    }
+
 //    @PostMapping("create")
 //    @Parameters(value = {
 //            @Parameter(name = "courseId", in = ParameterIn.QUERY, required = true),

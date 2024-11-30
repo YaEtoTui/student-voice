@@ -96,6 +96,10 @@ public class CourseQuery extends AbstractQuery {
         /*Todo доделать */
         query()
                 .update(course)
+//                .set(course.name, courseRedaction.getCourseName())
+//                .set(course.address, courseRedaction.getAddress())
+//                .set(course.instituteId, courseRedaction.getInstituteId())
+//                .set(course., courseRedaction.getInstituteId())
                 .where(exp)
                 .execute();
     }

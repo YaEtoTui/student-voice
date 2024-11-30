@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ActionResultFactory {
+
     public static ActionResult emptySuccess() {
         return new ActionResult(true, "");
     }
@@ -108,5 +109,4 @@ public class ActionResultFactory {
     public static ActionResult instituteCreatingError() {
         return new ActionResult(false, "Во время создания института произошла ошибка");
     }
-
 }

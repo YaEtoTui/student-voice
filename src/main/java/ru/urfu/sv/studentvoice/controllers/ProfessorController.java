@@ -6,14 +6,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import ru.urfu.sv.studentvoice.services.LessonService;
 import ru.urfu.sv.studentvoice.services.CourseService;
-import ru.urfu.sv.studentvoice.services.user.ProfessorService;
 
 @Controller
 @RequiredArgsConstructor
 @Slf4j
 @PreAuthorize("@RolesAC.isProfessor()")
 public class ProfessorController {
-    private final ProfessorService professorService;
+
     private final CourseService courseService;
     private final LessonService sessionService;
 

@@ -10,7 +10,6 @@ import ru.urfu.sv.studentvoice.controllers.links.Links;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.ProfessorResponse;
 import ru.urfu.sv.studentvoice.services.LessonService;
 import ru.urfu.sv.studentvoice.services.CourseService;
-import ru.urfu.sv.studentvoice.services.user.ProfessorService;
 import ru.urfu.sv.studentvoice.services.user.UserService;
 
 import java.util.List;
@@ -23,8 +22,6 @@ import java.util.List;
 @RequestMapping(Links.BASE_API + Links.PROFESSORS)
 public class ProfessorApiController {
 
-    @Autowired
-    private ProfessorService professorService;
     @Autowired
     private CourseService courseService;
     @Autowired

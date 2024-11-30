@@ -10,6 +10,7 @@ import ru.urfu.sv.studentvoice.model.domain.entity.QLesson;
 import ru.urfu.sv.studentvoice.model.domain.entity.QUser;
 import ru.urfu.sv.studentvoice.model.domain.entity.QUserCourse;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -94,5 +95,18 @@ public class LessonQuery extends AbstractQuery {
                                 lesson.endDateTime.as("dateEnd"))
                 )
                 .fetch();
+    }
+
+    public void createDisableTimestamp(Long lessonId, LocalDateTime disableDate) {
+
+        final BooleanExpression exp = lesson.id.eq(lessonId);
+
+        query()
+                .update(lesson)
+                .set(lesson.disableTimestamp, disableDate)
+                .set(lesson.createdQR, true)
+                .set(lesson.createTimestamp, lesson.startDateTime)
+                .where(exp)
+                .execute();
     }
 }

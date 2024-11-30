@@ -19,6 +19,7 @@ import ru.urfu.sv.studentvoice.services.LessonService;
 import ru.urfu.sv.studentvoice.services.ScheduleService;
 import ru.urfu.sv.studentvoice.services.user.ProfessorService;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -76,23 +77,11 @@ public class LessonController {
         return new ResponseEntity<>(scheduleService.findSchedule(), HttpStatus.OK);
     }
 
-//    @PostMapping("create")
-//    @Parameters(value = {
-//            @Parameter(name = "courseId", in = ParameterIn.QUERY, required = true),
-//            @Parameter(name = "professorName", in = ParameterIn.QUERY, required = true),
-//            @Parameter(name = "startSession", in = ParameterIn.QUERY, required = true),
-//            @Parameter(name = "endSession", in = ParameterIn.QUERY, required = true),
-//            @Parameter(name = "roomName", in = ParameterIn.QUERY, required = true),
-//            @Parameter(name = "sessionName", in = ParameterIn.QUERY, required = true)
-//    })
-//    @PreAuthorize("@RolesAC.isAdminOrProfessor()")
-//    public ResponseEntity<Map<String, Object>> createSession(HttpServletRequest request) {
-//        ExtendedModelMap model = new ExtendedModelMap();
-//        sessionController.createSession(null, request, model);
-//
-//        ActionResultResponse result = fromActionResult(model.getAttribute(RESULT));
-//        return ResponseEntity.ok().body(Map.of(RESULT, result));
-//    }
+    @Operation(summary = "Получение QR кода на пару")
+    @RequestMapping(path = "/qr-code/{lessonId}", method = RequestMethod.GET)
+    public ResponseEntity<String> getQrCode(@PathVariable Long lessonId) {
+        return new ResponseEntity<>(lessonService.getQrCode(lessonId), HttpStatus.OK);
+    }
 
 //    @GetMapping("find")
 //    @Parameters(value = {
@@ -129,29 +118,14 @@ public class LessonController {
 //        );
 //    }
 
-//    @PostMapping("start-timer")
-//    @Parameters(value = {
-//            @Parameter(name = "sessionId", in = ParameterIn.QUERY, required = true),
-//            @Parameter(name = "time", in = ParameterIn.QUERY, required = true)
-//    })
-//    @PreAuthorize("@RolesAC.isAdminOrProfessor()")
-//    public ResponseEntity<Map<String, Object>> startTimer(HttpServletRequest request) {
-//        UUID sessionId = UUID.fromString(request.getParameter(CLASS_SESSION_ID));
-//        Optional<ClassSession> sessionOpt = sessionService.findSessionById(sessionId);
-//        if (sessionOpt.isEmpty()) {
-//            return ResponseEntity.ok().body(
-//                    Map.of(RESULT, fromActionResult(ActionResultFactory.sessionNotExist())));
-//        }
-//
-//        ClassSession session = sessionOpt.get();
-//
-//        LocalTime time = LocalTime.parse(request.getParameter("time"));
-//        sessionService.setDisableTimestamp(session, time);
-//
-//        return ResponseEntity.ok().body(
-//                Map.of(RESULT, new ActionResultResponse(true,
-//                        "Таймер успешно запущен. Ссылка перестанет работать %s".formatted(TemporalFormatter.formatToDateTime(time)))));
-//    }
+    @Operation(summary = "Создаем таймер Qr-кода во время пары")
+    @RequestMapping(path = "start-timer/{lessonId}", method = RequestMethod.POST)
+    public ResponseEntity<Void> createStartTimer(@PathVariable Long lessonId,
+                                           @RequestParam(name = "duration") LocalTime duration) {
+
+        lessonService.createDisableTimestamp(lessonId, duration);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 
 //    @GetMapping("reviews-list")
 //    @Parameters(value = {

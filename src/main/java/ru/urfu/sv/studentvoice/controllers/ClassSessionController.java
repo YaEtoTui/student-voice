@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
 import ru.urfu.sv.studentvoice.services.*;
 import ru.urfu.sv.studentvoice.services.user.ProfessorService;
 
@@ -15,6 +15,7 @@ import ru.urfu.sv.studentvoice.services.user.ProfessorService;
 @RequestMapping("/sessions")
 @PreAuthorize("@RolesAC.isAdminOrProfessor()")
 public class ClassSessionController {
+
     private final LessonService sessionService;
     private final ReviewService reviewService;
     private final CourseService courseService;
@@ -43,69 +44,6 @@ public class ClassSessionController {
 //        }
 //
 //        return CREATE_SESSION;
-//    }
-
-//    @PostMapping("/create")
-//    public String createSession(@AuthenticationPrincipal UserDetails userDetails, HttpServletRequest request, Model model) {
-//        UUID courseId = UUID.fromString(request.getParameter(COURSE_ID));
-//        String professorName = request.getParameter(PROFESSOR_NAME);
-//        LocalDateTime startSessionDate = LocalDateTime.parse(request.getParameter("startSession"));
-//        LocalDateTime endSessionDate = LocalDateTime.parse(request.getParameter("endSession"));
-//        String roomName = request.getParameter("roomName");
-//        String sessionName = request.getParameter("sessionName");
-//
-//        ActionResult result = sessionService.createClassSession(courseId, sessionName, roomName, professorName,
-//                startSessionDate, endSessionDate);
-//
-//        model.addAttribute(INSTITUTES_LIST, instituteService.findAllInstitutes());
-//        model.addAttribute(COURSES_LIST, courseService.findAll());
-//        model.addAttribute(RESULT, result);
-//        addProfessorName(professorService, model, userDetails);
-//        return CREATE_SESSION;
-//    }
-
-//    @GetMapping("/{sessionId}")
-//    public String sessionPage(@PathVariable("sessionId") String sessionIdStr, Model model) {
-//        UUID sessionId = UUID.fromString(sessionIdStr);
-//        Optional<ClassSession> sessionOpt = sessionService.findSessionById(sessionId);
-//
-//        if (sessionOpt.isEmpty()) {
-//            model.addAttribute(RESULT, ActionResultFactory.sessionNotExist());
-//            return SESSION_PAGE;
-//        }
-//
-//        ClassSession session = sessionOpt.get();
-//
-//        if (session.getDisableAfterTimestamp() != null) {
-//            if (Instant.now().isAfter(session.getDisableAfterTimestamp())) {
-//                model.addAttribute(RESULT, new ActionResult(false, "Время действия кода для отзыва вышло"));
-//            } else {
-//                //Костыль для зоны UTC+5
-//                OffsetDateTime disableTime = session.getDisableAfterTimestamp().atOffset(ZoneOffset.ofHours(5));
-//                model.addAttribute(RESULT, new ActionResult(true, "Таймер успешно запущен. Ссылка перестанет работать %s",
-//                        TemporalFormatter.formatToDateTime(disableTime)));
-//            }
-//        }
-//
-//        fillSessionModel(model, session);
-//        return SESSION_PAGE;
-//    }
-//
-//    @PostMapping("/start-timer")
-//    public String startTimer(HttpServletRequest request, Model model) {
-//        UUID sessionId = UUID.fromString(request.getParameter("sessionId"));
-//        Optional<ClassSession> sessionOpt = sessionService.findSessionById(sessionId);
-//        if (sessionOpt.isEmpty()) {
-//            model.addAttribute(RESULT, ActionResultFactory.sessionNotExist());
-//            return SESSION_PAGE;
-//        }
-//
-//        ClassSession session = sessionOpt.get();
-//
-//        LocalTime time = LocalTime.parse(request.getParameter("time"));
-//        sessionService.setDisableTimestamp(session, time);
-//
-//        return REDIRECT.concat("/sessions/").concat(sessionId.toString());
 //    }
 
 //    @GetMapping("/{sessionId}/students")
@@ -149,14 +87,5 @@ public class ClassSessionController {
 //        ActionResult result = sessionService.updateSessionProfessor(sessionId, newProfessor);
 //        model.addAttribute(RESULT, result);
 //        return REDIRECT.concat("/professor-home");
-//    }
-//
-//    private void fillSessionModel(Model model, ClassSession session) {
-//        String reviewUrl = "%s/reviews/create?sessionId=%s".formatted(applicationHost, session.getSessionId());
-//        String qrCode = qrCodeService.getEncodedCode(reviewUrl, 256, 256);
-//        model.addAttribute(SESSION_QR, qrCode);
-//        model.addAttribute(CLASS_SESSION, session);
-//        model.addAttribute(CLASS_SESSION_DATE, TemporalFormatter.formatToSessionDateTime(session));
-//        model.addAttribute(REVIEW_URL, reviewUrl);
 //    }
 }

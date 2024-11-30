@@ -37,21 +37,6 @@ public class InstituteService {
         instituteRepository.save(institute);
     }
 
-//    @Transactional
-//    public void createInstitutesByClassSessions(List<ClassSession> sessions) {
-//        for (ClassSession session : sessions) {
-//            String address = session.getCourseDetails().getInstituteAddress();
-//            if (!repository.existsByAddress(address)) {
-//                ActionResult result = createInstitute("Не указано", "Не указано", address);
-//                if (!result.isSuccess()) {
-//                    log.error("Институт {} не создался - {}", session.getCourseDetails().getCourseName(), result.getFormattedMessage());
-//                } else {
-//                    log.info("Создался новый институт - {}", address);
-//                }
-//            }
-//        }
-//    }
-
     @Transactional
     public List<InstituteDto> findAllInstitutes() {
         final List<Institute> instituteList = instituteQuery.findAllInstituteList();

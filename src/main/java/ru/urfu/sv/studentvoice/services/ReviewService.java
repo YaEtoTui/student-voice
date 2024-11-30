@@ -16,9 +16,11 @@ import ru.urfu.sv.studentvoice.model.domain.dto.StatisticRating;
 import ru.urfu.sv.studentvoice.model.domain.dto.StudentRating;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.ReviewResponse;
 import ru.urfu.sv.studentvoice.model.domain.dto.review.ReviewDto;
-import ru.urfu.sv.studentvoice.model.domain.entity.*;
+import ru.urfu.sv.studentvoice.model.domain.entity.QCategoryReview;
+import ru.urfu.sv.studentvoice.model.domain.entity.QComment;
+import ru.urfu.sv.studentvoice.model.domain.entity.QLessonsReview;
+import ru.urfu.sv.studentvoice.model.domain.entity.QReview;
 import ru.urfu.sv.studentvoice.model.query.ReviewQuery;
-import ru.urfu.sv.studentvoice.model.repository.ReviewRepository;
 import ru.urfu.sv.studentvoice.services.mapper.ReviewMapper;
 
 import java.util.List;
@@ -29,12 +31,6 @@ import java.util.stream.Collectors;
 @Service
 public class ReviewService {
 
-    @Autowired
-    private LessonService sessionService;
-    @Autowired
-    private ReportService reportService;
-    @Autowired
-    private ReviewRepository repository;
     @Autowired
     private ReviewQuery reviewQuery;
     @Autowired
@@ -72,10 +68,6 @@ public class ReviewService {
 //        }
 //
 //        return reviews.isEmpty() ? 0f : (float) sum / reviews.size();
-//    }
-
-//    public List<Review> findReviewsBySessionId(UUID sessionId) {
-//        return repository.findAllBySessionId(sessionId);
 //    }
 
     /**

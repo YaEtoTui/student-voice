@@ -1,6 +1,7 @@
 package ru.urfu.sv.studentvoice.utils.formatters;
 
 import com.opencsv.ICSVWriter;
+import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
@@ -17,14 +18,14 @@ import java.util.List;
 public class CsvFormatter {
 
     public static <T> String toCsv(List<T> objects, String firstLine) {
-        try (StringWriter writer = new StringWriter()) {
+        try (final StringWriter writer = new StringWriter()) {
             writer.write(firstLine);
-            var csvWriter =
-                    new StatefulBeanToCsvBuilder<T>(writer)
-                            .withSeparator(';')
-                            .withQuotechar(ICSVWriter.NO_QUOTE_CHARACTER)
-                            .build();
+            final StatefulBeanToCsv<T> csvWriter = new StatefulBeanToCsvBuilder<T>(writer)
+                    .withSeparator(';')
+                    .withQuotechar(ICSVWriter.NO_QUOTE_CHARACTER)
+                    .build();
             csvWriter.write(objects);
+
             return writer.toString();
         } catch (IOException | CsvRequiredFieldEmptyException | CsvDataTypeMismatchException e) {
             log.error("Во время форматирования произошла ошибка", e);

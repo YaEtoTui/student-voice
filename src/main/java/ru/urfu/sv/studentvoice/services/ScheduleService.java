@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.urfu.sv.studentvoice.model.domain.dto.ScheduleByDay;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonDetailsDto;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonDetailsResponse;
@@ -34,6 +35,7 @@ public class ScheduleService {
     private LessonQuery lessonQuery;
 
     @PreAuthorize("@RolesAC.isProfessor()")
+    @Transactional
     public List<ScheduleByDay> findScheduleShort() {
         final String username = jwtUserDetailsService.findUsername();
         final User professor = userQuery.findProfessorByUsername(username);
@@ -91,6 +93,7 @@ public class ScheduleService {
     }
 
     @PreAuthorize("@RolesAC.isProfessor()")
+    @Transactional
     public List<ScheduleByDay> findSchedule() {
 
         final String professorName = jwtUserDetailsService.findUsername();

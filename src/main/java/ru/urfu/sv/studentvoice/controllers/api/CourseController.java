@@ -19,7 +19,7 @@ import ru.urfu.sv.studentvoice.services.CourseService;
 @SecurityRequirement(name = "Bearer Authentication")
 @RequestMapping(Links.BASE_API + Links.COURSES)
 @PreAuthorize("@RolesAC.isAdminOrProfessor()")
-public class CourseApiController {
+public class CourseController {
 
     @Autowired
     private CourseService courseService;
@@ -49,20 +49,4 @@ public class CourseApiController {
     public ResponseEntity<CourseResponse> findCourseDetailsById(@PathVariable Long courseId) {
         return new ResponseEntity<>(courseService.findCourseDetailsById(courseId), HttpStatus.OK);
     }
-
-//    @GetMapping("find")
-//    @Parameters(value = {
-//            @Parameter(name = "courseId", in = ParameterIn.QUERY, required = true)
-//    })
-//    public ResponseEntity<Map<String, Object>> findCourse(HttpServletRequest request) {
-//        ExtendedModelMap model = new ExtendedModelMap();
-//        courseController.coursePage(UUID.fromString(request.getParameter(COURSE_ID)), model);
-//        ActionResultResponse result = fromActionResult(model.getAttribute(RESULT));
-//
-//        return ResponseEntity.ok().body(
-//                Map.ofEntries(Map.entry(RESULT, result),
-//                        Map.entry(CLASS_SESSIONS_LIST, orNull(model.getAttribute(CLASS_SESSIONS_LIST))),
-//                        Map.entry(COURSE_DETAILS, orNull(model.getAttribute(COURSE_DETAILS)))
-//                ));
-//    }
 }

@@ -52,6 +52,7 @@ public class InstituteService {
 //        }
 //    }
 
+    @Transactional
     public List<InstituteDto> findAllInstitutes() {
         final List<Institute> instituteList = instituteQuery.findAllInstituteList();
         return instituteMapper.createInstituteDtoListFromInstituteList(instituteList);
@@ -64,6 +65,7 @@ public class InstituteService {
     }
 
     @PreAuthorize("@RolesAC.isAdminOrProfessor()")
+    @Transactional
     public List<String> findAllAddress() {
         return instituteQuery.findAllAddress();
     }

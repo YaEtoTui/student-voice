@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.urfu.sv.studentvoice.controllers.links.Links;
 import ru.urfu.sv.studentvoice.model.domain.dto.course.CourseInfo;
+import ru.urfu.sv.studentvoice.model.domain.dto.course.CourseRedaction;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.CourseResponse;
 import ru.urfu.sv.studentvoice.services.CourseService;
 
@@ -33,7 +34,7 @@ public class CourseApiController {
 
     @Operation(summary = "Редактирование предмета")
     @RequestMapping(path = "/update/{courseId}", method = RequestMethod.PUT)
-    public ResponseEntity<Void> updateCourse(@PathVariable Long courseId, @RequestBody CourseInfo courseInfo) {
+    public ResponseEntity<Void> updateCourse(@PathVariable Long courseId, @RequestBody CourseRedaction courseInfo) {
         courseService.updateCourse(courseId, courseInfo);
         return new ResponseEntity<>(HttpStatus.OK);
     }

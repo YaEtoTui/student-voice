@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.urfu.sv.studentvoice.model.domain.dto.course.CourseDto;
 import ru.urfu.sv.studentvoice.model.domain.dto.course.CourseInfo;
+import ru.urfu.sv.studentvoice.model.domain.dto.course.CourseRedaction;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonWithCourse;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.CourseResponse;
 import ru.urfu.sv.studentvoice.model.domain.entity.*;
@@ -150,5 +151,10 @@ public class CourseService {
 
     public List<Course> findAll() {
         return courseRepository.findAll();
+    }
+
+    @PreAuthorize("@RolesAC.isAdminOrProfessor()")
+    public void updateCourse(Long courseId, CourseRedaction courseInfo) {
+        courseQuery.updateCourse(courseId, courseInfo);
     }
 }

@@ -5,6 +5,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 import org.springframework.stereotype.Repository;
 import ru.urfu.sv.studentvoice.model.domain.dto.course.CourseInfo;
+import ru.urfu.sv.studentvoice.model.domain.dto.course.CourseRedaction;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.CourseResponse;
 import ru.urfu.sv.studentvoice.model.domain.entity.*;
 
@@ -87,5 +88,15 @@ public class CourseQuery extends AbstractQuery {
                         course.address.as("address")
                 ))
                 .fetchFirst();
+    }
+
+    public void updateCourse(Long courseId, CourseRedaction courseRedaction) {
+
+        final BooleanExpression exp = course.id.eq(courseId);
+        /*Todo доделать */
+        query()
+                .update(course)
+                .where(exp)
+                .execute();
     }
 }

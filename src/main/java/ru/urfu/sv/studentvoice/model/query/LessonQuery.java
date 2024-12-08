@@ -4,11 +4,9 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 import org.springframework.stereotype.Repository;
+import ru.urfu.sv.studentvoice.model.domain.dto.LessonAndCourseInfo;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonDetailsDto;
-import ru.urfu.sv.studentvoice.model.domain.entity.QCourse;
-import ru.urfu.sv.studentvoice.model.domain.entity.QLesson;
-import ru.urfu.sv.studentvoice.model.domain.entity.QUser;
-import ru.urfu.sv.studentvoice.model.domain.entity.QUserCourse;
+import ru.urfu.sv.studentvoice.model.domain.entity.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,6 +19,7 @@ public class LessonQuery extends AbstractQuery {
     private final static QCourse course = new QCourse("course");
     private final static QUserCourse userCourse = new QUserCourse("userCourse");
     private final static QUser user = new QUser("user");
+    private final static QInstitute institute = new QInstitute("institute");
 
     /**
      * Ищем список пар для преподавателя
@@ -119,5 +118,41 @@ public class LessonQuery extends AbstractQuery {
                 .where(exp)
                 .select(lesson.startDateTime)
                 .fetchFirst();
+    }
+
+    public List<LessonAndCourseInfo> findAllLessonInfoByProfessorId(Long professorId) {
+
+        final BooleanExpression exp = user.id.eq(professorId);
+
+        return query()
+                .from(lesson)
+                .join(course).on(lesson.courseId.eq(course.id))
+                .join(userCourse).on(userCourse.courseId.eq(course.id))
+                .join(user).on(userCourse.userId.eq(user.id))
+                .join(institute).on(lesson.instituteId.eq(institute.id))
+                .where(exp)
+                .select(
+                        Projections.bean(LessonAndCourseInfo.class,
+                                lesson.name.as("lessonName"),
+                                course.name.as("courseName"),
+                                institute.fullName.as("instituteName"),
+                                lesson.startDateTime.as("dateStart"),
+                                lesson.endDateTime.as("dateEnd"))
+                )
+                .fetch();
+    }
+
+    public List<Lesson> findAllLessonByProfessorId(Long professorId) {
+
+        final BooleanExpression exp = user.id.eq(professorId);
+
+        return query()
+                .selectFrom(lesson)
+                .join(course).on(lesson.courseId.eq(course.id))
+                .join(userCourse).on(userCourse.courseId.eq(course.id))
+                .join(user).on(userCourse.userId.eq(user.id))
+                .join(institute).on(lesson.instituteId.eq(institute.id))
+                .where(exp)
+                .fetch();
     }
 }

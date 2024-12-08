@@ -40,6 +40,23 @@ public class CourseQuery extends AbstractQuery {
         return !courses.isEmpty();
     }
 
+    public boolean isExistCourseByProfId(Long professorId, String courseName) {
+
+        /* Тут у преподавателя смотрим */
+        final BooleanExpression exp = course.name.eq(courseName)
+                .and(user.id.eq(professorId));
+
+        final Collection<Course> courses = query()
+                .from(course)
+                .join(userCourse).on(userCourse.courseId.eq(course.id))
+                .join(user).on(userCourse.userId.eq(user.id))
+                .where(exp)
+                .select(course)
+                .fetch();
+
+        return !courses.isEmpty();
+    }
+
     /**
      * Создаем связь между преподавателем и курсом
      *

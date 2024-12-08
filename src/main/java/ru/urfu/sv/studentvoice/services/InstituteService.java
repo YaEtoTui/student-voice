@@ -7,12 +7,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.urfu.sv.studentvoice.model.domain.dto.institute.InstituteDto;
 import ru.urfu.sv.studentvoice.model.domain.dto.institute.InstituteInfo;
+import ru.urfu.sv.studentvoice.model.domain.dto.json.JLesson;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.InstituteResponse;
 import ru.urfu.sv.studentvoice.model.domain.entity.Institute;
 import ru.urfu.sv.studentvoice.model.query.InstituteQuery;
 import ru.urfu.sv.studentvoice.model.repository.InstituteRepository;
 import ru.urfu.sv.studentvoice.services.mapper.InstituteMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -49,9 +51,27 @@ public class InstituteService {
         return instituteMapper.createInstituteResponseListFromInstituteDtoList(instituteDtoList);
     }
 
-    @PreAuthorize("@RolesAC.isAdminOrProfessor()")
     @Transactional
     public List<String> findAllAddress() {
         return instituteQuery.findAllAddress();
+    }
+
+    @Transactional
+    public void createInstitutesByJLessonList(List<JLesson> lessonList) {
+
+        final List<Institute> instituteList = new ArrayList<>();
+        for (final JLesson lesson : lessonList) {
+            final String address = lesson.getAddress();
+            if (!instituteQuery.isExistInstituteByAddress(address)) {
+
+                final Institute institute = new Institute();
+                institute.setFullName(lesson.getInstituteName());
+                institute.setAddress(address);
+
+                instituteList.add(institute);
+            }
+        }
+
+        instituteRepository.saveAll(instituteList);
     }
 }

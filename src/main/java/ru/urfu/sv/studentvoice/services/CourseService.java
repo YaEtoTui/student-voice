@@ -15,10 +15,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.urfu.sv.studentvoice.model.domain.dto.course.CourseDto;
 import ru.urfu.sv.studentvoice.model.domain.dto.course.CourseInfo;
+import ru.urfu.sv.studentvoice.model.domain.dto.json.JLesson;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonWithCourse;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.CourseResponse;
 import ru.urfu.sv.studentvoice.model.domain.entity.*;
 import ru.urfu.sv.studentvoice.model.query.CourseQuery;
+import ru.urfu.sv.studentvoice.model.query.InstituteQuery;
 import ru.urfu.sv.studentvoice.model.query.UserQuery;
 import ru.urfu.sv.studentvoice.model.repository.CourseRepository;
 import ru.urfu.sv.studentvoice.services.jwt.JwtUserDetailsService;
@@ -39,6 +41,8 @@ public class CourseService {
     private UserQuery userQuery;
     @Autowired
     private CourseQuery courseQuery;
+    @Autowired
+    private InstituteQuery instituteQuery;
     @Autowired
     protected EntityManager entityManager;
     @Autowired
@@ -96,5 +100,31 @@ public class CourseService {
     @PreAuthorize("@RolesAC.isProfessor()")
     public CourseResponse findCourseDetailsById(Long courseId) {
         return courseQuery.findCourseDetailsById(courseId);
+    }
+
+    @Transactional
+    public void createCoursesByJLessonList(Long professorId, List<JLesson> lessonList) {
+
+        final List<Institute> instituteList = instituteQuery.findAllIds();
+
+        for (final JLesson jLesson : lessonList) {
+            if (!courseQuery.isExistCourseByProfId(professorId, jLesson.getCourseName())) {
+
+                final Long instituteId = instituteList.stream()
+                        .filter(institute -> institute.getFullName().equals(jLesson.getInstituteName())
+                                && institute.getAddress().equals(jLesson.getAddress()))
+                        .map(AbstractEntity::getId)
+                        .findFirst()
+                        .orElse(null);
+
+                final Course course = new Course();
+                course.setName(jLesson.getCourseName());
+                course.setAddress(jLesson.getAddress());
+                course.setInstituteId(instituteId);
+
+                final Course courseResponse = courseRepository.save(course);
+                courseQuery.insertUserCourse(professorId, courseResponse.getId());
+            }
+        }
     }
 }

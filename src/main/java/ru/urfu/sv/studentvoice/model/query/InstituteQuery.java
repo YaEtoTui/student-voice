@@ -38,11 +38,33 @@ public class InstituteQuery extends AbstractQuery {
         return !institutes.isEmpty();
     }
 
+    /**
+     * Проверяем, существует ли институт с fullNameInstitute
+     */
+    public boolean isExistInstituteByAddress(String address) {
+
+        final BooleanExpression exp = institute.address.eq(address);
+
+        final Collection<Institute> institutes = query()
+                .selectFrom(institute)
+                .where(exp)
+                .fetch();
+
+        return !institutes.isEmpty();
+    }
+
     public List<String> findAllAddress() {
         return query()
                 .from(institute)
                 .select(institute.address)
                 .distinct()
+                .fetch();
+    }
+
+    public List<Institute> findAllIds() {
+
+        return query()
+                .selectFrom(institute)
                 .fetch();
     }
 }

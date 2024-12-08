@@ -6,26 +6,24 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ru.urfu.sv.studentvoice.model.domain.dto.FullAddress;
-import ru.urfu.sv.studentvoice.model.domain.entity.ClassSession;
-import ru.urfu.sv.studentvoice.model.domain.dto.CourseDetails;
-import ru.urfu.sv.studentvoice.model.domain.entity.Lesson;
+import ru.urfu.sv.studentvoice.model.domain.dto.json.JLesson;
+import ru.urfu.sv.studentvoice.model.domain.entity.User;
 import ru.urfu.sv.studentvoice.utils.exceptions.ModeusException;
 import ru.urfu.sv.studentvoice.utils.formatters.TemporalFormatter;
 
-import java.time.Instant;
 import java.util.*;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ClassSessionMapper {
+public class LessonModeusMapper {
 
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final String DISTANT_SESSION = "Дистант";
 
-    public static List<ClassSession> fromEventsJson(String eventsJson, String professorFullName, Map<String, String> instituteAddressNameMap) throws ModeusException {
+    public static List<JLesson> findFromEventsJson(String eventsJson, User professor, Map<String, String> instituteAddressNameMap) throws ModeusException {
         try {
-            JsonNode root = mapper.readTree(eventsJson).get("_embedded");
-            return getSessions(root, professorFullName, instituteAddressNameMap);
+            final JsonNode root = mapper.readTree(eventsJson).get("_embedded");
+            return findJLessonList(root, professor, instituteAddressNameMap);
         } catch (Exception e) {
             log.error("Ошибка во время чтения json пар", e);
             throw new ModeusException("Во время обработки ответа от Модеуса произошла ошибка");
@@ -42,17 +40,15 @@ public class ClassSessionMapper {
         }
     }
 
-    private static List<Lesson> getSessions(JsonNode root, String professorFullName, Map<String, String> instituteAddressNameMap) {
+    private static List<JLesson> findJLessonList(JsonNode root, User professor, Map<String, String> instituteAddressNameMap) {
+
         final Map<UUID, String> coursesNameMap = findCourseMap(root);
         final Map<UUID, FullAddress> addressMap = findAddressMap(root);
         final Iterator<JsonNode> eventNodes = root.get("events").elements();
-        final List<Lesson> result = new ArrayList<>();
+        final List<JLesson> result = new ArrayList<>();
         while (eventNodes.hasNext()) {
             final JsonNode eventNode = eventNodes.next();
-            final Lesson currentLesson = new Lesson();
-
-            ClassSession current = new ClassSession();
-//            current.setSessionId(UUID.fromString(eventNode.get("id").asText()));
+            final JLesson currentLesson = new JLesson();
 
             currentLesson.setName(eventNode.get("name").asText());
             currentLesson.setStartDateTime(TemporalFormatter.fromLocalDateTimeString(eventNode.get("startsAtLocal").asText()));
@@ -65,20 +61,14 @@ public class ClassSessionMapper {
                 continue;
             }
 
-            current.setCourseId(UUID.fromString(eventNode.get("_links").get("course-unit-realization").get("href").asText().substring(1)));
+            final FullAddress address = addressMap.get(UUID.fromString(eventNode.get("id").asText()));
 
-            final FullAddress address = addressMap.get(current.getSessionId());
-            CourseDetails currentCourseDetails = CourseDetails
-                    .builder()
-                    .courseName(coursesNameMap.get(current.getCourseId()))
-                    .instituteName(instituteAddressNameMap.get(address.getBuilding()))
-                    .instituteAddress(address.getBuilding())
-                    .professorsNames(professorFullName)
-                    .build();
-            current.setRoomName(address.getRoom());
-            current.setCourseDetails(currentCourseDetails);
-            current.setProfessorName(professorFullName);
-            current.setCreateTimestamp(Instant.now());
+            final UUID courseIdAsText = UUID.fromString(eventNode.get("_links").get("course-unit-realization").get("href").asText().substring(1));
+            currentLesson.setCourseName(coursesNameMap.get(courseIdAsText));
+            currentLesson.setInstituteName(instituteAddressNameMap.get(address.getBuilding()));
+            currentLesson.setAddress(address.getBuilding());
+            currentLesson.setProfessorId(professor.getId());
+            currentLesson.setCabinet(address.getRoom());
 
             result.add(currentLesson);
         }

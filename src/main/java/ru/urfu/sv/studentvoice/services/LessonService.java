@@ -14,6 +14,8 @@ import org.springframework.data.jpa.repository.support.Querydsl;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.urfu.sv.studentvoice.model.domain.dto.LessonAndCourseInfo;
+import ru.urfu.sv.studentvoice.model.domain.dto.json.JLesson;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonByCourse;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonDetailsDto;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonWithCourse;
@@ -28,7 +30,6 @@ import ru.urfu.sv.studentvoice.model.query.LessonQuery;
 import ru.urfu.sv.studentvoice.model.query.UserQuery;
 import ru.urfu.sv.studentvoice.services.jwt.JwtUserDetailsService;
 import ru.urfu.sv.studentvoice.services.mapper.LessonMapper;
-import ru.urfu.sv.studentvoice.services.user.ProfessorService;
 import ru.urfu.sv.studentvoice.utils.exceptions.ModeusException;
 
 import java.time.*;
@@ -163,35 +164,67 @@ public class LessonService {
 
     /**
      * Подгружаем пары из Модеуса
-     * @param professorName
-     * @param dateFrom
-     * @param dateTo
-     * @return
-     * @throws ModeusException
+     *
+     * @param professorName Username преподавателя
+     * @param dateFrom      Дата начало выгрузки
+     * @param dateTo        Дата окончания выгрузки
      */
+    @PreAuthorize("@RolesAC.isProfessor()")
     @Transactional
     public List<Lesson> findAllLessonsForModeus(String professorName, LocalDate dateFrom, LocalDate dateTo) throws ModeusException {
-        final List<Long> savedLessonIds = lessonQuery.findAllByProfessorNameIgnoreCase(professorName)
+
+        final String username = jwtUserDetailsService.findUsername();
+        final User professor = userQuery.findProfessorByUsername(username);
+
+        final List<LessonAndCourseInfo> savedLessonList = lessonQuery.findAllLessonInfoByProfessorId(professor.getId())
                 .stream()
-                .map(Lesson::getId)
-                .collectors(Collectors.toList());
+                .collect(Collectors.toList());
 
-        final User professor = professorService.findProfessor();
-        final String fio = String.format("%s %s %s", professor.getSurname(), professor.getName(), professor.getPatronymic());
+        final List<String> savedLessonNameList = savedLessonList.stream()
+                .map(LessonAndCourseInfo::getLessonName)
+                .collect(Collectors.toList());
+        final List<String> savedCourseNameList = savedLessonList.stream()
+                .map(LessonAndCourseInfo::getCourseName)
+                .collect(Collectors.toList());
+        final List<String> savedInstituteNameList = savedLessonList.stream()
+                .map(LessonAndCourseInfo::getInstituteName)
+                .collect(Collectors.toList());
 
-        List<Lesson> modeusLessons = modeusService.findLessonListOfProfessor(fio, dateFrom, dateTo);
-        List<ClassSession> unsaved = modeusClassSessions.stream().filter(session -> !savedClassSessions.contains(session.getSessionId())).toList();
-        if (!unsaved.isEmpty()) {
-            String newClassSessionStr = String.join("\n", unsaved.stream().map(ClassSession::toString).toList());
-            log.info("Для преподавателя найдены новые пары {}", newClassSessionStr);
-            instituteService.createInstitutesByClassSessions(unsaved);
-            courseService.createCoursesByClassSessions(unsaved);
-            saveAll(unsaved);
+        final List<JLesson> lessonListFromModeus = modeusService.findJLessonListOfProfessor(professor, dateFrom, dateTo);
+        final List<JLesson> unsavedLessonListFromModeus = lessonListFromModeus.stream()
+                .filter(jLesson -> savedLessonNameList.contains(jLesson.getName())
+                        && savedCourseNameList.contains(jLesson.getCourseName())
+                        && savedInstituteNameList.contains(jLesson.getInstituteName())
+                )
+                .collect(Collectors.toList());
+
+        if (!unsavedLessonListFromModeus.isEmpty()) {
+            final String newListLesson = String.join("\n", unsavedLessonListFromModeus.stream().map(JLesson::toString).toList());
+            log.info("Для преподавателя найдены новые пары {}", newListLesson);
+            instituteService.createInstitutesByJLessonList(unsavedLessonListFromModeus);
+            courseService.createCoursesByJLessonList(professor.getId(), unsavedLessonListFromModeus);
+            saveLessonList(unsavedLessonListFromModeus);
         }
 
-        List<ClassSession> allClassSessions = repository.findAllByProfessorNameIgnoreCase(professorName);
-        String classSessionsStr = String.join("\n", allClassSessions.stream().map(ClassSession::toString).toList());
-        log.info("Для преподавателя {} найдены следующие пары: {}", professorName, classSessionsStr);
-        return allClassSessions;
+        final List<Lesson> allLessonList = lessonQuery.findAllLessonByProfessorId(professor.getId());
+        final String lessonListAsText = String.join("\n", allLessonList.stream()
+                .map(Lesson::toString)
+                .collect(Collectors.toList()));
+
+        log.info("Для преподавателя {} найдены следующие пары: {}", professorName, lessonListAsText);
+        return allLessonList;
+    }
+
+    private void saveLessonList(List<JLesson> lessonList) {
+
+        for (JLesson jLesson : lessonList) {
+
+            final Lesson lesson = new Lesson();
+            lesson.setName(jLesson.getName());
+            lesson.setStatus(jLesson.getStatus());
+            lesson.setStatus(jLesson.getStatus());
+        }
+
+//        repository.saveAll(sessions);
     }
 }

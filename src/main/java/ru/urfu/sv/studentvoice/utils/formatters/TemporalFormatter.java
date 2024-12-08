@@ -2,7 +2,6 @@ package ru.urfu.sv.studentvoice.utils.formatters;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.urfu.sv.studentvoice.model.domain.entity.ClassSession;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;

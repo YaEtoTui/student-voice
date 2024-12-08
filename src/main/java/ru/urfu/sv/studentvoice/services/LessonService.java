@@ -32,16 +32,10 @@ import java.time.*;
 import java.util.List;
 import java.util.Objects;
 
-@Service
 @Slf4j
+@Service
 public class LessonService {
 
-    @Autowired
-    private CourseService courseService;
-    @Autowired
-    private InstituteService instituteService;
-    @Autowired
-    private ModeusService modeusService;
     @Autowired
     private QRCodeService qrCodeService;
     @Autowired
@@ -134,13 +128,14 @@ public class LessonService {
      */
     @PreAuthorize("@RolesAC.isAdminOrProfessor()")
     @Transactional
-    public void createDisableTimestamp(Long lessonId, LocalTime duration) {
+    public void createDisableTimestamp(Long lessonId, int hours, int minutes) {
 
-        /* Todo не правильно определяем время qr-code */
-        final Instant disableTimestamp = Instant.now()
-                .plus(Duration.ofHours(duration.getHour())
-                        .plus(Duration.ofMinutes(duration.getMinute()))
-                        .plus(Duration.ofSeconds(duration.getSecond())));
+        final LocalDateTime startLesson = lessonQuery.findStartLessonById(lessonId);
+
+        final Instant disableTimestamp = startLesson.atZone(ZoneId.systemDefault())
+                .toInstant()
+                .plus(Duration.ofHours(hours))
+                .plus(Duration.ofMinutes(minutes));
 
         final LocalDateTime disableDate = LocalDateTime.ofInstant(disableTimestamp, ZoneId.systemDefault());
         lessonQuery.createDisableTimestamp(lessonId, disableDate);

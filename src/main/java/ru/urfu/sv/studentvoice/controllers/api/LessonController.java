@@ -17,7 +17,6 @@ import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonResponse;
 import ru.urfu.sv.studentvoice.services.LessonService;
 import ru.urfu.sv.studentvoice.services.ScheduleService;
 
-import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -78,10 +77,11 @@ public class LessonController {
     }
 
     @Operation(summary = "Создаем таймер Qr-кода во время пары")
-    @RequestMapping(path = "/start-timer/{lessonId}", method = RequestMethod.POST)
+    @RequestMapping(path = "/start-timer/{lessonId}", method = RequestMethod.PUT)
     public ResponseEntity<Void> createStartTimer(@PathVariable Long lessonId,
-                                                 @RequestParam(name = "duration") LocalTime duration) {
-        lessonService.createDisableTimestamp(lessonId, duration);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+                                                 @RequestParam(name = "hours") int hours,
+                                                 @RequestParam(name = "minutes") int minutes) {
+        lessonService.createDisableTimestamp(lessonId, hours, minutes);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

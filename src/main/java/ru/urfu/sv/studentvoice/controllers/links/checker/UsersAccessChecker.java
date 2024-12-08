@@ -9,6 +9,8 @@ public class UsersAccessChecker {
 
     @Autowired
     private UserQuery userQuery;
+    @Autowired
+    private RolesAccessChecker rolesAccessChecker;
 
     public boolean isExistUser(String username) {
         return userQuery.isExistUser(username);
@@ -18,6 +20,11 @@ public class UsersAccessChecker {
      * Можно ли создавать нового пользователя с таким username
      */
     public boolean isCreateNewUser(String username) {
+
+        if (!rolesAccessChecker.isAdmin()) {
+            return false;
+        }
+
         return !isExistUser(username);
     }
 }

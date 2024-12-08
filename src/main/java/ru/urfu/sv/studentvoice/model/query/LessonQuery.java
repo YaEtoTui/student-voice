@@ -105,8 +105,19 @@ public class LessonQuery extends AbstractQuery {
                 .update(lesson)
                 .set(lesson.disableTimestamp, disableDate)
                 .set(lesson.createdQR, true)
-                .set(lesson.createTimestamp, lesson.startDateTime)
+                .set(lesson.createTimestamp, LocalDateTime.now())
                 .where(exp)
                 .execute();
+    }
+
+    public LocalDateTime findStartLessonById(Long lessonId) {
+
+        final BooleanExpression exp = lesson.id.eq(lessonId);
+
+        return query()
+                .from(lesson)
+                .where(exp)
+                .select(lesson.startDateTime)
+                .fetchFirst();
     }
 }

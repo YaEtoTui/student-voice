@@ -23,4 +23,62 @@
 
     </changeSet>
 
+    <changeSet id="2024_11_26_21_10" author="Egor Sazhin">
+
+        <insert tableName="category_reviews">
+            <column name="name" value="1"/>
+            <column name="description" value="Оценка подачи материала"/>
+        </insert>
+
+        <insert tableName="category_reviews">
+            <column name="name" value="2"/>
+            <column name="description" value="Оценка полезности материала"/>
+        </insert>
+
+        <insert tableName="category_reviews">
+            <column name="name" value="3"/>
+            <column name="description" value="Оценка взаимодействия со студентами"/>
+        </insert>
+
+        <insert tableName="category_reviews">
+            <column name="name" value="4"/>
+            <column name="description" value="Оценка аудитории и оборудования"/>
+        </insert>
+
+        <insert tableName="category_reviews">
+            <column name="name" value="5"/>
+            <column name="description" value="Оценка атмосферы на паре"/>
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="2024_11_28_23_40" author="Egor Sazhin">
+
+        <update tableName="category_reviews">
+            <column name="name" value="Подача материала"/>
+            <where> description = 'Оценка подачи материала' </where>
+        </update>
+
+        <update tableName="category_reviews">
+            <column name="name" value="Полезность материала"/>
+            <where> description = 'Оценка полезности материала' </where>
+        </update>
+
+        <update tableName="category_reviews">
+            <column name="name" value="Взаимодействие со студентами"/>
+            <where> description = 'Оценка взаимодействия со студентами' </where>
+        </update>
+
+        <update tableName="category_reviews">
+            <column name="name" value="Аудитория и оборудование"/>
+            <where> description = 'Оценка аудитории и оборудования' </where>
+        </update>
+
+        <update tableName="category_reviews">
+            <column name="name" value="Атмосфера на паре"/>
+            <where> description = 'Оценка атмосферы на паре' </where>
+        </update>
+
+    </changeSet>
+
 </databaseChangeLog>

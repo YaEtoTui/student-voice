@@ -9,6 +9,7 @@ import ru.urfu.sv.studentvoice.model.domain.dto.institute.InstituteDto;
 import ru.urfu.sv.studentvoice.model.domain.dto.institute.InstituteInfo;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.InstituteResponse;
 import ru.urfu.sv.studentvoice.model.domain.entity.Institute;
+import ru.urfu.sv.studentvoice.model.query.InstituteQuery;
 import ru.urfu.sv.studentvoice.model.repository.InstituteRepository;
 import ru.urfu.sv.studentvoice.services.mapper.InstituteMapper;
 
@@ -22,6 +23,8 @@ public class InstituteService {
     private InstituteRepository instituteRepository;
     @Autowired
     private InstituteMapper instituteMapper;
+    @Autowired
+    private InstituteQuery instituteQuery;
 
     @Transactional
     @PreAuthorize("@InstitutesAC.isCreateNewInstitute(#instituteInfo.instituteFullName)")
@@ -34,29 +37,21 @@ public class InstituteService {
         instituteRepository.save(institute);
     }
 
-//    @Transactional
-//    public void createInstitutesByClassSessions(List<ClassSession> sessions) {
-//        for (ClassSession session : sessions) {
-//            String address = session.getCourseDetails().getInstituteAddress();
-//            if (!repository.existsByAddress(address)) {
-//                ActionResult result = createInstitute("Не указано", "Не указано", address);
-//                if (!result.isSuccess()) {
-//                    log.error("Институт {} не создался - {}", session.getCourseDetails().getCourseName(), result.getFormattedMessage());
-//                } else {
-//                    log.info("Создался новый институт - {}", address);
-//                }
-//            }
-//        }
-//    }
-
+    @Transactional
     public List<InstituteDto> findAllInstitutes() {
-        //To Do Когда будет много, это будет костылем
-        final List<Institute> instituteList = instituteRepository.findAll();
+        final List<Institute> instituteList = instituteQuery.findAllInstituteList();
         return instituteMapper.createInstituteDtoListFromInstituteList(instituteList);
     }
 
+    @PreAuthorize("@RolesAC.isAdminOrProfessor()")
     public List<InstituteResponse> findAllInstituteResponse() {
         final List<InstituteDto> instituteDtoList = findAllInstitutes();
         return instituteMapper.createInstituteResponseListFromInstituteDtoList(instituteDtoList);
+    }
+
+    @PreAuthorize("@RolesAC.isAdminOrProfessor()")
+    @Transactional
+    public List<String> findAllAddress() {
+        return instituteQuery.findAllAddress();
     }
 }

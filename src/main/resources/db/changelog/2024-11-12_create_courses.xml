@@ -19,7 +19,19 @@
                 <constraints nullable="false"/>
             </column>
 
+            <column name="rating" type="DECIMAL(10, 2)">
+                <constraints nullable="true"/>
+            </column>
+
         </createTable>
+    </changeSet>
+
+    <changeSet id="2024_11_28_23_50" author="Egor Sazhin">
+
+        <addColumn tableName="courses">
+            <column name="address" type="VARCHAR"/>
+        </addColumn>
+
     </changeSet>
 
 </databaseChangeLog>

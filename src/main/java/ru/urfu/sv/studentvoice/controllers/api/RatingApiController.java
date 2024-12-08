@@ -1,16 +1,13 @@
 package ru.urfu.sv.studentvoice.controllers.api;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-import ru.urfu.sv.studentvoice.controllers.RatingController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/rating")
 @PreAuthorize("@RolesAC.isAdmin()")
 public class RatingApiController {
-    private final RatingController ratingController;
 
 //    @GetMapping("institutes")
 //    public ResponseEntity<Map<String, Object>> institutesRating() {

@@ -40,11 +40,4 @@ public final class TemporalFormatter {
     public static String instantToEkbDateTime(Instant instant){
         return dateTimeFormatter.format(instant.atOffset(ZoneOffset.ofHours(5)));
     }
-
-    public static String formatToSessionDateTime(ClassSession session){
-        return "%s: %s - %s".formatted(
-                TemporalFormatter.formatToDate(session.getStartDateTime()),
-                TemporalFormatter.formatToTime(session.getStartDateTime()),
-                TemporalFormatter.formatToTime(session.getEndDateTime()));
-    }
 }

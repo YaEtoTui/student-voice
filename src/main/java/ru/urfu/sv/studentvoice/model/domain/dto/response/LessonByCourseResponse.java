@@ -12,6 +12,9 @@ public class LessonByCourseResponse {
 
     private String status;
 
+    @JsonProperty("lesson_id")
+    private Long lessonId;
+
     @JsonProperty("course_name")
     private String courseName;
 

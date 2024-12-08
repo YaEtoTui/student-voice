@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 public class LessonByCourse {
 
+    private Long lessonId;
     private String status;
     private String courseName;
     private LocalDateTime dateStart;

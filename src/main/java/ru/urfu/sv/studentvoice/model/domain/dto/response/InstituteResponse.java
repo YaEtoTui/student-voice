@@ -8,9 +8,9 @@ import lombok.Setter;
 @Setter
 public class InstituteResponse {
 
+    @JsonProperty("institute_id")
+    private Long instituteId;
+
     @JsonProperty("institute_full_name")
     private String instituteFullName;
-
-    @JsonProperty("institute_address")
-    private String instituteAddress;
 }

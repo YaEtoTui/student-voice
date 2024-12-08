@@ -6,6 +6,7 @@ import com.querydsl.jpa.JPQLQuery;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -30,13 +31,13 @@ import ru.urfu.sv.studentvoice.services.mapper.LessonMapper;
 import ru.urfu.sv.studentvoice.services.user.ProfessorService;
 import ru.urfu.sv.studentvoice.utils.exceptions.ModeusException;
 
-import java.time.LocalDate;
+import java.time.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@Service
 @Slf4j
+@Service
 public class LessonService {
 
     @Autowired
@@ -46,9 +47,9 @@ public class LessonService {
     @Autowired
     private ModeusService modeusService;
     @Autowired
-    private JwtUserDetailsService jwtUserDetailsService;
+    private QRCodeService qrCodeService;
     @Autowired
-    private ProfessorService professorService;
+    private JwtUserDetailsService jwtUserDetailsService;
     @Autowired
     private UserQuery userQuery;
     @Autowired
@@ -57,6 +58,9 @@ public class LessonService {
     private LessonMapper lessonMapper;
     @Autowired
     protected EntityManager entityManager;
+
+    @Value("${application.host}")
+    private String applicationHost;
 
     /**
      * Ищем список пар для преподавателя
@@ -79,9 +83,9 @@ public class LessonService {
 
             final List<LessonWithCourse> lessonWithCourseList = queryPageable.select(
                             Projections.bean(LessonWithCourse.class,
-                                    /* Статус добавить */
                                     course.id.as("courseId"),
                                     course.name.as("courseName"),
+                                    lesson.id.as("lessonId"),
                                     lesson.status.as("status"),
                                     lesson.startDateTime.as("dateStart"),
                                     lesson.endDateTime.as("dateEnd"))
@@ -111,6 +115,7 @@ public class LessonService {
         final List<LessonByCourse> lessonList = queryPageable.select(
                         Projections.bean(LessonByCourse.class,
                                 course.name.as("courseName"),
+                                lesson.id.as("lessonId"),
                                 lesson.status.as("status"),
                                 lesson.startDateTime.as("dateStart"),
                                 lesson.endDateTime.as("dateEnd"))
@@ -128,74 +133,33 @@ public class LessonService {
         return lessonMapper.createLessonDetailsResponse(lessonDetailsDto);
     }
 
-//    @Transactional
-//    public ActionResult createClassSession(UUID courseId, String sessionName, String roomName, String professorName,
-//                                           LocalDateTime startDateTime, LocalDateTime endDateTime) {
-//        Optional<Course> courseOpt = courseService.findCourseById(courseId);
-//
-//        if (courseOpt.isEmpty()) {
-//            log.error("Предмета с идентификатором {} не найдено", courseId);
-//            return ActionResultFactory.courseNotExist();
-//        }
-//
-//        ClassSession session = ClassSession
-//                .builder()
-//                .sessionId(UUID.randomUUID())
-//                .status("Запланировано")
-//                .sessionName(sessionName)
-//                .roomName(roomName)
-//                .courseId(courseId)
-//                .courseDetails(courseOpt.get().getCourseDetails())
-//                .professorName(professorName)
-//                .startDateTime(startDateTime)
-//                .endDateTime(endDateTime)
-//                .disableAfterTimestamp(endDateTime.toInstant(ZoneOffset.ofHours(5)))
-//                .createTimestamp(Instant.now())
-//                .build();
-//
-//        session = repository.save(session);
-//
-//        return repository.existsById(session.getSessionId()) ? ActionResultFactory.sessionCreated() : ActionResultFactory.sessionCreatingError();
-//    }
+    /**
+     * Создаем время истечения ссылки
+     */
+    @PreAuthorize("@RolesAC.isAdminOrProfessor()")
+    @Transactional
+    public void createDisableTimestamp(Long lessonId, int hours, int minutes) {
 
-//    @Transactional
-//    public ActionResult setDisableTimestamp(ClassSession session, LocalTime duration) {
-//        Instant disableTimestamp = Instant.now()
-//                .plus(Duration.ofHours(duration.getHour())
-//                        .plus(Duration.ofMinutes(duration.getMinute()))
-//                        .plus(Duration.ofSeconds(duration.getSecond())));
-//        session.setDisableAfterTimestamp(disableTimestamp);
-//        repository.save(session);
-//
-//        return repository.existsById(session.getSessionId()) ? ActionResultFactory.sessionCreated() : ActionResultFactory.sessionCreatingError();
-//    }
-//
-//    @Transactional
-//    public ActionResult updateProfessorName(String professorName, String newProfessorName) {
-//        List<ClassSession> sessions = findAllSavedClassSessionsByProfessorName(professorName);
-//        sessions.forEach(session -> {
-//            String names = session.getCourseDetails().getProfessorsNames();
-//            String name = session.getProfessorName();
-//            if (names.contains(professorName)) {
-//                session.getCourseDetails().setProfessorsNames(names.replace(professorName, newProfessorName));
-//                repository.save(session);
-//            }
-//            if (name.contains(professorName)) {
-//                session.setProfessorName(newProfessorName);
-//                repository.save(session);
-//            }
-//        });
-//
-//        return new ActionResult(true, "Пары успешно обновлены");
-//    }
-//
-//    @Transactional
-//    public ActionResult updateSessionProfessor(UUID sessionId, String professorName) {
-//        Optional<ClassSession> session = repository.findById(sessionId);
-//        session.orElseThrow().setProfessorName(professorName);
-//        repository.save(session.orElseThrow());
-//        return new ActionResult(true, "Пара успешно изменена");
-//    }
+        final LocalDateTime startLesson = lessonQuery.findStartLessonById(lessonId);
+
+        final Instant disableTimestamp = startLesson.atZone(ZoneId.systemDefault())
+                .toInstant()
+                .plus(Duration.ofHours(hours))
+                .plus(Duration.ofMinutes(minutes));
+
+        final LocalDateTime disableDate = LocalDateTime.ofInstant(disableTimestamp, ZoneId.systemDefault());
+        lessonQuery.createDisableTimestamp(lessonId, disableDate);
+    }
+
+    /**
+     * Получаем QR-соde
+     */
+    @PreAuthorize("@RolesAC.isAdminOrProfessor()")
+    public String getQrCode(Long lessonId) {
+//        final String reviewUrl = "%s/reviews/create?lessonId=%s".formatted(applicationHost);
+        final String reviewUrl = "%s/swagger-ui/index.html".formatted(applicationHost);
+        return qrCodeService.getEncodedCode(reviewUrl, 256, 256);
+    }
 
     /**
      * Подгружаем пары из Модеуса
@@ -230,45 +194,4 @@ public class LessonService {
         log.info("Для преподавателя {} найдены следующие пары: {}", professorName, classSessionsStr);
         return allClassSessions;
     }
-
-//    private ActionResult saveAll(List<ClassSession> sessions) {
-//        sessions.forEach(session -> session.setDisableAfterTimestamp(session.getEndDateTime().toInstant(ZoneOffset.ofHours(5))));
-//        repository.saveAll(sessions);
-//        return ActionResultFactory.sessionCreated();
-//    }
-
-//    public List<ClassSession> findSavedClassSessionsByProfessorName(String professorName, LocalDate dateFrom, LocalDate dateTo) {
-//        final List<ClassSession> savedClassSessions = repository
-//                .findAllByProfessorNameIgnoreCaseAndStartDateTimeAfterAndEndDateTimeBefore(professorName, dateFrom.atStartOfDay(), dateTo.atStartOfDay());
-//        String classSessionsStr = String.join("\n", savedClassSessions.stream().map(ClassSession::toString).toList());
-//        log.info("Для преподавателя {} найдены следующие пары: {}", professorName, classSessionsStr);
-//        return savedClassSessions;
-//    }
-
-//    public List<ClassSession> findAllSavedClassSessionsByProfessorName(String professorName) {
-//        final List<ClassSession> savedClassSessions = repository
-//                .findAllByProfessorNameIgnoreCase(professorName);
-//        String classSessionsStr = String.join("\n", savedClassSessions.stream().map(ClassSession::toString).toList());
-//        log.info("Для преподавателя {} найдены следующие пары: {}", professorName, classSessionsStr);
-//        return savedClassSessions;
-//    }
-
-//    public List<ClassSession> findClassSessionsByCourseId(UUID courseId) {
-//        return repository.findAllByCourseId(courseId);
-//    }
-//
-//    public List<ClassSession> findClassSessionsByInstituteName(String instituteShortName) {
-//        return repository.findAllByCourseDetails_InstituteNameIgnoreCase(instituteShortName);
-//    }
-//
-//    public List<ClassSession> getClassSessionsAfterDate(LocalDateTime dateTime, List<ClassSession> classSessions) {
-//        return classSessions.stream().filter(session -> {
-//            LocalDateTime sessionDate = session.getStartDateTime();
-//            return sessionDate.isAfter(dateTime);
-//        }).toList();
-//    }
-//
-//    public Optional<ClassSession> findSessionById(UUID sessionId) {
-//        return repository.findById(sessionId);
-//    }
 }

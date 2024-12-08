@@ -43,6 +43,10 @@
                 <constraints nullable="false"/>
             </column>
 
+            <column name="rating" type="DECIMAL(10, 2)">
+                <constraints nullable="true"/>
+            </column>
+
         </createTable>
     </changeSet>
 

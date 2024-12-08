@@ -15,14 +15,21 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.Map;
 
-@Component
 @Slf4j
+@Component
 public class QRCodeService {
+
     private static final QRCodeWriter qrCodeWriter = new QRCodeWriter();
 
+    /**
+     * Получаем QR-код, он создается путем преобразования ссылки на форму с id пары
+     */
     public String getEncodedCode(String textContent, Integer width, Integer height) {
-        try (ByteArrayOutputStream bao = new ByteArrayOutputStream()) {
-            BitMatrix bitMatrix = qrCodeWriter.encode(textContent, BarcodeFormat.QR_CODE, width, height, Map.of(EncodeHintType.MARGIN, 0));
+        try (final ByteArrayOutputStream bao = new ByteArrayOutputStream()) {
+            final BitMatrix bitMatrix = qrCodeWriter.encode(textContent,
+                    BarcodeFormat.QR_CODE, width, height,
+                    Map.of(EncodeHintType.MARGIN, 0)
+            );
             ImageIO.write(MatrixToImageWriter.toBufferedImage(bitMatrix), "jpg", bao);
             return Base64.getEncoder().encodeToString(bao.toByteArray());
         } catch (IOException | WriterException e) {

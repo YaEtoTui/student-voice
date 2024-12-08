@@ -6,11 +6,22 @@ import ru.urfu.sv.studentvoice.model.domain.entity.Institute;
 import ru.urfu.sv.studentvoice.model.domain.entity.QInstitute;
 
 import java.util.Collection;
+import java.util.List;
 
 @Repository
 public class InstituteQuery extends AbstractQuery {
 
     private final static QInstitute institute = new QInstitute("institute");
+
+    /**
+     * Ищем все институты
+     */
+    public List<Institute> findAllInstituteList() {
+
+        return query()
+                .selectFrom(institute)
+                .fetch();
+    }
 
     /**
      * Проверяем, существует ли институт с fullNameInstitute
@@ -25,5 +36,13 @@ public class InstituteQuery extends AbstractQuery {
                 .fetch();
 
         return !institutes.isEmpty();
+    }
+
+    public List<String> findAllAddress() {
+        return query()
+                .from(institute)
+                .select(institute.address)
+                .distinct()
+                .fetch();
     }
 }

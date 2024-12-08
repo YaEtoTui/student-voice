@@ -4,6 +4,7 @@ import lombok.Value;
 
 @Value
 public class ActionResult {
+
     boolean success;
     String message;
     String[] params;

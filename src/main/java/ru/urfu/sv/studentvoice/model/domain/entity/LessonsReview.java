@@ -19,10 +19,10 @@ import java.time.LocalDateTime;
 @Table(name = "lessons_review")
 public class LessonsReview extends AbstractEntity {
 
-    @Column(name = "lesson_id", nullable = false, unique = true)
+    @Column(name = "lesson_id", nullable = false)
     private Long lessonId;
 
-    @Column(name = "value", nullable = false)
+    @Column(name = "value")
     private String value;
 
     @Column(name = "create_timestamp", nullable = false)

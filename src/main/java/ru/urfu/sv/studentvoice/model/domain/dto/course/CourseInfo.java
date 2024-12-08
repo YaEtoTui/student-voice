@@ -11,9 +11,13 @@ public class CourseInfo {
     @JsonProperty("course_name")
     private String courseName;
 
+    private String address;
+
     @JsonProperty("institute_id")
     private Long instituteId;
 
     @JsonProperty("professor_id")
     private Long professorId;
+
+    private Boolean isConstantlyLink;
 }

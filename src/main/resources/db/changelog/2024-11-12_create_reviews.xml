@@ -10,7 +10,7 @@
                 <constraints primaryKey="true"/>
             </column>
 
-            <column name="value" type="VARCHAR">
+            <column name="value" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
 

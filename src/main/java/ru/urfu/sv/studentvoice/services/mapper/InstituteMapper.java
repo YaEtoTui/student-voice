@@ -30,6 +30,7 @@ public class InstituteMapper {
      */
     public InstituteDto createInstituteDto(Institute institute) {
         final InstituteDto instituteDto = new InstituteDto();
+        instituteDto.setInstituteId(institute.getId());
         instituteDto.setInstituteFullName(institute.getFullName());
         instituteDto.setInstituteShortName(institute.getShortName());
         instituteDto.setInstituteAddress(institute.getAddress());
@@ -55,8 +56,8 @@ public class InstituteMapper {
      */
     public InstituteResponse createInstituteResponse(InstituteDto instituteDto) {
         final InstituteResponse instituteResponse = new InstituteResponse();
+        instituteResponse.setInstituteId(instituteDto.getInstituteId());
         instituteResponse.setInstituteFullName(instituteDto.getInstituteFullName());
-        instituteResponse.setInstituteAddress(instituteDto.getInstituteAddress());
 
         return instituteResponse;
     }

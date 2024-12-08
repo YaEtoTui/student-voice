@@ -3,6 +3,8 @@ package ru.urfu.sv.studentvoice.model.domain.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @Setter
@@ -19,4 +21,7 @@ public class Institute extends AbstractEntity {
 
     @Column(name = "address", nullable = false)
     private String address;
+
+    @Column(name = "rating")
+    private BigDecimal rating;
 }

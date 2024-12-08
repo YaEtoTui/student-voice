@@ -1,9 +1,11 @@
 package ru.urfu.sv.studentvoice.model.query;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 import org.springframework.stereotype.Repository;
 import ru.urfu.sv.studentvoice.model.domain.dto.course.CourseInfo;
+import ru.urfu.sv.studentvoice.model.domain.dto.response.CourseResponse;
 import ru.urfu.sv.studentvoice.model.domain.entity.*;
 
 import java.util.Collection;
@@ -58,16 +60,32 @@ public class CourseQuery extends AbstractQuery {
      */
     public JPQLQuery<?> findAllCourseBySearchTextAndProfName(String searchText, String username) {
 
-        //To Do связоки нет с преподом
-        BooleanExpression exp = null;
+        BooleanExpression exp = user.username.eq(username);
 
         if (Objects.nonNull(searchText)) {
-            exp = course.name.likeIgnoreCase("%" + searchText + "%");
+            exp = exp.and(course.name.likeIgnoreCase("%" + searchText + "%"));
         }
 
         return query()
                 .from(course)
                 .join(institute).on(course.instituteId.eq(institute.id))
+                .join(userCourse).on(userCourse.courseId.eq(course.id))
+                .join(user).on(userCourse.userId.eq(user.id))
                 .where(exp);
+    }
+
+    public CourseResponse findCourseDetailsById(Long courseId) {
+
+        final BooleanExpression exp = course.id.eq(courseId);
+
+        return query()
+                .from(course)
+                .where(exp)
+                .select(Projections.bean(CourseResponse.class,
+                        course.id.as("courseId"),
+                        course.name.as("name"),
+                        course.address.as("address")
+                ))
+                .fetchFirst();
     }
 }

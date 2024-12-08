@@ -26,7 +26,7 @@ public class ProfessorController {
     private UserService userService;
 
     @Operation(summary = "Вывод всех преподавателей")
-    @RequestMapping(path = "/list", method = RequestMethod.POST)
+    @RequestMapping(path = "/list", method = RequestMethod.GET)
     public ResponseEntity<List<ProfessorResponse>> findProfessorList() {
         return new ResponseEntity<>(userService.findProfessorList(), HttpStatus.OK);
     }

@@ -16,7 +16,7 @@ public class Review extends AbstractEntity {
     @Column(name = "lesson_review_id", nullable = false)
     private Long lessonReviewId;
 
-    @Column(name = "category_id", unique = true, nullable = false)
+    @Column(name = "category_id", nullable = false)
     private Long categoryId;
 
     @Column(name = "value", nullable = false)

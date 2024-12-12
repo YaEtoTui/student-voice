@@ -21,9 +21,9 @@ public class UsersAccessChecker {
      */
     public boolean isCreateNewUser(String username) {
 
-        if (!rolesAccessChecker.isAdmin()) {
-            return false;
-        }
+//        if (!rolesAccessChecker.isAdmin()) {
+//            return false;
+//        }
 
         return !isExistUser(username);
     }

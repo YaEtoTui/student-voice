@@ -93,7 +93,6 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: springBootVersion
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: springBootVersion
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: springBootVersion
-
     implementation "org.thymeleaf.extras:thymeleaf-extras-springsecurity6:$springSecurityVersion"
 
     developmentOnly "org.springframework.boot:spring-boot-devtools"

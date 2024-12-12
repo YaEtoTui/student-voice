@@ -28,6 +28,7 @@ import ru.urfu.sv.studentvoice.model.domain.entity.QLesson;
 import ru.urfu.sv.studentvoice.model.domain.entity.User;
 import ru.urfu.sv.studentvoice.model.query.LessonQuery;
 import ru.urfu.sv.studentvoice.model.query.UserQuery;
+import ru.urfu.sv.studentvoice.model.repository.LessonRepository;
 import ru.urfu.sv.studentvoice.services.jwt.JwtUserDetailsService;
 import ru.urfu.sv.studentvoice.services.mapper.LessonMapper;
 import ru.urfu.sv.studentvoice.utils.exceptions.ModeusException;
@@ -55,6 +56,8 @@ public class LessonService {
     private UserQuery userQuery;
     @Autowired
     private LessonQuery lessonQuery;
+    @Autowired
+    private LessonRepository lessonRepository;
     @Autowired
     private LessonMapper lessonMapper;
     @Autowired
@@ -191,6 +194,8 @@ public class LessonService {
                 .collect(Collectors.toList());
 
         final List<JLesson> lessonListFromModeus = modeusService.findJLessonListOfProfessor(professor, dateFrom, dateTo);
+
+        /* To Do Тут поправить */
         final List<JLesson> unsavedLessonListFromModeus = lessonListFromModeus.stream()
                 .filter(jLesson -> savedLessonNameList.contains(jLesson.getName())
                         && savedCourseNameList.contains(jLesson.getCourseName())
@@ -217,14 +222,15 @@ public class LessonService {
 
     private void saveLessonList(List<JLesson> lessonList) {
 
+        /* To Do Тут поправить */
         for (JLesson jLesson : lessonList) {
 
             final Lesson lesson = new Lesson();
             lesson.setName(jLesson.getName());
             lesson.setStatus(jLesson.getStatus());
-            lesson.setStatus(jLesson.getStatus());
-        }
+//            lesson.setCourseId(jLesson.getCourseName());
 
-//        repository.saveAll(sessions);
+            lessonRepository.save(lesson);
+        }
     }
 }

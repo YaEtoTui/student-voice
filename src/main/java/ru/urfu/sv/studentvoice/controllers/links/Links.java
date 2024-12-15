@@ -12,5 +12,6 @@ public interface Links {
     String LESSONS = "/lessons";
     String REVIEWS = "/reviews";
     String XSLX = "/xslx";
+    String CSV = "/csv";
     String DOWNLOAD_REPORT = "/download-report";
 }

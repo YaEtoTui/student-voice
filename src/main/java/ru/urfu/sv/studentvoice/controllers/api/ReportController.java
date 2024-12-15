@@ -33,7 +33,7 @@ public class ReportController {
     private ReportService reportService;
 
     @Operation(summary = "Выгрузка отчета по отзывам типа .csv")
-    @RequestMapping(path = "/download-report", method = RequestMethod.GET)
+    @RequestMapping(path = Links.CSV + Links.DOWNLOAD_REPORT + "/reviews", method = RequestMethod.GET)
     public ResponseEntity<StreamingResponseBody> downloadReport() {
         final String content = reportService.getCvsReport();
         final String fileName = "reviews_report".concat("_")

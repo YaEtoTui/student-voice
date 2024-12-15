@@ -32,12 +32,12 @@ public class ReportController {
     @Autowired
     private ReportService reportService;
 
-    @Operation(summary = "Выгрузка отчета типа .csv")
+    @Operation(summary = "Выгрузка отчета по отзывам типа .csv")
     @RequestMapping(path = "/download-report", method = RequestMethod.GET)
     public ResponseEntity<StreamingResponseBody> downloadReport() {
         final String content = reportService.getCvsReport();
         final String fileName = "reviews_report".concat("_")
-                .concat(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm")))
+                .concat(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")))
                 .concat(".csv");
 
         final StreamingResponseBody responseBody = outputStream -> {
@@ -53,17 +53,17 @@ public class ReportController {
         return new ResponseEntity<>(responseBody, headers, HttpStatus.OK);
     }
 
-    @Operation(summary = "Выгрузка отчета типа .xslx")
-    @RequestMapping(path = "/download-report-xslx", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public ResponseEntity<byte[]> downloadReportXSLX(HttpServletResponse response) throws IOException {
+    @Operation(summary = "Выгрузка отчета по отзывам типа .xslx")
+    @RequestMapping(path = Links.XSLX + Links.DOWNLOAD_REPORT + "/reviews", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ResponseEntity<byte[]> downloadReportXSLXByReviews(HttpServletResponse response) throws IOException {
 
         final String fileName = "reviews_report".concat("_")
-                .concat(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm")))
+                .concat(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")))
                 .concat(".xlsx");
 
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
         response.setContentType(HttpHeaders.CONTENT_TYPE);
-        final byte[] report = reportService.getReport();
+        final byte[] report = reportService.getReportByReviews();
 
         return new ResponseEntity<>(report, HttpStatus.OK);
     }

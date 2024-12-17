@@ -55,8 +55,8 @@ public class LessonService {
     @Autowired
     protected EntityManager entityManager;
 
-    @Value("${application.host}")
-    private String applicationHost;
+    @Value("${application.front.host}")
+    private String applicationFrontHost;
 
     /**
      * Создание пары
@@ -179,8 +179,7 @@ public class LessonService {
      */
     @PreAuthorize("@RolesAC.isAdminOrProfessor()")
     public String getQrCode(Long lessonId) {
-//        final String reviewUrl = "%s/reviews/create?lessonId=%s".formatted(applicationHost);
-        final String reviewUrl = "%s/swagger-ui/index.html".formatted(applicationHost);
+        final String reviewUrl = String.format("%s/form/%d", applicationFrontHost, lessonId);
         return qrCodeService.getEncodedCode(reviewUrl, 256, 256);
     }
 }

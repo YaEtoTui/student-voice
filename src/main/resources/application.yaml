@@ -1,4 +1,8 @@
-application.host: 'http://localhost:8080'
+application:
+  host: ${APPLICATION_HOST}
+  front:
+    host: ${APPLICATION_FRONT_HOST}
+
 
 web.driver:
   path: ${WEB_DRIVER_PATH}

@@ -14,17 +14,21 @@ import org.springframework.data.jpa.repository.support.Querydsl;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.urfu.sv.studentvoice.model.domain.dto.Status;
+import ru.urfu.sv.studentvoice.model.domain.dto.json.JLesson;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonByCourse;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonDetailsDto;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonWithCourse;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonByCourseResponse;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonDetailsResponse;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonResponse;
+import ru.urfu.sv.studentvoice.model.domain.entity.Lesson;
 import ru.urfu.sv.studentvoice.model.domain.entity.QCourse;
 import ru.urfu.sv.studentvoice.model.domain.entity.QLesson;
 import ru.urfu.sv.studentvoice.model.domain.entity.User;
 import ru.urfu.sv.studentvoice.model.query.LessonQuery;
 import ru.urfu.sv.studentvoice.model.query.UserQuery;
+import ru.urfu.sv.studentvoice.model.repository.LessonRepository;
 import ru.urfu.sv.studentvoice.services.jwt.JwtUserDetailsService;
 import ru.urfu.sv.studentvoice.services.mapper.LessonMapper;
 
@@ -41,6 +45,8 @@ public class LessonService {
     @Autowired
     private JwtUserDetailsService jwtUserDetailsService;
     @Autowired
+    private LessonRepository lessonRepository;
+    @Autowired
     private UserQuery userQuery;
     @Autowired
     private LessonQuery lessonQuery;
@@ -51,6 +57,33 @@ public class LessonService {
 
     @Value("${application.host}")
     private String applicationHost;
+
+    /**
+     * Создание пары
+     * @param jLesson Объект пары json
+     */
+    @Transactional
+    @PreAuthorize("@LessonsAC.isCreateNewLesson(#jLesson)")
+    public void createLesson(JLesson jLesson) {
+
+        final Lesson lesson = new Lesson();
+        lesson.setName(jLesson.getNameLesson());
+        lesson.setCourseId(jLesson.getCourseId());
+        lesson.setStartDateTime(jLesson.getStartDateTime());
+        lesson.setEndDateTime(jLesson.getEndDateTime());
+        lesson.setStatus(Status.PLANNED.getTitleStatus());
+
+        if (jLesson.isFullTime()) {
+            lesson.setAddress(jLesson.getAddress());
+            lesson.setInstituteId(jLesson.getInstituteId());
+            lesson.setCabinet(jLesson.getCabinet());
+        } else {
+            lesson.setCabinet(jLesson.getLink());
+            lesson.setAddress("Дистант");
+        }
+
+        lessonRepository.save(lesson);
+    }
 
     /**
      * Ищем список пар для преподавателя

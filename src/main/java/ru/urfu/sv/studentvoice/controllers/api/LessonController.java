@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.urfu.sv.studentvoice.controllers.links.Links;
 import ru.urfu.sv.studentvoice.model.domain.dto.ScheduleByDay;
+import ru.urfu.sv.studentvoice.model.domain.dto.json.JLesson;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonByCourseResponse;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonDetailsResponse;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonResponse;
@@ -28,6 +29,16 @@ public class LessonController {
     private LessonService lessonService;
     @Autowired
     private ScheduleService scheduleService;
+
+    /**
+     * Создание пары
+     */
+    @Operation(summary = "Создание пары")
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<Page<LessonResponse>> createLesson(@RequestBody JLesson jLesson) {
+        lessonService.createLesson(jLesson);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 
     /**
      * Ищем список пар ПАГИНИРОВАННЫЙ у преподавателя

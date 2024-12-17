@@ -33,9 +33,16 @@ public class CourseController {
 
     @Operation(summary = "Редактирование предмета")
     @RequestMapping(path = "{courseId}", method = RequestMethod.PUT)
-    public ResponseEntity<Void> updateCourse(@PathVariable() Long courseId,
+    public ResponseEntity<Void> updateCourse(@PathVariable Long courseId,
                                              @RequestBody CourseInfo courseInfo) {
         courseService.updateCourse(courseId, courseInfo);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Operation(summary = "Удаление предмета")
+    @RequestMapping(path = "{courseId}", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> deleteCourse(@PathVariable Long courseId) {
+        courseService.deleteCourse(courseId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

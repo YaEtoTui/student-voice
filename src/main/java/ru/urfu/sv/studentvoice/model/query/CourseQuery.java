@@ -104,10 +104,21 @@ public class CourseQuery extends AbstractQuery {
 
     public void deleteProfessors(Long courseId, Collection<Long> professorIds) {
 
-        final BooleanExpression exp = course.id.eq(courseId)
-                .and(userCourse.userId.in(professorIds));
+        BooleanExpression exp = userCourse.courseId.eq(courseId);
+        if (Objects.nonNull(professorIds)) {
+            exp = exp.and(userCourse.userId.in(professorIds));
+        }
 
         query().delete(userCourse)
+                .where(exp)
+                .execute();
+    }
+
+    public void deleteCourse(Long courseId) {
+
+        BooleanExpression exp = course.id.eq(courseId);
+
+        query().delete(course)
                 .where(exp)
                 .execute();
     }

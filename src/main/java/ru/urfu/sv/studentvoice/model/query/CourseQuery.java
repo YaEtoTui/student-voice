@@ -27,7 +27,7 @@ public class CourseQuery extends AbstractQuery {
         /* Тут у преподавателя смотрим */
         final BooleanExpression exp = course.instituteId.eq(courseInfo.getInstituteId())
                 .and(course.name.eq(courseInfo.getCourseName()))
-                .and(user.id.eq(courseInfo.getProfessorId()));
+                .and(user.id.in(courseInfo.getProfessorIds()));
 
         final Collection<Course> courses = query()
                 .from(course)

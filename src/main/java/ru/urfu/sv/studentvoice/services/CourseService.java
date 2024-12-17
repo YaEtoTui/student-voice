@@ -56,7 +56,10 @@ public class CourseService {
         /* Тут проверить постоянную ссылку */
 
         final Course courseResponse = courseRepository.save(course);
-        courseQuery.insertUserCourse(courseInfo.getProfessorId(), courseResponse.getId());
+
+        for (final Long professorId : courseInfo.getProfessorIds()) {
+            courseQuery.insertUserCourse(professorId, courseResponse.getId());
+        }
     }
 
     @Transactional

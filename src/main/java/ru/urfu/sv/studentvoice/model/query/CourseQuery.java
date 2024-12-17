@@ -88,4 +88,27 @@ public class CourseQuery extends AbstractQuery {
                 ))
                 .fetchFirst();
     }
+
+    public void updateCourse(Long courseId, CourseInfo courseInfo) {
+
+        final BooleanExpression exp = course.id.eq(courseId);
+
+        query()
+                .update(course)
+                .set(course.name, courseInfo.getCourseName())
+                .set(course.address, courseInfo.getAddress())
+                .set(course.instituteId, courseInfo.getInstituteId())
+                .where(exp)
+                .execute();
+    }
+
+    public void deleteProfessors(Long courseId, Collection<Long> professorIds) {
+
+        final BooleanExpression exp = course.id.eq(courseId)
+                .and(userCourse.userId.in(professorIds));
+
+        query().delete(userCourse)
+                .where(exp)
+                .execute();
+    }
 }

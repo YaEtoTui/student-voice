@@ -63,6 +63,16 @@ public class CourseService {
     }
 
     @Transactional
+    public void updateCourse(Long courseId, CourseInfo courseInfo) {
+
+        if (Objects.nonNull(courseInfo.getProfessorIds())) {
+            courseQuery.deleteProfessors(courseId, courseInfo.getProfessorIds());
+        }
+
+        courseQuery.updateCourse(courseId, courseInfo);
+    }
+
+    @Transactional
     @PreAuthorize("@RolesAC.isProfessor()")
     public Page<CourseResponse> findCourseList(String searchText, Pageable pageable) {
         final String username = jwtUserDetailsService.findUsername();

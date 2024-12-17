@@ -31,6 +31,14 @@ public class CourseController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Редактирование предмета")
+    @RequestMapping(path = "{courseId}", method = RequestMethod.PUT)
+    public ResponseEntity<Void> updateCourse(@PathVariable() Long courseId,
+                                             @RequestBody CourseInfo courseInfo) {
+        courseService.updateCourse(courseId, courseInfo);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     /**
      * Ищем список предметов ПАГИНИРОВАННЫЙ у преподавателя
      */

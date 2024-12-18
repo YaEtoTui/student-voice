@@ -6,7 +6,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ru.urfu.sv.studentvoice.model.domain.dto.FullAddress;
-import ru.urfu.sv.studentvoice.model.domain.dto.json.JLesson;
+import ru.urfu.sv.studentvoice.model.domain.dto.modeus.LessonModeus;
 import ru.urfu.sv.studentvoice.model.domain.entity.User;
 import ru.urfu.sv.studentvoice.utils.exceptions.ModeusException;
 import ru.urfu.sv.studentvoice.utils.formatters.TemporalFormatter;
@@ -20,7 +20,7 @@ public class LessonModeusMapper {
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final String DISTANT_SESSION = "Дистант";
 
-    public static List<JLesson> findFromEventsJson(String eventsJson, User professor, Map<String, String> instituteAddressNameMap) throws ModeusException {
+    public static List<LessonModeus> findFromEventsJson(String eventsJson, User professor, Map<String, String> instituteAddressNameMap) throws ModeusException {
         try {
             final JsonNode root = mapper.readTree(eventsJson).get("_embedded");
             return findJLessonList(root, professor, instituteAddressNameMap);
@@ -40,15 +40,15 @@ public class LessonModeusMapper {
         }
     }
 
-    private static List<JLesson> findJLessonList(JsonNode root, User professor, Map<String, String> instituteAddressNameMap) {
+    private static List<LessonModeus> findJLessonList(JsonNode root, User professor, Map<String, String> instituteAddressNameMap) {
 
         final Map<UUID, String> coursesNameMap = findCourseMap(root);
         final Map<UUID, FullAddress> addressMap = findAddressMap(root);
         final Iterator<JsonNode> eventNodes = root.get("events").elements();
-        final List<JLesson> result = new ArrayList<>();
+        final List<LessonModeus> result = new ArrayList<>();
         while (eventNodes.hasNext()) {
             final JsonNode eventNode = eventNodes.next();
-            final JLesson currentLesson = new JLesson();
+            final LessonModeus currentLesson = new LessonModeus();
 
             currentLesson.setName(eventNode.get("name").asText());
             currentLesson.setStartDateTime(TemporalFormatter.fromLocalDateTimeString(eventNode.get("startsAtLocal").asText()));

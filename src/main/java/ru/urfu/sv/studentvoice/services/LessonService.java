@@ -15,7 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.urfu.sv.studentvoice.model.domain.dto.LessonAndCourseInfo;
-import ru.urfu.sv.studentvoice.model.domain.dto.json.JLesson;
+import ru.urfu.sv.studentvoice.model.domain.dto.modeus.LessonModeus;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonByCourse;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonDetailsDto;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonWithCourse;
@@ -193,10 +193,10 @@ public class LessonService {
                 .map(LessonAndCourseInfo::getInstituteName)
                 .collect(Collectors.toList());
 
-        final List<JLesson> lessonListFromModeus = modeusService.findJLessonListOfProfessor(professor, dateFrom, dateTo);
+        final List<LessonModeus> lessonListFromModeus = modeusService.findJLessonListOfProfessor(professor, dateFrom, dateTo);
 
         /* To Do Тут поправить */
-        final List<JLesson> unsavedLessonListFromModeus = lessonListFromModeus.stream()
+        final List<LessonModeus> unsavedLessonListFromModeus = lessonListFromModeus.stream()
                 .filter(jLesson -> savedLessonNameList.contains(jLesson.getName())
                         && savedCourseNameList.contains(jLesson.getCourseName())
                         && savedInstituteNameList.contains(jLesson.getInstituteName())
@@ -204,7 +204,7 @@ public class LessonService {
                 .collect(Collectors.toList());
 
         if (!unsavedLessonListFromModeus.isEmpty()) {
-            final String newListLesson = String.join("\n", unsavedLessonListFromModeus.stream().map(JLesson::toString).toList());
+            final String newListLesson = String.join("\n", unsavedLessonListFromModeus.stream().map(LessonModeus::toString).toList());
             log.info("Для преподавателя найдены новые пары {}", newListLesson);
             instituteService.createInstitutesByJLessonList(unsavedLessonListFromModeus);
             courseService.createCoursesByJLessonList(professor.getId(), unsavedLessonListFromModeus);
@@ -220,14 +220,14 @@ public class LessonService {
         return allLessonList;
     }
 
-    private void saveLessonList(List<JLesson> lessonList) {
+    private void saveLessonList(List<LessonModeus> lessonList) {
 
         /* To Do Тут поправить */
-        for (JLesson jLesson : lessonList) {
+        for (LessonModeus lessonModeus : lessonList) {
 
             final Lesson lesson = new Lesson();
-            lesson.setName(jLesson.getName());
-            lesson.setStatus(jLesson.getStatus());
+            lesson.setName(lessonModeus.getName());
+            lesson.setStatus(lessonModeus.getStatus());
 //            lesson.setCourseId(jLesson.getCourseName());
 
             lessonRepository.save(lesson);

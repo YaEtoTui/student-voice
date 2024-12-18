@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.urfu.sv.studentvoice.model.domain.dto.course.CourseDto;
 import ru.urfu.sv.studentvoice.model.domain.dto.course.CourseInfo;
-import ru.urfu.sv.studentvoice.model.domain.dto.json.JLesson;
+import ru.urfu.sv.studentvoice.model.domain.dto.modeus.LessonModeus;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonWithCourse;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.CourseResponse;
 import ru.urfu.sv.studentvoice.model.domain.entity.*;
@@ -103,23 +103,23 @@ public class CourseService {
     }
 
     @Transactional
-    public void createCoursesByJLessonList(Long professorId, List<JLesson> lessonList) {
+    public void createCoursesByJLessonList(Long professorId, List<LessonModeus> lessonList) {
 
         final List<Institute> instituteList = instituteQuery.findAllIds();
 
-        for (final JLesson jLesson : lessonList) {
-            if (!courseQuery.isExistCourseByProfId(professorId, jLesson.getCourseName())) {
+        for (final LessonModeus lessonModeus : lessonList) {
+            if (!courseQuery.isExistCourseByProfId(professorId, lessonModeus.getCourseName())) {
 
                 final Long instituteId = instituteList.stream()
-                        .filter(institute -> institute.getFullName().equals(jLesson.getInstituteName())
-                                && institute.getAddress().equals(jLesson.getAddress()))
+                        .filter(institute -> institute.getFullName().equals(lessonModeus.getInstituteName())
+                                && institute.getAddress().equals(lessonModeus.getAddress()))
                         .map(AbstractEntity::getId)
                         .findFirst()
                         .orElse(null);
 
                 final Course course = new Course();
-                course.setName(jLesson.getCourseName());
-                course.setAddress(jLesson.getAddress());
+                course.setName(lessonModeus.getCourseName());
+                course.setAddress(lessonModeus.getAddress());
                 course.setInstituteId(instituteId);
 
                 final Course courseResponse = courseRepository.save(course);

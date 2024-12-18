@@ -1,4 +1,4 @@
-package ru.urfu.sv.studentvoice.model.domain.dto.json;
+package ru.urfu.sv.studentvoice.model.domain.dto.modeus;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class JLesson {
+public class LessonModeus {
 
     private String name;
     private String status;

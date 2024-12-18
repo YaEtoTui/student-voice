@@ -10,7 +10,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.urfu.sv.studentvoice.model.domain.dto.institute.InstituteDto;
-import ru.urfu.sv.studentvoice.model.domain.dto.json.JLesson;
+import ru.urfu.sv.studentvoice.model.domain.dto.modeus.LessonModeus;
 import ru.urfu.sv.studentvoice.model.domain.entity.User;
 import ru.urfu.sv.studentvoice.utils.exceptions.ModeusException;
 import ru.urfu.sv.studentvoice.utils.formatters.TemporalFormatter;
@@ -46,7 +46,7 @@ public class ModeusService {
      * @param dateTo    Дата окончания подгрузки пар
      * @return Возвращаем список пар для преподаваталея
      */
-    public List<JLesson> findJLessonListOfProfessor(User professor, LocalDate dateFrom, LocalDate dateTo) throws ModeusException {
+    public List<LessonModeus> findJLessonListOfProfessor(User professor, LocalDate dateFrom, LocalDate dateTo) throws ModeusException {
 
         final Optional<String> modeusAuthToken = webDriverService.getModeusAuthToken();
         if (modeusAuthToken.isEmpty()) {

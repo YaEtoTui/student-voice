@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.urfu.sv.studentvoice.model.domain.dto.institute.InstituteDto;
 import ru.urfu.sv.studentvoice.model.domain.dto.institute.InstituteInfo;
-import ru.urfu.sv.studentvoice.model.domain.dto.json.JLesson;
+import ru.urfu.sv.studentvoice.model.domain.dto.modeus.LessonModeus;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.InstituteResponse;
 import ru.urfu.sv.studentvoice.model.domain.entity.Institute;
 import ru.urfu.sv.studentvoice.model.query.InstituteQuery;
@@ -57,10 +57,10 @@ public class InstituteService {
     }
 
     @Transactional
-    public void createInstitutesByJLessonList(List<JLesson> lessonList) {
+    public void createInstitutesByJLessonList(List<LessonModeus> lessonList) {
 
         final List<Institute> instituteList = new ArrayList<>();
-        for (final JLesson lesson : lessonList) {
+        for (final LessonModeus lesson : lessonList) {
             final String address = lesson.getAddress();
             if (!instituteQuery.isExistInstituteByAddress(address)) {
 

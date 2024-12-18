@@ -173,4 +173,14 @@ public class LessonQuery extends AbstractQuery {
                 .where(exp)
                 .fetch();
     }
+
+    public Lesson findLessonById(Long lessonId) {
+
+        final BooleanExpression exp = lesson.id.eq(lessonId);
+
+        return query()
+                .selectFrom(lesson)
+                .where(exp)
+                .fetchFirst();
+    }
 }

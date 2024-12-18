@@ -91,6 +91,28 @@ public class LessonService {
         lessonRepository.save(lesson);
     }
 
+    @Transactional
+    public void updateLesson(Long lessonId, JLesson jLesson) {
+
+        final Lesson lesson = lessonQuery.findLessonById(lessonId);
+        lesson.setName(jLesson.getNameLesson());
+        lesson.setCourseId(jLesson.getCourseId());
+        lesson.setStartDateTime(jLesson.getStartDateTime());
+        lesson.setEndDateTime(jLesson.getEndDateTime());
+        lesson.setStatus(Status.PLANNED.getTitleStatus());
+
+        if (jLesson.isFullTime()) {
+            lesson.setAddress(jLesson.getAddress());
+            lesson.setInstituteId(jLesson.getInstituteId());
+            lesson.setCabinet(jLesson.getCabinet());
+        } else {
+            lesson.setCabinet(jLesson.getLink());
+            lesson.setAddress("Дистант");
+        }
+
+        lessonRepository.save(lesson);
+    }
+
     /**
      * Ищем список пар для преподавателя
      */

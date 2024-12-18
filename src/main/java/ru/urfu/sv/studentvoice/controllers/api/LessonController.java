@@ -40,6 +40,13 @@ public class LessonController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Редактирование пары")
+    @RequestMapping(path = "{lessonId}", method = RequestMethod.PUT)
+    public ResponseEntity<Page<LessonResponse>> createLesson(@PathVariable Long lessonId, @RequestBody JLesson jLesson) {
+        lessonService.updateLesson(lessonId, jLesson);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
     /**
      * Ищем список пар ПАГИНИРОВАННЫЙ у преподавателя
      */

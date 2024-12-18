@@ -9,6 +9,7 @@ import ru.urfu.sv.studentvoice.model.domain.dto.response.CourseResponse;
 import ru.urfu.sv.studentvoice.model.domain.entity.*;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Repository
@@ -27,7 +28,7 @@ public class CourseQuery extends AbstractQuery {
         /* Тут у преподавателя смотрим */
         final BooleanExpression exp = course.instituteId.eq(courseInfo.getInstituteId())
                 .and(course.name.eq(courseInfo.getCourseName()))
-                .and(user.id.eq(courseInfo.getProfessorId()));
+                .and(user.id.in(courseInfo.getProfessorIds()));
 
         final Collection<Course> courses = query()
                 .from(course)
@@ -104,5 +105,50 @@ public class CourseQuery extends AbstractQuery {
                         course.address.as("address")
                 ))
                 .fetchFirst();
+    }
+
+    public void updateCourse(Long courseId, CourseInfo courseInfo) {
+
+        final BooleanExpression exp = course.id.eq(courseId);
+
+        query()
+                .update(course)
+                .set(course.name, courseInfo.getCourseName())
+                .set(course.address, courseInfo.getAddress())
+                .set(course.instituteId, courseInfo.getInstituteId())
+                .where(exp)
+                .execute();
+    }
+
+    public void deleteProfessors(Long courseId, Collection<Long> professorIds) {
+
+        BooleanExpression exp = userCourse.courseId.eq(courseId);
+        if (Objects.nonNull(professorIds)) {
+            exp = exp.and(userCourse.userId.in(professorIds));
+        }
+
+        query().delete(userCourse)
+                .where(exp)
+                .execute();
+    }
+
+    public void deleteCourse(Long courseId) {
+
+        BooleanExpression exp = course.id.eq(courseId);
+
+        query().delete(course)
+                .where(exp)
+                .execute();
+    }
+
+    public List<Long> findProfessorsByCourseId(Long courseId) {
+
+        final BooleanExpression exp = userCourse.courseId.eq(courseId);
+
+        return query()
+                .from(userCourse)
+                .select(userCourse.userId)
+                .where(exp)
+                .fetch();
     }
 }

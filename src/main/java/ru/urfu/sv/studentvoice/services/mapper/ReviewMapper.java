@@ -4,8 +4,8 @@ import org.springframework.stereotype.Component;
 import ru.urfu.sv.studentvoice.model.domain.dto.StatisticRating;
 import ru.urfu.sv.studentvoice.model.domain.dto.StudentRating;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.ReviewResponse;
+import ru.urfu.sv.studentvoice.utils.RatingUtil;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,35 +35,11 @@ public class ReviewMapper {
                     .collect(Collectors.toList());
 
             reviewResponse.setStatisticRatingList(statisticRatingList);
-            reviewResponse.setRatingResult(calculateRating(studentRating));
+            reviewResponse.setRatingResult(RatingUtil.calculateRatingForLesson(studentRating));
 
             reviewResponseList.add(reviewResponse);
         }
 
         return reviewResponseList;
-    }
-
-    private BigDecimal calculateRating(StudentRating studentRating) {
-
-        final List<StatisticRating> reviewCategoryList = studentRating.getReviewCategoryList();
-
-        if (reviewCategoryList == null || reviewCategoryList.isEmpty()) {
-            return BigDecimal.ZERO;
-        }
-
-        final List<StatisticRating> nonNullRatings = reviewCategoryList.stream()
-                .filter(Objects::nonNull)
-                .filter(rating -> rating.getRating() != null)
-                .collect(Collectors.toList());
-
-        if (nonNullRatings.isEmpty()) {
-            return BigDecimal.ZERO;
-        }
-
-        final long sum = nonNullRatings.stream()
-                .mapToLong(StatisticRating::getRating)
-                .sum();
-
-        return BigDecimal.valueOf(sum).divide(BigDecimal.valueOf(nonNullRatings.size()));
     }
 }

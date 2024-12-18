@@ -4,11 +4,13 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 import org.springframework.stereotype.Repository;
+import ru.urfu.sv.studentvoice.model.domain.dto.json.JLesson;
 import ru.urfu.sv.studentvoice.model.domain.dto.LessonAndCourseInfo;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonDetailsDto;
 import ru.urfu.sv.studentvoice.model.domain.entity.*;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -118,6 +120,22 @@ public class LessonQuery extends AbstractQuery {
                 .where(exp)
                 .select(lesson.startDateTime)
                 .fetchFirst();
+    }
+
+    public boolean isExistLesson(JLesson jLesson) {
+
+        final BooleanExpression exp = lesson.courseId.eq(jLesson.getCourseId())
+                .and(lesson.instituteId.eq(jLesson.getInstituteId()))
+                .and(lesson.endDateTime.goe(jLesson.getStartDateTime().toLocalDate().atStartOfDay()))
+                .and(lesson.startDateTime.goe(jLesson.getEndDateTime().toLocalDate().minusDays(1).atStartOfDay()))
+                .and(lesson.startDateTime.loe(jLesson.getEndDateTime().toLocalDate().atStartOfDay().plusDays(1).minusSeconds(1)));
+
+        final Collection<Lesson> lessons = query()
+                .selectFrom(lesson)
+                .where(exp)
+                .fetch();
+
+        return !lessons.isEmpty();
     }
 
     public List<LessonAndCourseInfo> findAllLessonInfoByProfessorId(Long professorId) {

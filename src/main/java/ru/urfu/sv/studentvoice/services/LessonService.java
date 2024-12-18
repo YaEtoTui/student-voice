@@ -14,14 +14,7 @@ import org.springframework.data.jpa.repository.support.Querydsl;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.urfu.sv.studentvoice.model.domain.dto.LessonAndCourseInfo;
-import ru.urfu.sv.studentvoice.model.domain.dto.modeus.LessonModeus;
-import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonByCourse;
-import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonDetailsDto;
-import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonWithCourse;
-import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonByCourseResponse;
-import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonDetailsResponse;
-import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonResponse;
+import ru.urfu.sv.studentvoice.model.domain.dto.*;
 import ru.urfu.sv.studentvoice.model.domain.entity.Lesson;
 import ru.urfu.sv.studentvoice.model.domain.entity.QCourse;
 import ru.urfu.sv.studentvoice.model.domain.entity.QLesson;
@@ -53,6 +46,8 @@ public class LessonService {
     @Autowired
     private JwtUserDetailsService jwtUserDetailsService;
     @Autowired
+    private LessonRepository lessonRepository;
+    @Autowired
     private UserQuery userQuery;
     @Autowired
     private LessonQuery lessonQuery;
@@ -63,8 +58,35 @@ public class LessonService {
     @Autowired
     protected EntityManager entityManager;
 
-    @Value("${application.host}")
-    private String applicationHost;
+    @Value("${application.front.host}")
+    private String applicationFrontHost;
+
+    /**
+     * Создание пары
+     * @param jLesson Объект пары json
+     */
+    @Transactional
+    @PreAuthorize("@LessonsAC.isCreateNewLesson(#jLesson)")
+    public void createLesson(JLesson jLesson) {
+
+        final Lesson lesson = new Lesson();
+        lesson.setName(jLesson.getNameLesson());
+        lesson.setCourseId(jLesson.getCourseId());
+        lesson.setStartDateTime(jLesson.getStartDateTime());
+        lesson.setEndDateTime(jLesson.getEndDateTime());
+        lesson.setStatus(Status.PLANNED.getTitleStatus());
+
+        if (jLesson.isFullTime()) {
+            lesson.setAddress(jLesson.getAddress());
+            lesson.setInstituteId(jLesson.getInstituteId());
+            lesson.setCabinet(jLesson.getCabinet());
+        } else {
+            lesson.setCabinet(jLesson.getLink());
+            lesson.setAddress("Дистант");
+        }
+
+        lessonRepository.save(lesson);
+    }
 
     /**
      * Ищем список пар для преподавателя
@@ -160,8 +182,7 @@ public class LessonService {
      */
     @PreAuthorize("@RolesAC.isAdminOrProfessor()")
     public String getQrCode(Long lessonId) {
-//        final String reviewUrl = "%s/reviews/create?lessonId=%s".formatted(applicationHost);
-        final String reviewUrl = "%s/swagger-ui/index.html".formatted(applicationHost);
+        final String reviewUrl = String.format("%s/form/%d", applicationFrontHost, lessonId);
         return qrCodeService.getEncodedCode(reviewUrl, 256, 256);
     }
 

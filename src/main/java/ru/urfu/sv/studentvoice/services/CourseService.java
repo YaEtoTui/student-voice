@@ -28,6 +28,7 @@ import ru.urfu.sv.studentvoice.services.mapper.CourseMapper;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -60,7 +61,42 @@ public class CourseService {
         /* Тут проверить постоянную ссылку */
 
         final Course courseResponse = courseRepository.save(course);
-        courseQuery.insertUserCourse(courseInfo.getProfessorId(), courseResponse.getId());
+
+        for (final Long professorId : courseInfo.getProfessorIds()) {
+            courseQuery.insertUserCourse(professorId, courseResponse.getId());
+        }
+    }
+
+    @Transactional
+    public void updateCourse(Long courseId, CourseInfo courseInfo) {
+
+        final List<Long> professorIdsInCourse = courseQuery.findProfessorsByCourseId(courseId);
+
+        // Новый список для преподавателей, которых нет в списке на бэк
+        final List<Long> newProfessorIds = courseInfo.getProfessorIds()
+                .stream()
+                .filter(professorId -> !professorIdsInCourse.contains(professorId))
+                .collect(Collectors.toList());
+
+        // Список для преподавателей, которых нужно удалить
+        final List<Long> professorsToRemove = professorIdsInCourse.stream()
+                .filter(professorId -> !courseInfo.getProfessorIds().contains(professorId))
+                .collect(Collectors.toList());
+
+        if (!professorsToRemove.isEmpty()) {
+            courseQuery.deleteProfessors(courseId, professorsToRemove);
+        }
+
+        courseQuery.updateCourse(courseId, courseInfo);
+        for (final Long professorId : newProfessorIds) {
+            courseQuery.insertUserCourse(professorId, courseId);
+        }
+    }
+
+    @Transactional
+    public void deleteCourse(Long courseId) {
+        courseQuery.deleteProfessors(courseId, null);
+        courseQuery.deleteCourse(courseId);
     }
 
     @Transactional

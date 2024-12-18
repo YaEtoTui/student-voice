@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class CourseInfo {
@@ -16,8 +18,8 @@ public class CourseInfo {
     @JsonProperty("institute_id")
     private Long instituteId;
 
-    @JsonProperty("professor_id")
-    private Long professorId;
+    @JsonProperty("professor_ids")
+    private List<Long> professorIds;
 
     private Boolean isConstantlyLink;
 }

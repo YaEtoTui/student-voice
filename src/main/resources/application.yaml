@@ -1,4 +1,8 @@
-application.host: 'http://localhost:8080'
+application:
+  host: ${APPLICATION_HOST}
+  front:
+    host: ${APPLICATION_FRONT_HOST}
+
 
 web.driver:
   path: ${WEB_DRIVER_PATH}
@@ -45,3 +49,11 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
     operations-sorter: method
+
+server:
+    ssl:
+      key-store-type: ${KEY_STORE_TYPE}
+      key-store: ${KEY_STORE_PATH}
+      key-store-password: ${KEY_STORE_PASSWORD}
+      key-alias: ${KEY_STORE_ALIAS}
+      enabled: true

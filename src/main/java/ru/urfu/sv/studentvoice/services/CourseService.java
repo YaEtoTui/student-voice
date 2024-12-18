@@ -26,6 +26,7 @@ import ru.urfu.sv.studentvoice.services.mapper.CourseMapper;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -65,11 +66,27 @@ public class CourseService {
     @Transactional
     public void updateCourse(Long courseId, CourseInfo courseInfo) {
 
-        if (Objects.nonNull(courseInfo.getProfessorIds())) {
-            courseQuery.deleteProfessors(courseId, courseInfo.getProfessorIds());
+        final List<Long> professorIdsInCourse = courseQuery.findProfessorsByCourseId(courseId);
+
+        // Новый список для преподавателей, которых нет в списке на бэк
+        final List<Long> newProfessorIds = courseInfo.getProfessorIds()
+                .stream()
+                .filter(professorId -> !professorIdsInCourse.contains(professorId))
+                .collect(Collectors.toList());
+
+        // Список для преподавателей, которых нужно удалить
+        final List<Long> professorsToRemove = professorIdsInCourse.stream()
+                .filter(professorId -> !courseInfo.getProfessorIds().contains(professorId))
+                .collect(Collectors.toList());
+
+        if (!professorsToRemove.isEmpty()) {
+            courseQuery.deleteProfessors(courseId, professorsToRemove);
         }
 
         courseQuery.updateCourse(courseId, courseInfo);
+        for (final Long professorId : newProfessorIds) {
+            courseQuery.insertUserCourse(professorId, courseId);
+        }
     }
 
     @Transactional

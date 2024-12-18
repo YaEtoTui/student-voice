@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import ru.urfu.sv.studentvoice.controllers.jwt.JwtAuthenticationController;
 import ru.urfu.sv.studentvoice.model.domain.dto.user.UserClient;
 import ru.urfu.sv.studentvoice.services.jwt.JwtUserDetailsService;
+import ru.urfu.sv.studentvoice.utils.exceptions.InvalidLoginException;
 import ru.urfu.sv.studentvoice.utils.jwt.JwtUtil;
 
 import java.util.ArrayList;
@@ -114,6 +115,8 @@ public class JwtAuthenticationControllerTest {
         Mockito.when(authenticationManager.authenticate(ArgumentMatchers.any(UsernamePasswordAuthenticationToken.class))).thenThrow(new UsernameNotFoundException("User not found"));
 
         // Проверка на получении ошибки
-        Assertions.assertThrows(Exception.class, () -> jwtAuthenticationController.login(user));
+        InvalidLoginException exception = Assertions.assertThrows(InvalidLoginException.class, () -> jwtAuthenticationController.login(user));
+
+        Assertions.assertEquals("Invalid login or password", exception.getMessage());
     }
 }

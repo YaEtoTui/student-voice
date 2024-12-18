@@ -9,6 +9,7 @@ import ru.urfu.sv.studentvoice.model.domain.dto.response.CourseResponse;
 import ru.urfu.sv.studentvoice.model.domain.entity.*;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Repository
@@ -121,5 +122,16 @@ public class CourseQuery extends AbstractQuery {
         query().delete(course)
                 .where(exp)
                 .execute();
+    }
+
+    public List<Long> findProfessorsByCourseId(Long courseId) {
+
+        final BooleanExpression exp = userCourse.courseId.eq(courseId);
+
+        return query()
+                .from(userCourse)
+                .select(userCourse.userId)
+                .where(exp)
+                .fetch();
     }
 }

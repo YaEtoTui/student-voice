@@ -27,7 +27,6 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping(Links.BASE_API)
-@CrossOrigin
 public class JwtAuthenticationController {
 
     @Autowired

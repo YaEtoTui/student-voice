@@ -57,7 +57,7 @@ public class InstituteService {
     }
 
     @Transactional
-    public void createInstitutesByJLessonList(List<LessonModeus> lessonList) {
+    public List<Institute> createInstitutesByJLessonList(List<LessonModeus> lessonList) {
 
         final List<Institute> instituteList = new ArrayList<>();
         for (final LessonModeus lesson : lessonList) {
@@ -72,6 +72,6 @@ public class InstituteService {
             }
         }
 
-        instituteRepository.saveAll(instituteList);
+        return instituteRepository.saveAll(instituteList);
     }
 }

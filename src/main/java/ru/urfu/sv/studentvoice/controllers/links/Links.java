@@ -14,4 +14,5 @@ public interface Links {
     String XSLX = "/xslx";
     String CSV = "/csv";
     String DOWNLOAD_REPORT = "/download-report";
+    String INTEGRATIONS = "/integrations";
 }

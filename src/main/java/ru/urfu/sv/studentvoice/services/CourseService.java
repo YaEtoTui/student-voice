@@ -26,6 +26,7 @@ import ru.urfu.sv.studentvoice.model.repository.CourseRepository;
 import ru.urfu.sv.studentvoice.services.jwt.JwtUserDetailsService;
 import ru.urfu.sv.studentvoice.services.mapper.CourseMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -139,10 +140,11 @@ public class CourseService {
     }
 
     @Transactional
-    public void createCoursesByJLessonList(Long professorId, List<LessonModeus> lessonList) {
+    public List<Course> createCoursesByJLessonList(Long professorId, List<LessonModeus> lessonList) {
 
         final List<Institute> instituteList = instituteQuery.findAllIds();
 
+        final List<Course> courseList = new ArrayList<>();
         for (final LessonModeus lessonModeus : lessonList) {
             if (!courseQuery.isExistCourseByProfId(professorId, lessonModeus.getCourseName())) {
 
@@ -158,9 +160,13 @@ public class CourseService {
                 course.setAddress(lessonModeus.getAddress());
                 course.setInstituteId(instituteId);
 
+                courseList.add(course);
+
                 final Course courseResponse = courseRepository.save(course);
                 courseQuery.insertUserCourse(professorId, courseResponse.getId());
             }
         }
+
+        return courseList;
     }
 }

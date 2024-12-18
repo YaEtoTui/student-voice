@@ -9,10 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.urfu.sv.studentvoice.controllers.links.Links;
 import ru.urfu.sv.studentvoice.model.domain.dto.user.UserClient;
 import ru.urfu.sv.studentvoice.services.jwt.JwtUserDetailsService;
@@ -30,6 +27,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping(Links.BASE_API)
+@CrossOrigin
 public class JwtAuthenticationController {
 
     @Autowired

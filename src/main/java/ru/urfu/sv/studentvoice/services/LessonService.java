@@ -15,6 +15,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.urfu.sv.studentvoice.model.domain.dto.*;
+import ru.urfu.sv.studentvoice.model.domain.dto.json.JLesson;
+import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonByCourse;
+import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonDetailsDto;
+import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonWithCourse;
+import ru.urfu.sv.studentvoice.model.domain.dto.modeus.LessonModeus;
+import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonByCourseResponse;
+import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonDetailsResponse;
+import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonResponse;
 import ru.urfu.sv.studentvoice.model.domain.entity.Lesson;
 import ru.urfu.sv.studentvoice.model.domain.entity.QCourse;
 import ru.urfu.sv.studentvoice.model.domain.entity.QLesson;
@@ -51,8 +59,6 @@ public class LessonService {
     private UserQuery userQuery;
     @Autowired
     private LessonQuery lessonQuery;
-    @Autowired
-    private LessonRepository lessonRepository;
     @Autowired
     private LessonMapper lessonMapper;
     @Autowired

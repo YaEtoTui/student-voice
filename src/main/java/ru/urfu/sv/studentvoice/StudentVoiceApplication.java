@@ -16,6 +16,7 @@ public class StudentVoiceApplication {
         System.setProperty("spring.datasource.password", System.getenv("SPRING_DATASOURCE_PASSWORD"));
         System.setProperty("urfu.user.username", System.getenv("URFU_USER_USERNAME"));
         System.setProperty("urfu.user.password", System.getenv("URFU_USER_PASSWORD"));
+        System.setProperty("application.host", System.getenv("APPLICATION_HOST"));
         System.setProperty("application.front.host", System.getenv("APPLICATION_FRONT_HOST"));
 
         SpringApplication.run(StudentVoiceApplication.class, args);

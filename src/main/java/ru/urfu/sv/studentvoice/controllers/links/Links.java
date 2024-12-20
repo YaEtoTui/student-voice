@@ -15,4 +15,5 @@ public interface Links {
     String CSV = "/csv";
     String DOWNLOAD_REPORT = "/download-report";
     String INTEGRATIONS = "/integrations";
+    String FORMS = "/forms";
 }

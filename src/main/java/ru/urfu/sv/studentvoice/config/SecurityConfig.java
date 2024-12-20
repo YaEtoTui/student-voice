@@ -40,8 +40,9 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/static/bootstrap/**", "/bootstrap/**", "/api/reviews/**", "/reviews/**", "/api/login",
-                                "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/api/users/create"
+                        .requestMatchers("/static/bootstrap/**", "/bootstrap/**", "/api/login",
+                                "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html",
+                                "/api/forms/**"
                         )
                         .permitAll()
                         .anyRequest().authenticated()

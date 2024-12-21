@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.urfu.sv.studentvoice.controllers.links.Links;
-import ru.urfu.sv.studentvoice.services.FormService;
+import ru.urfu.sv.studentvoice.model.domain.dto.form.FormInfoDto;
+import ru.urfu.sv.studentvoice.services.form.FormService;
 
 /**
  * Контроллер работы с формой для заполнения людьми,
@@ -27,8 +28,7 @@ public class FormController {
 
     @Operation(summary = "Получаем данные для формы. При этом проверяем qr-код на актуальность")
     @RequestMapping(path = "check-qr-code/{lessonId}", method = RequestMethod.GET)
-    public ResponseEntity<?> checkQrCodeActual(@PathVariable Long lessonId) {
-        final boolean isActualQrCode = formService.checkQrCodeActual(lessonId);
-        return new ResponseEntity<>(isActualQrCode, HttpStatus.OK);
+    public ResponseEntity<FormInfoDto> getDataForm(@PathVariable Long lessonId) {
+        return new ResponseEntity<>(formService.getDataForm(lessonId), HttpStatus.OK);
     }
 }

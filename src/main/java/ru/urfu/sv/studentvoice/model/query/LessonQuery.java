@@ -4,6 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 import org.springframework.stereotype.Repository;
+import ru.urfu.sv.studentvoice.model.domain.dto.form.FormInfo;
 import ru.urfu.sv.studentvoice.model.domain.dto.json.JLesson;
 import ru.urfu.sv.studentvoice.model.domain.dto.LessonAndCourseInfo;
 import ru.urfu.sv.studentvoice.model.domain.dto.lesson.LessonDetailsDto;
@@ -182,5 +183,27 @@ public class LessonQuery extends AbstractQuery {
                 .selectFrom(lesson)
                 .where(exp)
                 .fetchFirst();
+    }
+
+    public List<FormInfo> getFormInfoList(Long lessonId) {
+
+        final BooleanExpression exp = lesson.id.eq(lessonId);
+
+        return query()
+                .from(lesson)
+                .join(course).on(lesson.courseId.eq(course.id))
+                .join(userCourse).on(userCourse.courseId.eq(course.id))
+                .join(user).on(userCourse.userId.eq(user.id))
+                .where(exp)
+                .select(Projections.bean(FormInfo.class,
+                        lesson.id.as("lessonId"),
+                        lesson.startDateTime.as("startDateTime"),
+                        lesson.endDateTime.as("endDateTime"),
+                        course.name.as("courseName"),
+                        user.name.as("professorName"),
+                        user.surname.as("professorSurname"),
+                        user.patronymic.as("professorPatronymic")
+                ))
+                .fetch();
     }
 }

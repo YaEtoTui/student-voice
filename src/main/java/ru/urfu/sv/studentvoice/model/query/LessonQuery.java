@@ -126,11 +126,14 @@ public class LessonQuery extends AbstractQuery {
 
     public boolean isExistLesson(JLesson jLesson) {
 
-        final BooleanExpression exp = lesson.courseId.eq(jLesson.getCourseId())
-                .and(lesson.instituteId.eq(jLesson.getInstituteId()))
+        BooleanExpression exp = lesson.courseId.eq(jLesson.getCourseId())
                 .and(lesson.endDateTime.goe(jLesson.getStartDateTime().toLocalDate().atStartOfDay()))
                 .and(lesson.startDateTime.goe(jLesson.getEndDateTime().toLocalDate().minusDays(1).atStartOfDay()))
                 .and(lesson.startDateTime.loe(jLesson.getEndDateTime().toLocalDate().atStartOfDay().plusDays(1).minusSeconds(1)));
+
+        if (Objects.nonNull(jLesson.getInstituteId())) {
+            exp = exp.and(lesson.instituteId.eq(jLesson.getInstituteId()));
+        }
 
         final Collection<Lesson> lessons = query()
                 .selectFrom(lesson)

@@ -24,6 +24,7 @@ import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonByCourseResponse;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonDetailsResponse;
 import ru.urfu.sv.studentvoice.model.domain.dto.response.LessonResponse;
 import ru.urfu.sv.studentvoice.model.domain.entity.*;
+import ru.urfu.sv.studentvoice.model.query.CourseQuery;
 import ru.urfu.sv.studentvoice.model.query.LessonQuery;
 import ru.urfu.sv.studentvoice.model.query.UserQuery;
 import ru.urfu.sv.studentvoice.model.repository.LessonRepository;
@@ -57,6 +58,8 @@ public class LessonService {
     @Autowired
     private LessonQuery lessonQuery;
     @Autowired
+    private CourseQuery courseQuery;
+    @Autowired
     private LessonMapper lessonMapper;
     @Autowired
     protected EntityManager entityManager;
@@ -86,6 +89,9 @@ public class LessonService {
         } else {
             lesson.setCabinet(jLesson.getLink());
             lesson.setAddress("Дистант");
+
+            final Long instituteId = courseQuery.findInstituteIdByCourseId(jLesson.getCourseId());
+            lesson.setInstituteId(instituteId);
         }
 
         lessonRepository.save(lesson);

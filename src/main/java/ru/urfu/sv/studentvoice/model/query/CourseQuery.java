@@ -151,4 +151,15 @@ public class CourseQuery extends AbstractQuery {
                 .where(exp)
                 .fetch();
     }
+
+    public Long findInstituteIdByCourseId(Long courseId) {
+
+        final BooleanExpression exp = course.id.eq(courseId);
+
+        return query()
+                .from(course)
+                .where(exp)
+                .select(course.instituteId)
+                .fetchFirst();
+    }
 }

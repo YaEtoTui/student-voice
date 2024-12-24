@@ -42,7 +42,7 @@ public class LessonController {
 
     @Operation(summary = "Редактирование пары")
     @RequestMapping(path = "{lessonId}", method = RequestMethod.PUT)
-    public ResponseEntity<Page<LessonResponse>> createLesson(@PathVariable Long lessonId, @RequestBody JLesson jLesson) {
+    public ResponseEntity<Page<LessonResponse>> updateLesson(@PathVariable Long lessonId, @RequestBody JLesson jLesson) {
         lessonService.updateLesson(lessonId, jLesson);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

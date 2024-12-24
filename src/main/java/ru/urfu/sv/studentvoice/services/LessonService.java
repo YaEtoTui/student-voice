@@ -114,6 +114,9 @@ public class LessonService {
         } else {
             lesson.setCabinet(jLesson.getLink());
             lesson.setAddress("Дистант");
+
+            final Long instituteId = courseQuery.findInstituteIdByCourseId(jLesson.getCourseId());
+            lesson.setInstituteId(instituteId);
         }
 
         lessonRepository.save(lesson);

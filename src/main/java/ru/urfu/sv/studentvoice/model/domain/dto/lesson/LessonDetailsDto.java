@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class LessonDetailsDto {
 
     private Long lessonId;
+    private Long courseId;
     private String courseName;
     private String address;
     private LocalDateTime dateStart;

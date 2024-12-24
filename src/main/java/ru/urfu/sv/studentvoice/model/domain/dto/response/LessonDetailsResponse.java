@@ -13,6 +13,9 @@ public class LessonDetailsResponse {
     @JsonProperty("lesson_id")
     private Long lessonId;
 
+    @JsonProperty("course_id")
+    private Long courseId;
+
     @JsonProperty("course_name")
     private String courseName;
 

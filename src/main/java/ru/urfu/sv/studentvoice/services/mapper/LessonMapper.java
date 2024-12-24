@@ -79,10 +79,12 @@ public class LessonMapper {
         final LessonDetailsResponse lessonResponse = new LessonDetailsResponse();
 
         lessonResponse.setLessonId(lesson.getLessonId());
+        lessonResponse.setCourseId(lesson.getCourseId());
         lessonResponse.setCourseName(lesson.getCourseName());
         lessonResponse.setAddress(lesson.getAddress());
         lessonResponse.setDateStart(lesson.getDateStart());
         lessonResponse.setDateEnd(lesson.getDateEnd());
+
         return lessonResponse;
     }
 }

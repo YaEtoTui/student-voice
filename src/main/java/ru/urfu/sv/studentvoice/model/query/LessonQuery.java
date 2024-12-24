@@ -67,6 +67,7 @@ public class LessonQuery extends AbstractQuery {
                 .select(
                         Projections.bean(LessonDetailsDto.class,
                                 lesson.id.as("lessonId"),
+                                course.id.as("courseId"),
                                 course.name.as("courseName"),
                                 lesson.address.as("address"),
                                 lesson.startDateTime.as("dateStart"),
